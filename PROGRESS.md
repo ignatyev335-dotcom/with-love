@@ -24,6 +24,7 @@
 - [x] Публичная invite (темы, блоки, музыка, RSVP, wishes)
 - [x] Mobile bottom nav (ref 03)
 - [x] OG metadata + sitemap + robots
+- [x] Visual pass: soft blush, florals, rounded UI (landing/invite/editor/cabinet/admin)
 
 ## Этап 4. Личный кабинет
 - [x] Дашборд (статы, QR, checklist, timeline, reminders)

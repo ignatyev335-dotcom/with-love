@@ -1,5 +1,6 @@
 "use client";
 
+import { FloralCorner } from "@/components/decor/Floral";
 import { Countdown } from "@/components/invitation/Countdown";
 import { BlockIcon } from "@/components/editor/blockIcons";
 import { BLOCK_LABELS } from "@/lib/editor-meta";
@@ -83,11 +84,14 @@ export function LiveCanvas({
                   src={String(hero.data.image)}
                   alt="Cover"
                   fill
-                  className="object-cover"
+                  className="object-cover object-[center_15%]"
                   sizes="500px"
                 />
               )}
-              <div className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-medium text-charcoal shadow-soft">
+              {!isLuxury && (
+                <FloralCorner className="pointer-events-none absolute -bottom-3 -left-3 h-28 w-28 drop-shadow" />
+              )}
+              <div className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-medium text-charcoal shadow-sm">
                 Изменить обложку
               </div>
             </div>
