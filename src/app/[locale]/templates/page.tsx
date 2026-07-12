@@ -26,6 +26,19 @@ export default function TemplatesPage() {
       router.push(`/${locale}/register`);
       return;
     }
+    const tpl = TEMPLATES.find((t) => t.id === id);
+    if (tpl?.premium && (user.plan === "free" || user.plan === "basic")) {
+      const ok = window.confirm(
+        isEn
+          ? `«${tpl.nameEn}» is a premium template (${formatPrice(tpl.price, "en-US")}). Continue to checkout demo, or apply style for free in demo mode?`
+          : `«${tpl.name}» — премиум-шаблон (${formatPrice(tpl.price)}). Перейти к оплате (демо) или применить стиль бесплатно в демо-режиме?`
+      );
+      // Demo: always apply; real Stripe would gate here
+      if (!ok) {
+        router.push(`/${locale}/checkout?plan=premium`);
+        return;
+      }
+    }
     applyTemplate(id);
     router.push(`/${locale}/dashboard/editor`);
   };
