@@ -1,9 +1,9 @@
 "use client";
 
+import { FloralCorner, GoldFlourish } from "@/components/decor/Floral";
 import { Button } from "@/components/ui/Button";
 import { HERO_IMAGE } from "@/lib/seed";
 import { motion } from "framer-motion";
-import { Play } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,81 +13,77 @@ export function Hero({ locale }: { locale: string }) {
   const isEn = locale === "en";
 
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-soft-pink/40 via-ivory to-light-sage/30" />
-      <div className="pointer-events-none absolute -right-20 top-10 h-80 w-80 rounded-full bg-blush/5 blur-3xl" />
-      <div className="pointer-events-none absolute -left-20 bottom-0 h-72 w-72 rounded-full bg-gold/10 blur-3xl" />
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#FDF9F3] via-ivory to-[#F8F4EE]">
+      {/* soft ambient florals */}
+      <FloralCorner className="pointer-events-none absolute -left-8 top-24 h-56 w-56 opacity-70 lg:h-72 lg:w-72" />
+      <FloralCorner
+        flip
+        className="pointer-events-none absolute -right-6 bottom-0 h-64 w-64 opacity-60 lg:h-80 lg:w-80"
+      />
+      <div className="pointer-events-none absolute right-1/4 top-16 h-40 w-40 rounded-full bg-[#F8E8E8]/50 blur-3xl" />
+      <div className="pointer-events-none absolute left-1/3 bottom-10 h-32 w-32 rounded-full bg-[#E8EDE5]/60 blur-3xl" />
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8 lg:py-20">
+      <div className="relative mx-auto grid max-w-6xl items-center gap-8 px-4 py-10 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-16">
+        {/* Photo — left, soft rounded, florals peeking */}
         <motion.div
-          initial={{ opacity: 0, x: -24 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-          className="relative order-2 overflow-hidden rounded-[2rem] shadow-soft-lg lg:order-1"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="relative order-2 lg:order-1"
         >
-          <div className="relative aspect-[4/3]">
-            <Image
-              src={HERO_IMAGE}
-              alt="Wedding couple"
-              fill
-              priority
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-charcoal/25 via-transparent to-transparent" />
-          </div>
-          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-2xl border border-white/40 bg-white/85 px-4 py-3 backdrop-blur-md">
-            <div>
-              <p className="text-xs text-muted">
-                {isEn ? "Live demo" : "Живое демо"}
-              </p>
-              <p className="font-heading text-sm text-charcoal">
-                Александр & Екатерина
-              </p>
+          <div className="relative mx-auto max-w-lg">
+            <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-[#F8E8E8]/80 via-transparent to-[#E8EDE5]/50 blur-sm" />
+            <div className="relative overflow-hidden rounded-[1.75rem] shadow-[0_20px_50px_-12px_rgba(40,43,43,0.15)] ring-1 ring-white/80">
+              <div className="relative aspect-[5/4]">
+                <Image
+                  src={HERO_IMAGE}
+                  alt="Wedding couple"
+                  fill
+                  priority
+                  className="object-cover object-[center_20%]"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#282B2B]/15 via-transparent to-transparent" />
+              </div>
             </div>
-            <Link href={`/${locale}/invite/aleksandr-ekaterina`}>
-              <Button size="sm" variant="primary" className="gap-1.5">
-                <Play size={12} className="fill-current" />
-                {isEn ? "Open" : "Открыть"}
-              </Button>
-            </Link>
+            {/* floral overlays on photo corners */}
+            <FloralCorner className="pointer-events-none absolute -bottom-6 -left-6 h-36 w-36 drop-shadow-sm" />
+            <FloralCorner
+              flip
+              className="pointer-events-none absolute -right-4 -top-4 h-28 w-28 opacity-90"
+            />
           </div>
-          <div className="absolute -bottom-2 -left-2 h-24 w-24 rounded-full bg-soft-pink/50 blur-2xl" />
         </motion.div>
 
+        {/* Copy — right */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.1 }}
-          className="order-1 space-y-6 text-center lg:order-2 lg:text-left"
+          transition={{ duration: 0.6, delay: 0.12 }}
+          className="order-1 flex flex-col items-center text-center lg:order-2 lg:items-start lg:text-left"
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-white/80 px-3 py-1 text-xs text-muted shadow-soft">
-            <span className="h-1.5 w-1.5 rounded-full bg-sage" />
-            {isEn ? "Freemium · one-time upgrades" : "Freemium · разовые платежи"}
-          </div>
-          <h1 className="font-heading text-4xl leading-[1.15] tracking-tight text-charcoal sm:text-5xl lg:text-[3.25rem]">
-            {t("heroTitle1")}
-            <br />
-            {t("heroTitle2")}
-            <br />
-            <span className="text-blush">{t("heroTitle3")}</span>
+          <GoldFlourish className="mb-4 h-8 w-28 opacity-80" />
+          <h1 className="font-heading text-[2.35rem] font-medium leading-[1.18] tracking-tight text-charcoal sm:text-5xl lg:text-[3.15rem]">
+            <span className="block">{t("heroTitle1")}</span>
+            <span className="block">{t("heroTitle2")}</span>
+            <span className="mt-1 block text-charcoal">{t("heroTitle3")}</span>
           </h1>
-          <p className="mx-auto max-w-md text-base leading-relaxed text-muted lg:mx-0 sm:text-lg">
+          <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-[#8a8580] sm:text-base">
             {t("heroSubtitle")}
           </p>
-          <div className="flex flex-col items-center gap-3 sm:flex-row lg:justify-start">
+          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row lg:items-start">
             <Link href={`/${locale}/register`}>
-              <Button size="lg" className="min-w-[200px]">
+              <Button
+                size="lg"
+                className="min-w-[200px] rounded-full bg-[#E8A09A] px-8 shadow-soft hover:bg-[#d9928c]"
+              >
                 {t("heroCta")}
               </Button>
             </Link>
-            <Link href={`/${locale}/templates`}>
-              <Button size="lg" variant="secondary" className="min-w-[180px]">
-                {t("viewTemplates")}
-              </Button>
-            </Link>
           </div>
-          <p className="text-sm text-muted/80">{t("heroHint")}</p>
+          <p className="mt-4 text-xs tracking-wide text-[#a39e97]">
+            {isEn ? "Create an invitation in 10 minutes" : "Создайте приглашение за 10 минут"}
+          </p>
         </motion.div>
       </div>
     </section>

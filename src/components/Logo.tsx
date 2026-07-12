@@ -14,17 +14,18 @@ export function Logo({
   size?: "sm" | "md" | "lg";
 }) {
   const sizes = {
-    sm: "text-base gap-1",
+    sm: "text-[15px] gap-1",
     md: "text-lg gap-1.5",
     lg: "text-2xl gap-2",
   };
-  const iconSizes = { sm: 14, md: 16, lg: 20 };
+  const iconSizes = { sm: 13, md: 15, lg: 18 };
+  const heart = dark ? "text-[#D4A537]" : "text-[#E8A09A]";
 
   return (
     <Link
       href={href}
       className={cn(
-        "inline-flex items-center font-heading font-semibold tracking-tight",
+        "inline-flex items-center font-heading font-medium tracking-tight",
         dark ? "text-white" : "text-charcoal",
         sizes[size],
         className
@@ -32,14 +33,17 @@ export function Logo({
     >
       <Heart
         size={iconSizes[size]}
-        className={cn(dark ? "text-gold" : "text-blush", "fill-current opacity-80")}
+        className={cn(heart, "fill-current opacity-70")}
+        strokeWidth={1.5}
       />
       <span>
-        With <span className={dark ? "text-gold" : "text-blush"}>Love</span>
+        With{" "}
+        <span className={dark ? "text-[#D4A537]" : "text-[#E8A09A]"}>Love</span>
       </span>
       <Heart
         size={iconSizes[size]}
-        className={cn(dark ? "text-gold" : "text-blush", "fill-current opacity-80")}
+        className={cn(heart, "fill-current opacity-70")}
+        strokeWidth={1.5}
       />
     </Link>
   );

@@ -20,14 +20,13 @@ export default async function HomePage({
   setRequestLocale(locale);
 
   return (
-    <div className="flex min-h-screen flex-col bg-ivory">
+    <div className="flex min-h-screen flex-col bg-[#FDFCFA]">
       <Header />
       <main className="flex-1">
         <Hero locale={locale} />
         <Features locale={locale} />
-        <HowItWorks locale={locale} />
-        <BenefitsGrid locale={locale} />
         <StylesGallery locale={locale} />
+        <HowItWorks locale={locale} />
         <Reviews locale={locale} />
         <Pricing locale={locale} />
         <FAQ locale={locale} />

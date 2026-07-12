@@ -66,7 +66,7 @@ export function RsvpForm({ deadline }: { deadline?: string }) {
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-3xl border border-border/80 bg-white p-6 shadow-card sm:p-8"
+      className="rounded-[1.5rem] border border-[#EDE7DD] bg-white p-6 shadow-[0_12px_40px_-16px_rgba(40,43,43,0.12)] sm:p-8"
     >
       <h3 className="text-center font-heading text-xl text-charcoal sm:text-2xl">
         {t("rsvpTitle")}
@@ -99,10 +99,10 @@ export function RsvpForm({ deadline }: { deadline?: string }) {
                 key={opt.value}
                 type="button"
                 onClick={() => setStatus(opt.value)}
-                className={`rounded-2xl border px-3 py-3 text-sm transition-all ${
+                className={`rounded-full border px-3 py-3 text-sm transition-all ${
                   status === opt.value
-                    ? "border-blush bg-soft-pink text-blush font-medium"
-                    : "border-border bg-ivory text-muted hover:border-blush/30"
+                    ? "border-[#E8A09A] bg-[#F8E8E8] font-medium text-[#E8A09A]"
+                    : "border-[#EDE7DD] bg-[#FAF7F2] text-[#8a8580] hover:border-[#E8A09A]/40"
                 }`}
               >
                 {opt.label}
@@ -122,10 +122,10 @@ export function RsvpForm({ deadline }: { deadline?: string }) {
                   key={n}
                   type="button"
                   onClick={() => setCount(n)}
-                  className={`flex h-11 w-11 items-center justify-center rounded-xl border text-sm font-medium transition-all ${
+                  className={`flex h-11 w-11 items-center justify-center rounded-full border text-sm font-medium transition-all ${
                     count === n
-                      ? "border-blush bg-blush text-white"
-                      : "border-border bg-white text-muted hover:border-blush/30"
+                      ? "border-[#E8A09A] bg-[#E8A09A] text-white"
+                      : "border-[#EDE7DD] bg-white text-[#8a8580] hover:border-[#E8A09A]/40"
                   }`}
                 >
                   {n === 4 ? "4+" : n}

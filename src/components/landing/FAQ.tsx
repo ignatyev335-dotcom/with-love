@@ -1,5 +1,6 @@
 "use client";
 
+import { GoldLine } from "@/components/decor/Floral";
 import { Button } from "@/components/ui/Button";
 import { LANDING_FAQ } from "@/lib/seed";
 import { cn } from "@/lib/utils";
@@ -13,38 +14,39 @@ export function FAQ({ locale }: { locale: string }) {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="bg-white/50 py-16 lg:py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="faq" className="bg-white py-16 lg:py-20">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-5">
           <div className="lg:col-span-3">
-            <h2 className="mb-8 font-heading text-3xl text-charcoal sm:text-4xl">
+            <h2 className="font-heading text-3xl font-medium text-charcoal sm:text-4xl">
               {t("faqTitle")}
             </h2>
-            <div className="space-y-3">
+            <GoldLine className="mt-4 mb-8" />
+            <div className="space-y-2.5">
               {LANDING_FAQ.map((item, i) => {
                 const isOpen = open === i;
                 return (
                   <div
                     key={i}
-                    className="rounded-2xl border border-border/80 bg-white shadow-card"
+                    className="rounded-[1.1rem] border border-[#EDE7DD] bg-[#FDFCFA] shadow-sm"
                   >
                     <button
                       className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
                       onClick={() => setOpen(isOpen ? null : i)}
                     >
-                      <span className="text-sm font-medium text-charcoal sm:text-base">
+                      <span className="text-sm font-medium text-charcoal sm:text-[15px]">
                         {isEn ? item.qEn : item.q}
                       </span>
                       <ChevronDown
                         size={18}
                         className={cn(
-                          "shrink-0 text-muted transition-transform",
+                          "shrink-0 text-[#a39e97] transition-transform",
                           isOpen && "rotate-180"
                         )}
                       />
                     </button>
                     {isOpen && (
-                      <div className="border-t border-border/60 px-5 py-4 text-sm leading-relaxed text-muted">
+                      <div className="border-t border-[#EDE7DD] px-5 py-4 text-sm leading-relaxed text-[#8a8580]">
                         {isEn ? item.aEn : item.a}
                       </div>
                     )}
@@ -55,19 +57,17 @@ export function FAQ({ locale }: { locale: string }) {
           </div>
 
           <div className="lg:col-span-2">
-            <div className="rounded-3xl border border-border/80 bg-gradient-to-br from-soft-pink/60 to-warm-beige p-6 shadow-card lg:sticky lg:top-24">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-blush shadow-soft">
-                <MessageCircle size={22} />
+            <div className="rounded-[1.5rem] border border-[#EDE7DD] bg-gradient-to-br from-[#F8E8E8]/80 via-[#FDF9F3] to-[#E8EDE5]/50 p-6 shadow-sm lg:sticky lg:top-24">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#E8A09A] shadow-sm">
+                <MessageCircle size={22} strokeWidth={1.5} />
               </div>
               <h3 className="font-heading text-xl text-charcoal">
                 {t("faqContact")}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
+              <p className="mt-2 text-sm leading-relaxed text-[#8a8580]">
                 {t("faqContactHint")}
               </p>
-              <Button className="mt-5 w-full" variant="primary">
-                {t("faqContactCta")}
-              </Button>
+              <Button className="mt-5 w-full">{t("faqContactCta")}</Button>
             </div>
           </div>
         </div>

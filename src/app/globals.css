@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
 :root {
+  /* Softer blush closer to references (dusty rose-coral) */
   --ivory: #faf7f2;
   --warm-beige: #f2ede6;
-  --blush: #f76e62;
+  --blush: #e8a09a;
   --dusty-rose: #c98b88;
   --sage: #a7b8a1;
   --gold: #d4a537;
@@ -16,10 +17,10 @@
   --dark-surface: #1a1a1a;
   --gold-text: #d4a537;
 
-  --background: var(--ivory);
+  --background: #fdfcfa;
   --foreground: var(--charcoal);
   --muted: #8a8580;
-  --border: #e8e2d9;
+  --border: #ede7dd;
   --card: #ffffff;
   --ring: var(--blush);
 }
