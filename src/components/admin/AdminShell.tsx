@@ -22,6 +22,7 @@ import { useEffect } from "react";
 const links = [
   { href: "/admin", icon: LayoutDashboard, label: "Дашборд" },
   { href: "/admin/users", icon: Users, label: "Пользователи" },
+  { href: "/admin/invitations", icon: FileText, label: "Приглашения" },
   { href: "/admin/payments", icon: CreditCard, label: "Платежи" },
   { href: "/admin/templates", icon: FileText, label: "Шаблоны" },
   { href: "/admin/support", icon: HeadphonesIcon, label: "Поддержка" },

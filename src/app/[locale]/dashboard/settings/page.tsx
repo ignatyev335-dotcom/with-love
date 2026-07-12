@@ -1,68 +1,139 @@
 "use client";
 
+import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
+import { PLANS } from "@/lib/seed";
 import { useAppStore } from "@/lib/store";
+import { formatPrice } from "@/lib/utils";
+import { useLocale } from "next-intl";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function SettingsPage() {
+  const locale = useLocale();
+  const isEn = locale === "en";
   const user = useAppStore((s) => s.user);
   const wedding = useAppStore((s) => s.wedding);
+  const invitation = useAppStore((s) => s.invitation);
   const [name, setName] = useState(user?.name ?? "");
   const [saved, setSaved] = useState(false);
 
+  const plan = PLANS.find((p) => p.id === user?.plan) || PLANS[0];
+
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto max-w-2xl space-y-6 animate-fade-in">
       <h1 className="font-heading text-2xl text-charcoal sm:text-3xl">
-        Настройки
+        {isEn ? "Settings" : "Настройки"}
       </h1>
 
       <Card>
         <CardHeader>
-          <h2 className="font-heading text-lg">Профиль</h2>
+          <h2 className="font-heading text-lg">
+            {isEn ? "Profile" : "Профиль"}
+          </h2>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-sm text-muted">Имя</label>
+            <label className="mb-1.5 block text-sm text-muted">
+              {isEn ? "Name" : "Имя"}
+            </label>
             <Input value={name} onChange={(e) => setName(e.target.value)} />
           </div>
           <div>
             <label className="mb-1.5 block text-sm text-muted">Email</label>
             <Input value={user?.email ?? ""} disabled />
           </div>
-          <div>
-            <label className="mb-1.5 block text-sm text-muted">Тариф</label>
-            <Input value={user?.plan ?? "free"} disabled />
-          </div>
           <Button
             onClick={() => {
+              if (user) {
+                useAppStore.setState({
+                  user: { ...user, name: name.trim() || user.name },
+                });
+              }
               setSaved(true);
               setTimeout(() => setSaved(false), 2000);
             }}
           >
-            {saved ? "Сохранено!" : "Сохранить"}
+            {saved
+              ? isEn
+                ? "Saved!"
+                : "Сохранено!"
+              : isEn
+                ? "Save"
+                : "Сохранить"}
           </Button>
         </CardContent>
       </Card>
 
       <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <h2 className="font-heading text-lg">
+            {isEn ? "Plan" : "Тариф"}
+          </h2>
+          <Badge variant={plan.id === "free" ? "muted" : "gold"}>
+            {isEn ? plan.nameEn : plan.name}
+          </Badge>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-sm text-muted">
+            {plan.price === 0
+              ? isEn
+                ? "Free plan with limits"
+                : "Бесплатный тариф с ограничениями"
+              : formatPrice(plan.price, isEn ? "en-US" : "ru-RU")}
+            {" · "}
+            {plan.guestLimit} {isEn ? "guests max" : "гостей макс."}
+          </p>
+          {invitation?.watermark && (
+            <p className="text-xs text-deep-rose">
+              {isEn
+                ? "Watermark is enabled on your invitation."
+                : "На приглашении включён водяной знак."}
+            </p>
+          )}
+          <Link href={`/${locale}/pricing`}>
+            <Button variant="secondary" size="sm">
+              {isEn ? "Upgrade plan" : "Улучшить тариф"}
+            </Button>
+          </Link>
+        </CardContent>
+      </Card>
+
+      <Card>
         <CardHeader>
-          <h2 className="font-heading text-lg">Свадьба</h2>
+          <h2 className="font-heading text-lg">
+            {isEn ? "Wedding" : "Свадьба"}
+          </h2>
         </CardHeader>
         <CardContent className="space-y-3 text-sm text-muted">
           <p>
-            <span className="text-charcoal">Пара:</span>{" "}
+            <span className="text-charcoal">{isEn ? "Couple:" : "Пара:"}</span>{" "}
             {wedding?.coupleNames}
           </p>
           <p>
-            <span className="text-charcoal">Дата:</span>{" "}
+            <span className="text-charcoal">{isEn ? "Date:" : "Дата:"}</span>{" "}
             {wedding?.date
-              ? new Date(wedding.date).toLocaleDateString("ru-RU")
+              ? new Date(wedding.date).toLocaleDateString(
+                  isEn ? "en-US" : "ru-RU"
+                )
               : "—"}
           </p>
           <p>
-            <span className="text-charcoal">Место:</span> {wedding?.venue}
+            <span className="text-charcoal">{isEn ? "Venue:" : "Место:"}</span>{" "}
+            {wedding?.venue}
+          </p>
+          <p>
+            <span className="text-charcoal">Slug:</span>{" "}
+            <code className="rounded bg-warm-beige px-1.5 py-0.5 text-xs">
+              {invitation?.slug}
+            </code>
+          </p>
+          <p className="text-xs">
+            {isEn
+              ? "Rule: 1 organizer = 1 active wedding"
+              : "Правило: 1 организатор = 1 активная свадьба"}
           </p>
         </CardContent>
       </Card>

@@ -10,7 +10,10 @@ import {
   DEMO_USER,
   DEMO_WEDDING,
   DEMO_WISHES,
+  TEMPLATES,
 } from "./seed";
+import { THEME_PRESETS } from "./editor-meta";
+import type { ThemeStyle } from "@/types";
 
 interface AppState {
   user: User | null;
@@ -28,6 +31,7 @@ interface AppState {
   setBlockEnabled: (blockId: string, enabled: boolean) => void;
   moveBlock: (blockId: string, direction: "up" | "down") => void;
   updateWedding: (partial: Partial<Wedding>) => void;
+  applyTemplate: (templateId: string) => boolean;
   publishInvitation: () => void;
   addGuest: (guest: Omit<Guest, "id">) => void;
   updateGuest: (id: string, partial: Partial<Guest>) => void;
@@ -215,6 +219,44 @@ export const useAppStore = create<AppState>()(
         const wedding = get().wedding;
         if (!wedding) return;
         set({ wedding: { ...wedding, ...partial } });
+      },
+
+      applyTemplate: (templateId) => {
+        const inv = get().invitation;
+        const tpl = TEMPLATES.find((t) => t.id === templateId);
+        if (!inv || !tpl) return false;
+        const style = (tpl.style as ThemeStyle) || "classic";
+        const preset =
+          THEME_PRESETS.find((p) => p.id === style) || THEME_PRESETS[0];
+        const heroBlock = inv.config.blocks.find((b) => b.type === "hero");
+        set({
+          invitation: {
+            ...inv,
+            templateId: tpl.id,
+            config: {
+              ...inv.config,
+              theme: preset.id,
+              colors: preset.colors,
+              blocks: inv.config.blocks.map((b) =>
+                b.type === "hero"
+                  ? {
+                      ...b,
+                      data: {
+                        ...b.data,
+                        image: tpl.preview,
+                      },
+                    }
+                  : b
+              ),
+            },
+            watermark: tpl.premium
+              ? inv.watermark
+              : inv.watermark,
+          },
+        });
+        // silence unused
+        void heroBlock;
+        return true;
       },
 
       publishInvitation: () => {

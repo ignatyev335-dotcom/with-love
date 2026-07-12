@@ -9,9 +9,12 @@ import { formatDate } from "@/lib/utils";
 import {
   Baby,
   CheckCircle2,
+  Clock,
   ExternalLink,
   HelpCircle,
+  MapPin,
   Users,
+  Wand2,
   XCircle,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -29,10 +32,11 @@ export default function DashboardPage() {
   const stats = useMemo(() => {
     const confirmed = guests.filter((g) => g.status === "confirmed");
     const declined = guests.filter((g) => g.status === "declined");
-    const pending = guests.filter((g) => g.status === "pending" || g.status === "maybe");
+    const pending = guests.filter(
+      (g) => g.status === "pending" || g.status === "maybe"
+    );
     const children = guests.reduce((s, g) => s + g.children, 0);
-    const totalPeople =
-      confirmed.reduce((s, g) => s + 1 + g.plusOnes, 0);
+    const totalPeople = confirmed.reduce((s, g) => s + 1 + g.plusOnes, 0);
     return {
       invited: wedding?.guestCount ?? guests.length,
       confirmed: confirmed.length,
@@ -43,6 +47,7 @@ export default function DashboardPage() {
       pending: pending.length,
       children,
       totalPeople,
+      listSize: guests.length,
     };
   }, [guests, wedding]);
 
@@ -52,7 +57,11 @@ export default function DashboardPage() {
       (a, b) =>
         new Date(b.respondedAt!).getTime() - new Date(a.respondedAt!).getTime()
     )
-    .slice(0, 5);
+    .slice(0, 6);
+
+  const scheduleItems =
+    (invitation?.config.blocks.find((b) => b.type === "schedule")?.data
+      .items as { time: string; title: string }[]) || [];
 
   if (!wedding || !invitation) {
     return (
@@ -104,8 +113,38 @@ export default function DashboardPage() {
     },
   ];
 
+  const checklist = [
+    {
+      done: invitation.published,
+      label: locale === "en" ? "Publish invitation" : "Опубликовать приглашение",
+      href: `/${locale}/dashboard/editor`,
+    },
+    {
+      done: stats.listSize >= 5,
+      label: locale === "en" ? "Add guest list" : "Добавить список гостей",
+      href: `/${locale}/dashboard/guests`,
+    },
+    {
+      done: Boolean(
+        invitation.config.blocks.find((b) => b.type === "location")?.enabled
+      ),
+      label: locale === "en" ? "Set venue & address" : "Указать локацию",
+      href: `/${locale}/dashboard/editor`,
+    },
+    {
+      done: Boolean(invitation.config.music?.enabled),
+      label: locale === "en" ? "Choose background music" : "Выбрать музыку",
+      href: `/${locale}/dashboard/editor`,
+    },
+    {
+      done: stats.confirmed > 0,
+      label: locale === "en" ? "Collect first RSVPs" : "Получить первые RSVP",
+      href: `/${locale}/invite/${invitation.slug}`,
+    },
+  ];
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-sm text-muted">
@@ -114,9 +153,24 @@ export default function DashboardPage() {
           <h1 className="mt-1 font-heading text-2xl text-charcoal sm:text-3xl">
             {t("weddingOf")} {wedding.coupleNames}
           </h1>
-          <p className="mt-1 text-sm text-muted">
-            {formatDate(wedding.date, locale === "en" ? "en-US" : "ru-RU")} ·{" "}
-            {wedding.venue}
+          <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
+            <span className="inline-flex items-center gap-1">
+              <Clock size={14} className="text-gold" />
+              {formatDate(wedding.date, locale === "en" ? "en-US" : "ru-RU")}
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <MapPin size={14} className="text-gold" />
+              {wedding.venue}
+            </span>
+            <Badge variant={invitation.published ? "success" : "warning"}>
+              {invitation.published
+                ? locale === "en"
+                  ? "Published"
+                  : "Опубликовано"
+                : locale === "en"
+                  ? "Draft"
+                  : "Черновик"}
+            </Badge>
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -127,12 +181,13 @@ export default function DashboardPage() {
             </Button>
           </Link>
           <Link href={`/${locale}/dashboard/editor`}>
-            <Button size="sm">{t("openEditor")}</Button>
+            <Button size="sm">
+              <Wand2 size={14} />
+              {t("openEditor")}
+            </Button>
           </Link>
         </div>
       </div>
-
-      <SharePanel locale={locale} slug={invitation.slug} />
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {statCards.map((s) => {
@@ -160,8 +215,10 @@ export default function DashboardPage() {
         })}
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
-        <Card>
+      <SharePanel locale={locale} slug={invitation.slug} />
+
+      <div className="grid gap-5 lg:grid-cols-3">
+        <Card className="lg:col-span-1">
           <CardHeader>
             <h2 className="font-heading text-lg text-charcoal">
               {t("quickStats")}
@@ -204,10 +261,17 @@ export default function DashboardPage() {
                 </div>
               ))}
             </div>
+            <p className="mt-4 text-xs text-muted">
+              {locale === "en" ? "Attending (with +1)" : "Придут (с +1)"}:{" "}
+              <strong className="text-charcoal">{stats.totalPeople}</strong>
+              {" · "}
+              {locale === "en" ? "Views" : "Просмотры"}:{" "}
+              <strong className="text-charcoal">{invitation.views}</strong>
+            </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="lg:col-span-1">
           <CardHeader className="flex flex-row items-center justify-between">
             <h2 className="font-heading text-lg text-charcoal">
               {t("recentRsvp")}
@@ -216,22 +280,31 @@ export default function DashboardPage() {
               href={`/${locale}/dashboard/guests`}
               className="text-xs text-blush hover:underline"
             >
-              Все гости →
+              {locale === "en" ? "All guests →" : "Все гости →"}
             </Link>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-2.5">
             {recent.length === 0 && (
-              <p className="text-sm text-muted">Пока нет ответов</p>
+              <p className="text-sm text-muted">
+                {locale === "en" ? "No responses yet" : "Пока нет ответов"}
+              </p>
             )}
             {recent.map((g) => (
               <div
                 key={g.id}
                 className="flex items-center justify-between rounded-2xl bg-warm-beige/50 px-3 py-2.5"
               >
-                <div>
-                  <p className="text-sm font-medium text-charcoal">{g.name}</p>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-charcoal">
+                    {g.name}
+                    {g.plusOnes > 0 && (
+                      <span className="ml-1 text-xs text-muted">
+                        +{g.plusOnes}
+                      </span>
+                    )}
+                  </p>
                   {g.message && (
-                    <p className="text-xs text-muted line-clamp-1">{g.message}</p>
+                    <p className="truncate text-xs text-muted">{g.message}</p>
                   )}
                 </div>
                 <Badge
@@ -249,7 +322,66 @@ export default function DashboardPage() {
             ))}
           </CardContent>
         </Card>
+
+        <Card className="lg:col-span-1">
+          <CardHeader>
+            <h2 className="font-heading text-lg text-charcoal">
+              {locale === "en" ? "Checklist" : "Чек-лист"}
+            </h2>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {checklist.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="flex items-center gap-3 rounded-xl px-2 py-2 transition-colors hover:bg-warm-beige/50"
+              >
+                <span
+                  className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] ${
+                    item.done
+                      ? "bg-sage text-white"
+                      : "border border-border bg-white text-muted"
+                  }`}
+                >
+                  {item.done ? "✓" : ""}
+                </span>
+                <span
+                  className={`text-sm ${
+                    item.done ? "text-muted line-through" : "text-charcoal"
+                  }`}
+                >
+                  {item.label}
+                </span>
+              </Link>
+            ))}
+          </CardContent>
+        </Card>
       </div>
+
+      {scheduleItems.length > 0 && (
+        <Card>
+          <CardHeader>
+            <h2 className="font-heading text-lg text-charcoal">
+              {locale === "en" ? "Day timeline" : "Тайминг дня"}
+            </h2>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-4 overflow-x-auto pb-2">
+              {scheduleItems.map((item, i) => (
+                <div
+                  key={i}
+                  className="flex min-w-[100px] flex-col items-center rounded-2xl bg-warm-beige/40 px-3 py-3 text-center"
+                >
+                  <p className="font-heading text-base font-semibold text-charcoal">
+                    {item.time}
+                  </p>
+                  <p className="mt-1 text-xs text-muted">{item.title}</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

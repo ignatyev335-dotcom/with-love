@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
+import { rsvpConfirmationEmail, sendEmail } from "@/lib/email";
 import { useAppStore } from "@/lib/store";
 import type { RsvpStatus } from "@/types";
 import { useTranslations } from "next-intl";
@@ -10,6 +11,7 @@ import { FormEvent, useState } from "react";
 export function RsvpForm({ deadline }: { deadline?: string }) {
   const t = useTranslations("invite");
   const submitRsvp = useAppStore((s) => s.submitRsvp);
+  const wedding = useAppStore((s) => s.wedding);
   const [status, setStatus] = useState<RsvpStatus>("confirmed");
   const [name, setName] = useState("");
   const [count, setCount] = useState(1);
@@ -26,6 +28,19 @@ export function RsvpForm({ deadline }: { deadline?: string }) {
       plusOnes: Math.max(0, count - 1),
       message: comment || undefined,
       dietary: dietary || undefined,
+    });
+    const mail = rsvpConfirmationEmail({
+      guestName: name.trim(),
+      coupleNames: wedding?.coupleNames || "With Love",
+      status,
+      date: wedding?.date
+        ? new Date(wedding.date).toLocaleDateString("ru-RU")
+        : "",
+    });
+    void sendEmail({
+      to: "guest@example.com",
+      subject: mail.subject,
+      html: mail.html,
     });
     setDone(true);
   };

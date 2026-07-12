@@ -5,17 +5,30 @@ import { Header } from "@/components/layout/Header";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { TEMPLATES } from "@/lib/seed";
+import { useAppStore } from "@/lib/store";
 import { formatPrice } from "@/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 export default function TemplatesPage() {
   const t = useTranslations("templates");
   const locale = useLocale();
   const isEn = locale === "en";
+  const router = useRouter();
+  const user = useAppStore((s) => s.user);
+  const applyTemplate = useAppStore((s) => s.applyTemplate);
   const [filter, setFilter] = useState("all");
+
+  const useTemplate = (id: string) => {
+    if (!user) {
+      router.push(`/${locale}/register`);
+      return;
+    }
+    applyTemplate(id);
+    router.push(`/${locale}/dashboard/editor`);
+  };
 
   const categories = useMemo(() => {
     const set = new Set(TEMPLATES.map((x) => x.category));
@@ -69,11 +82,13 @@ export default function TemplatesPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal/50 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                   <div className="absolute bottom-3 left-3 right-3 translate-y-2 opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100">
-                    <Link href={`/${locale}/dashboard/editor`}>
-                      <Button size="sm" className="w-full">
-                        {t("use")}
-                      </Button>
-                    </Link>
+                    <Button
+                      size="sm"
+                      className="w-full"
+                      onClick={() => useTemplate(tpl.id)}
+                    >
+                      {t("use")}
+                    </Button>
                   </div>
                   <div className="absolute right-3 top-3">
                     {tpl.premium ? (
