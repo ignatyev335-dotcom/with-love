@@ -20,7 +20,6 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useMemo } from "react";
-// Badge already imported
 
 export default function DashboardPage() {
   const t = useTranslations("dashboard");
