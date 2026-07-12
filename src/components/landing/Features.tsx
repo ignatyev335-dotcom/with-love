@@ -26,23 +26,26 @@ export function Features({ locale }: { locale: string }) {
   const isEn = locale === "en";
 
   return (
-    <section id="features" className="relative border-y border-[#EDE7DD] bg-white/70 py-8 backdrop-blur-sm">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-4 gap-2 sm:grid-cols-4 lg:grid-cols-8 lg:gap-1">
+    <section
+      id="features"
+      className="relative border-y border-[#EFE9E0] bg-white/80 py-6 backdrop-blur-sm"
+    >
+      <div className="mx-auto max-w-[1120px] px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-4 gap-1 lg:grid-cols-8">
           {items.map((f) => {
             const Icon = f.icon;
             return (
               <div
                 key={f.title}
-                className="group flex flex-col items-center gap-2 rounded-2xl px-1 py-3 text-center transition-all hover:bg-[#FAF7F2]"
+                className="group flex flex-col items-center gap-1.5 rounded-2xl px-1 py-3 text-center transition-colors hover:bg-[#FBF8F3]"
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#FAF7F2] text-[#C4A35A] ring-1 ring-[#EDE7DD] transition-colors group-hover:bg-[#F8E8E8] group-hover:text-[#E8A09A]">
-                  <Icon size={20} strokeWidth={1.5} />
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl text-[#C4A35A] transition-colors group-hover:bg-[#F8E8E8] group-hover:text-[#D4A39C]">
+                  <Icon size={20} strokeWidth={1.35} />
                 </div>
-                <span className="text-[11px] font-medium tracking-wide text-charcoal sm:text-xs">
+                <span className="text-[11px] font-medium tracking-wide text-[#3A3632] sm:text-xs">
                   {isEn ? f.titleEn : f.title}
                 </span>
-                <span className="hidden text-[10px] leading-snug text-[#a39e97] lg:block">
+                <span className="hidden max-w-[90px] text-[10px] leading-snug text-[#A39E96] lg:block">
                   {isEn ? f.descEn : f.desc}
                 </span>
               </div>

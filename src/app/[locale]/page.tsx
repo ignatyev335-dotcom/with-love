@@ -1,6 +1,6 @@
-import { BenefitsGrid } from "@/components/landing/BenefitsGrid";
 import { CTABanner } from "@/components/landing/CTABanner";
 import { FAQ } from "@/components/landing/FAQ";
+import { FeatureTiles } from "@/components/landing/FeatureTiles";
 import { Features } from "@/components/landing/Features";
 import { Hero } from "@/components/landing/Hero";
 import { HowItWorks } from "@/components/landing/HowItWorks";
@@ -20,14 +20,15 @@ export default async function HomePage({
   setRequestLocale(locale);
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#FDFCFA]">
+    <div className="flex min-h-screen flex-col bg-[#FBF8F3]">
       <Header />
       <main className="flex-1">
         <Hero locale={locale} />
         <Features locale={locale} />
         <StylesGallery locale={locale} />
-        <HowItWorks locale={locale} />
+        <FeatureTiles locale={locale} />
         <Reviews locale={locale} />
+        <HowItWorks locale={locale} />
         <Pricing locale={locale} />
         <FAQ locale={locale} />
         <CTABanner locale={locale} />

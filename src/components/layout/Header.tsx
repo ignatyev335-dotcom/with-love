@@ -83,7 +83,7 @@ export function Header() {
           >
             <Button
               size="sm"
-              className="rounded-full bg-[#E8A09A] px-5 text-[13px] shadow-none hover:bg-[#d9928c]"
+              className="rounded-full bg-[#D4A39C] px-5 text-[13px] shadow-none hover:bg-[#c9948d]"
             >
               {t("common.createInvitation")}
             </Button>
@@ -134,7 +134,7 @@ export function Header() {
               href={user ? `/${locale}/dashboard/editor` : `/${locale}/register`}
               onClick={() => setOpen(false)}
             >
-              <Button className="w-full rounded-full bg-[#E8A09A] hover:bg-[#d9928c]">
+              <Button className="w-full rounded-full bg-[#D4A39C] hover:bg-[#c9948d]">
                 {t("common.createInvitation")}
               </Button>
             </Link>

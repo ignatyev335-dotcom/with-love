@@ -1,12 +1,13 @@
 "use client";
 
-import { FloralCorner, GoldFlourish } from "@/components/decor/Floral";
+import { FloralBouquet, GoldFlourish } from "@/components/decor/Floral";
 import { ConfirmedGuests } from "@/components/invitation/ConfirmedGuests";
 import { Countdown } from "@/components/invitation/Countdown";
 import { MusicPlayer } from "@/components/invitation/MusicPlayer";
 import { RsvpForm } from "@/components/invitation/RsvpForm";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/Button";
+import { STORY_IMAGE } from "@/lib/seed";
 import { useAppStore } from "@/lib/store";
 import type { Invitation, ScheduleItem, Wish } from "@/types";
 import {
@@ -76,14 +77,18 @@ export function InviteView({
     cta?: string;
   };
 
-  const primary = config.colors.primary || "#E8A09A";
-  const accent = config.colors.accent || "#D4A537";
+  const primary =
+    config.colors.primary === "#F76E62" || !config.colors.primary
+      ? "#D4A39C"
+      : config.colors.primary;
+  const accent = config.colors.accent || "#C4A35A";
   const isLuxury = config.theme === "luxury";
-  const bg = config.colors.background || (isLuxury ? "#111111" : "#FAF7F2");
-  const text = config.colors.text || (isLuxury ? "#FAF7F2" : "#282B2B");
-  const surface = isLuxury ? "#1A1A1A" : "#FFFFFF";
-  const border = isLuxury ? "rgba(255,255,255,0.1)" : "#EDE7DD";
-  const muted = isLuxury ? "rgba(255,255,255,0.55)" : "#8a8580";
+  const bg = isLuxury ? "#111111" : "#FBF8F3";
+  const text = isLuxury ? "#FAF7F2" : "#2C2926";
+  const surface = isLuxury ? "#1A1A1A" : "#FFFCFA";
+  const border = isLuxury ? "rgba(255,255,255,0.1)" : "#EFE9E0";
+  const muted = isLuxury ? "rgba(255,255,255,0.55)" : "#8F8880";
+  const cream = isLuxury ? "#1A1A1A" : "#F7F1EA";
 
   const schedule = blocks.find((b) => b.type === "schedule");
   const location = blocks.find((b) => b.type === "location");
@@ -100,7 +105,16 @@ export function InviteView({
   const payment = blocks.find((b) => b.type === "payment");
   const seating = blocks.find((b) => b.type === "seating");
 
-  const headingStyle = { fontFamily: `"${config.fonts.heading}", Georgia, serif` };
+  const headingStyle = {
+    fontFamily: `"${config.fonts.heading}", Georgia, "Times New Roman", serif`,
+  };
+
+  const softBtn = {
+    background: primary,
+    color: "#fff",
+    border: "none",
+    boxShadow: "0 8px 18px -8px rgba(212,163,156,0.55)",
+  };
 
   return (
     <div
@@ -111,159 +125,144 @@ export function InviteView({
         fontFamily: `"${config.fonts.body}", system-ui, sans-serif`,
       }}
     >
-      {/* soft ambient for classic themes */}
       {!isLuxury && (
         <>
-          <FloralCorner className="pointer-events-none fixed -left-10 bottom-20 h-64 w-64 opacity-40" />
-          <FloralCorner
+          <FloralBouquet className="pointer-events-none fixed -right-12 top-24 z-0 h-72 w-80 opacity-45" />
+          <FloralBouquet
             flip
-            className="pointer-events-none fixed -right-8 top-32 h-56 w-56 opacity-35"
+            className="pointer-events-none fixed -left-16 bottom-32 z-0 h-64 w-72 opacity-30"
           />
         </>
       )}
 
+      {/* NAV — ref 13 clean top */}
       <header
         className="sticky top-0 z-30 border-b backdrop-blur-md"
         style={{
           borderColor: border,
           background: isLuxury
-            ? "rgba(17,17,17,0.92)"
-            : "rgba(253,252,250,0.92)",
+            ? "rgba(17,17,17,0.94)"
+            : "rgba(251,248,243,0.92)",
         }}
       >
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
+        <div className="mx-auto flex h-[3.4rem] max-w-[1120px] items-center justify-between px-4 lg:px-6">
           <Logo href={`/${locale}`} dark={isLuxury} size="sm" />
           <nav
-            className="hidden items-center gap-7 text-[13px] tracking-wide md:flex"
+            className="hidden items-center gap-8 text-[13px] tracking-wide md:flex"
             style={{ color: muted }}
           >
-            {story && (
-              <a href="#story" className="hover:opacity-100" style={{ opacity: 0.85 }}>
-                {labels.story}
-              </a>
-            )}
-            {schedule && (
-              <a href="#schedule" className="hover:opacity-100" style={{ opacity: 0.85 }}>
-                {labels.schedule}
-              </a>
-            )}
-            <a href="#details" className="hover:opacity-100" style={{ opacity: 0.85 }}>
-              {labels.details || "Детали"}
-            </a>
-            {faq && (
-              <a href="#faq" className="hover:opacity-100" style={{ opacity: 0.85 }}>
-                {labels.faq}
-              </a>
-            )}
-            {wishesBlock && (
-              <a href="#wishes" className="hover:opacity-100" style={{ opacity: 0.85 }}>
-                {labels.wishes}
-              </a>
-            )}
+            {story && <a href="#story">{labels.story}</a>}
+            {schedule && <a href="#schedule">{labels.schedule}</a>}
+            <a href="#details">{labels.details || "Детали"}</a>
+            {faq && <a href="#faq">{labels.faq}</a>}
+            {wishesBlock && <a href="#wishes">{labels.wishes}</a>}
           </nav>
           {rsvp && (
             <a href="#rsvp">
-              <Button
-                size="sm"
-                className="border-0 text-white shadow-none"
-                style={{ background: primary }}
+              <button
+                type="button"
+                className="inline-flex h-9 items-center rounded-full px-4 text-[13px] font-medium text-white transition hover:opacity-90"
+                style={softBtn}
               >
                 RSVP ♥
-              </Button>
+              </button>
             </a>
           )}
         </div>
       </header>
 
-      {/* HERO — ref 13 layout */}
+      {/* HERO — exact ref 13: photo | names | info column */}
       {hero && (
-        <section className="relative overflow-hidden">
-          <div className="mx-auto max-w-6xl px-4 pt-6 lg:px-6 lg:pt-8">
+        <section className="relative z-10 px-4 pt-5 lg:px-6 lg:pt-7">
+          <div className="mx-auto max-w-[1120px]">
             <div
-              className="overflow-hidden rounded-[1.75rem] border shadow-[0_20px_50px_-16px_rgba(40,43,43,0.12)]"
-              style={{
-                background: surface,
-                borderColor: border,
-              }}
+              className="overflow-hidden rounded-[1.35rem] border shadow-[0_28px_70px_-28px_rgba(50,40,30,0.2)]"
+              style={{ background: cream, borderColor: border }}
             >
               <div className="grid lg:grid-cols-12">
-                {/* Photo */}
-                <div className="relative min-h-[280px] lg:col-span-5 lg:min-h-[420px]">
+                {/* Photo + florals */}
+                <div className="relative min-h-[300px] lg:col-span-5 lg:min-h-[460px]">
                   {heroData.image && (
                     <Image
                       src={heroData.image}
                       alt={`${heroData.partner1} & ${heroData.partner2}`}
                       fill
                       priority
-                      className="object-cover object-[center_15%]"
+                      className="object-cover object-[center_12%]"
                       sizes="(max-width: 1024px) 100vw, 42vw"
                     />
                   )}
                   {!isLuxury && (
-                    <FloralCorner className="pointer-events-none absolute -bottom-4 -left-4 h-40 w-40 drop-shadow" />
+                    <FloralBouquet className="pointer-events-none absolute -bottom-10 -left-12 h-56 w-64 drop-shadow-lg" />
                   )}
                 </div>
 
-                {/* Names + CTA */}
-                <div className="relative flex flex-col items-center justify-center px-6 py-10 text-center lg:col-span-4 lg:px-8">
-                  <GoldFlourish className="mb-3 h-7 w-24" />
+                {/* Center names */}
+                <div
+                  className="relative flex flex-col items-center justify-center px-6 py-12 text-center lg:col-span-4 lg:px-8"
+                  style={{ background: surface }}
+                >
+                  <GoldFlourish className="mb-4 h-6 w-32 opacity-70" />
                   <h1
-                    className="text-[2rem] leading-[1.15] sm:text-[2.5rem]"
+                    className="text-[2.15rem] font-normal leading-[1.12] sm:text-[2.55rem]"
                     style={headingStyle}
                   >
                     {heroData.partner1}
                     <br />
-                    <span style={{ color: primary }}>&</span> {heroData.partner2}
+                    <span className="mx-1" style={{ color: primary }}>
+                      &
+                    </span>
+                    {heroData.partner2}
                   </h1>
-                  <p className="mt-3 text-sm" style={{ color: muted }}>
+                  <p className="mt-3.5 text-[14px]" style={{ color: muted }}>
                     {heroData.date &&
                       new Date(heroData.date).toLocaleDateString(
                         locale === "en" ? "en-US" : "ru-RU",
-                        { day: "numeric", month: "long", year: "numeric" }
+                        {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        }
                       )}
                   </p>
                   <p
-                    className="mt-2 text-lg italic"
+                    className="mt-2.5 text-[17px] italic"
                     style={{ ...headingStyle, color: accent }}
                   >
-                    {heroData.tagline} ♥
+                    {heroData.tagline || "Мы женимся!"} ♥
                   </p>
                   {rsvp && (
-                    <a href="#rsvp" className="mt-6">
-                      <Button
-                        size="lg"
-                        className="border-0 px-8 text-white shadow-none"
-                        style={{ background: primary }}
+                    <a href="#rsvp" className="mt-7">
+                      <button
+                        type="button"
+                        className="inline-flex h-11 items-center rounded-full px-8 text-[14px] font-medium text-white transition hover:opacity-92"
+                        style={softBtn}
                       >
                         {heroData.cta || labels.confirm}
-                      </Button>
+                      </button>
                     </a>
                   )}
-                  <p className="mt-3 text-xs" style={{ color: muted }}>
+                  <p className="mt-3 text-[12px]" style={{ color: muted }}>
                     {locale === "en"
                       ? "We will be happy to see you!"
                       : "Мы будем рады видеть вас!"}
                   </p>
                 </div>
 
-                {/* Side cards */}
+                {/* Right info column — ref 13 */}
                 <div
-                  className="space-y-3 border-t px-5 py-6 lg:col-span-3 lg:border-l lg:border-t-0 lg:px-4 lg:py-6"
-                  style={{
-                    borderColor: border,
-                    background: isLuxury ? bg : "#FDFCFA",
-                  }}
+                  className="space-y-3 border-t px-4 py-5 lg:col-span-3 lg:border-l lg:border-t-0 lg:px-4 lg:py-6"
+                  style={{ borderColor: border, background: cream }}
                 >
                   {countdown && (
                     <div
-                      className="rounded-2xl border p-4 text-center"
+                      className="rounded-2xl border px-3 py-4 text-center"
                       style={{ background: surface, borderColor: border }}
                     >
                       <p
-                        className="mb-2 flex items-center justify-center gap-1 text-[11px] font-medium uppercase tracking-wider"
+                        className="mb-2 text-[11px] font-medium tracking-wide"
                         style={{ color: muted }}
                       >
-                        <Clock size={12} style={{ color: accent }} />{" "}
                         {labels.countdown}
                       </p>
                       <Countdown
@@ -282,21 +281,21 @@ export function InviteView({
                   )}
                   {location && (
                     <div
-                      className="rounded-2xl border p-4 text-left"
+                      className="rounded-2xl border px-3.5 py-3.5"
                       style={{ background: surface, borderColor: border }}
                     >
                       <p
-                        className="mb-1.5 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider"
+                        className="mb-1.5 flex items-center gap-1.5 text-[11px] font-medium"
                         style={{ color: muted }}
                       >
                         <MapPin size={12} style={{ color: accent }} />{" "}
                         {labels.location}
                       </p>
-                      <p className="text-sm font-medium">
+                      <p className="text-[13px] font-medium leading-snug">
                         {String(location.data.name || "")}
                       </p>
                       <p
-                        className="mt-1 text-xs leading-relaxed"
+                        className="mt-1 text-[11px] leading-relaxed"
                         style={{ color: muted }}
                       >
                         {String(location.data.address || "")}
@@ -306,7 +305,7 @@ export function InviteView({
                           href={String(location.data.mapUrl)}
                           target="_blank"
                           rel="noreferrer"
-                          className="mt-2 inline-block text-xs font-medium"
+                          className="mt-2 inline-block text-[11px] font-medium"
                           style={{ color: primary }}
                         >
                           {labels.showMap} →
@@ -316,17 +315,20 @@ export function InviteView({
                   )}
                   {transfer && (
                     <div
-                      className="rounded-2xl border p-4 text-left"
+                      className="rounded-2xl border px-3.5 py-3.5"
                       style={{ background: surface, borderColor: border }}
                     >
                       <p
-                        className="mb-1.5 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider"
+                        className="mb-1.5 flex items-center gap-1.5 text-[11px] font-medium"
                         style={{ color: muted }}
                       >
                         <Car size={12} style={{ color: accent }} />{" "}
                         {labels.transfer}
                       </p>
-                      <p className="text-xs leading-relaxed" style={{ color: muted }}>
+                      <p
+                        className="text-[11px] leading-relaxed"
+                        style={{ color: muted }}
+                      >
                         {String(transfer.data.text || "")}
                       </p>
                     </div>
@@ -338,35 +340,41 @@ export function InviteView({
         </section>
       )}
 
-      {/* SCHEDULE timeline */}
+      {/* SCHEDULE — horizontal with gold icons (ref 13) */}
       {schedule && (
-        <section id="schedule" className="mx-auto max-w-6xl px-4 py-14">
-          <div className="mb-8 flex flex-col items-center">
-            <h2 className="text-center text-2xl sm:text-3xl" style={headingStyle}>
+        <section id="schedule" className="relative z-10 mx-auto max-w-[1120px] px-4 py-14 lg:px-6">
+          <div className="mb-9 flex flex-col items-center">
+            <h2
+              className="text-center text-[1.65rem] font-normal sm:text-[1.85rem]"
+              style={headingStyle}
+            >
               {labels.schedule}
             </h2>
-            <div className="mt-3 h-px w-24 bg-gradient-to-r from-transparent via-[#D4A537]/50 to-transparent" />
+            <div className="mt-3 h-px w-20 bg-gradient-to-r from-transparent via-[#C4A35A]/55 to-transparent" />
           </div>
-          <div className="relative flex flex-wrap items-start justify-center gap-3 sm:gap-1">
+          <div className="flex flex-wrap items-start justify-center gap-x-2 gap-y-6 sm:gap-x-1">
             {((schedule.data.items as ScheduleItem[]) || []).map((item, i, arr) => (
-              <div key={i} className="relative flex w-[100px] flex-col items-center text-center sm:w-[110px]">
+              <div
+                key={i}
+                className="relative flex w-[96px] flex-col items-center text-center sm:w-[108px]"
+              >
                 {i < arr.length - 1 && (
                   <div
-                    className="absolute left-[calc(50%+28px)] top-6 hidden h-px w-[calc(100%-16px)] sm:block"
-                    style={{ background: `${accent}33` }}
+                    className="absolute left-[calc(50%+26px)] top-[22px] hidden h-px w-[calc(100%-12px)] sm:block"
+                    style={{ background: `${accent}40` }}
                   />
                 )}
                 <div
-                  className="relative z-10 mb-2.5 flex h-12 w-12 items-center justify-center rounded-2xl"
+                  className="relative z-[1] mb-2.5 flex h-11 w-11 items-center justify-center rounded-2xl"
                   style={{
-                    background: isLuxury ? "#1A1A1A" : "#FAF7F2",
+                    background: isLuxury ? "#1A1A1A" : "#F7F1EA",
                     color: accent,
-                    boxShadow: isLuxury ? "none" : "0 0 0 1px #EDE7DD",
+                    boxShadow: isLuxury ? "none" : "inset 0 0 0 1px #EFE9E0",
                   }}
                 >
-                  <Heart size={18} strokeWidth={1.5} />
+                  <Heart size={17} strokeWidth={1.4} />
                 </div>
-                <p className="text-base font-semibold tracking-tight" style={headingStyle}>
+                <p className="text-[15px] font-semibold tracking-tight" style={headingStyle}>
                   {item.time}
                 </p>
                 <p className="mt-1 text-[11px] leading-snug" style={{ color: muted }}>
@@ -378,35 +386,44 @@ export function InviteView({
         </section>
       )}
 
-      {/* Content cards grid */}
+      {/* CONTENT GRID — visual cards like ref 13 */}
       <section
         id="details"
-        className="mx-auto grid max-w-6xl gap-4 px-4 pb-4 sm:grid-cols-2 lg:grid-cols-3"
+        className="relative z-10 mx-auto grid max-w-[1120px] gap-3.5 px-4 pb-6 sm:grid-cols-2 lg:grid-cols-3 lg:px-6"
       >
         {story && (
           <div
             id="story"
-            className="rounded-[1.25rem] border p-5 shadow-sm"
+            className="rounded-[1.15rem] border p-5 shadow-[0_4px_20px_-10px_rgba(40,30,20,0.08)]"
             style={{ background: surface, borderColor: border }}
           >
-            <h3 className="text-lg" style={headingStyle}>
+            <h3 className="text-[1.1rem] font-normal" style={headingStyle}>
               {String(story.data.title || labels.story)}
             </h3>
-            <p className="mt-2 text-sm leading-relaxed" style={{ color: muted }}>
+            <p className="mt-2 text-[13px] leading-relaxed" style={{ color: muted }}>
               {String(story.data.text || "")}
             </p>
-            {Boolean(story.data.image) && (
-              <div className="relative mt-4 aspect-[4/3] overflow-hidden rounded-xl">
+            <div className="mt-4 flex gap-2">
+              <div className="relative h-20 w-20 rotate-[-4deg] overflow-hidden rounded-lg border-2 border-white shadow-md">
                 <Image
-                  src={String(story.data.image)}
+                  src={String(story.data.image || STORY_IMAGE)}
                   alt=""
                   fill
                   className="object-cover"
-                  sizes="320px"
+                  sizes="80px"
                 />
               </div>
-            )}
-            <span className="mt-3 inline-block text-xs font-medium" style={{ color: primary }}>
+              <div className="relative h-20 w-20 rotate-[3deg] overflow-hidden rounded-lg border-2 border-white shadow-md">
+                <Image
+                  src={heroData.image || STORY_IMAGE}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  sizes="80px"
+                />
+              </div>
+            </div>
+            <span className="mt-3 inline-block text-[12px] font-medium" style={{ color: primary }}>
               {locale === "en" ? "Read story →" : "Читать историю →"}
             </span>
           </div>
@@ -414,55 +431,67 @@ export function InviteView({
 
         {afterparty && (
           <div
-            className="rounded-[1.25rem] border p-5 shadow-sm"
+            className="rounded-[1.15rem] border p-5 shadow-[0_4px_20px_-10px_rgba(40,30,20,0.08)]"
             style={{ background: surface, borderColor: border }}
           >
-            <h3 className="text-lg" style={headingStyle}>
+            <h3 className="text-[1.1rem]" style={headingStyle}>
               {String(afterparty.data.title || "После свадьбы")}
             </h3>
-            <p className="mt-2 text-sm leading-relaxed" style={{ color: muted }}>
+            <p className="mt-2 text-[13px] leading-relaxed" style={{ color: muted }}>
               {String(afterparty.data.text || "")}
             </p>
+            <div className="relative mt-4 h-24 overflow-hidden rounded-xl">
+              <Image
+                src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=80"
+                alt=""
+                fill
+                className="object-cover"
+                sizes="300px"
+              />
+            </div>
           </div>
         )}
 
         {seating && (
           <div
-            className="rounded-[1.25rem] border p-5 shadow-sm"
+            className="rounded-[1.15rem] border p-5 shadow-[0_4px_20px_-10px_rgba(40,30,20,0.08)]"
             style={{ background: surface, borderColor: border }}
           >
-            <h3 className="text-lg" style={headingStyle}>
+            <h3 className="text-[1.1rem]" style={headingStyle}>
               {String(seating.data.title || "План рассадки")}
             </h3>
-            <p className="mt-2 text-sm leading-relaxed" style={{ color: muted }}>
+            <p className="mt-2 text-[13px] leading-relaxed" style={{ color: muted }}>
               {String(seating.data.text || "")}
             </p>
-            <div className="mt-4 flex flex-wrap justify-center gap-2 opacity-40">
-              {[1, 2, 3, 4, 5].map((n) => (
+            <div className="mt-4 grid grid-cols-3 place-items-center gap-2 opacity-70">
+              {[1, 2, 3, 4, 5, 6].map((n) => (
                 <span
                   key={n}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border text-[10px]"
-                  style={{ borderColor: accent }}
+                  className="flex h-11 w-11 items-center justify-center rounded-full border text-[11px]"
+                  style={{ borderColor: `${accent}66`, color: accent }}
                 >
                   {n}
                 </span>
               ))}
             </div>
+            <span className="mt-3 inline-block text-[12px] font-medium" style={{ color: primary }}>
+              {locale === "en" ? "Open plan →" : "Открыть план →"}
+            </span>
           </div>
         )}
 
         {dresscode && (
           <div
-            className="rounded-[1.25rem] border p-5 shadow-sm"
+            className="rounded-[1.15rem] border p-5 shadow-[0_4px_20px_-10px_rgba(40,30,20,0.08)]"
             style={{ background: surface, borderColor: border }}
           >
             <div className="mb-2 flex items-center gap-2">
-              <Shirt size={18} strokeWidth={1.5} style={{ color: accent }} />
-              <h3 className="text-lg" style={headingStyle}>
+              <Shirt size={17} strokeWidth={1.4} style={{ color: accent }} />
+              <h3 className="text-[1.1rem]" style={headingStyle}>
                 {labels.dresscode}
               </h3>
             </div>
-            <p className="text-sm leading-relaxed" style={{ color: muted }}>
+            <p className="text-[13px] leading-relaxed" style={{ color: muted }}>
               {String(dresscode.data.text || "")}
             </p>
             <div className="mt-4 flex gap-2">
@@ -479,37 +508,40 @@ export function InviteView({
 
         {(musicBlock || config.music?.enabled) && (
           <div
-            className="rounded-[1.25rem] border p-5 shadow-sm"
+            className="rounded-[1.15rem] border p-5 shadow-[0_4px_20px_-10px_rgba(40,30,20,0.08)]"
             style={{ background: surface, borderColor: border }}
           >
             <div className="mb-2 flex items-center gap-2">
-              <Music size={18} strokeWidth={1.5} style={{ color: accent }} />
-              <h3 className="text-lg" style={headingStyle}>
+              <Music size={17} strokeWidth={1.4} style={{ color: accent }} />
+              <h3 className="text-[1.1rem]" style={headingStyle}>
                 {labels.music}
               </h3>
             </div>
-            <p className="text-sm" style={{ color: muted }}>
+            <p className="text-[13px]" style={{ color: muted }}>
               {config.music?.trackName ||
                 String(musicBlock?.data.trackName || "Фоновая музыка")}
             </p>
+            <span className="mt-3 inline-block text-[12px] font-medium" style={{ color: primary }}>
+              {locale === "en" ? "Add tracks →" : "Добавить треки →"}
+            </span>
           </div>
         )}
 
         {wishesBlock && (
           <div
-            className="rounded-[1.25rem] border p-5 shadow-sm"
+            className="rounded-[1.15rem] border p-5 shadow-[0_4px_20px_-10px_rgba(40,30,20,0.08)]"
             style={{ background: surface, borderColor: border }}
           >
             <div className="mb-2 flex items-center gap-2">
-              <Gift size={18} strokeWidth={1.5} style={{ color: accent }} />
-              <h3 className="text-lg" style={headingStyle}>
+              <Gift size={17} strokeWidth={1.4} style={{ color: accent }} />
+              <h3 className="text-[1.1rem]" style={headingStyle}>
                 {String(wishesBlock.data.title || labels.wishes)}
               </h3>
             </div>
-            <p className="text-sm leading-relaxed" style={{ color: muted }}>
+            <p className="text-[13px] leading-relaxed" style={{ color: muted }}>
               {String(wishesBlock.data.text || "")}
             </p>
-            <a href="#wishes" className="mt-3 inline-block text-xs font-medium" style={{ color: primary }}>
+            <a href="#wishes" className="mt-3 inline-block text-[12px] font-medium" style={{ color: primary }}>
               {locale === "en" ? "Leave a wish →" : "Оставить пожелание →"}
             </a>
           </div>
@@ -517,18 +549,21 @@ export function InviteView({
 
         {faq && (
           <div
-            className="rounded-[1.25rem] border p-5 shadow-sm"
+            className="rounded-[1.15rem] border p-5 shadow-[0_4px_20px_-10px_rgba(40,30,20,0.08)]"
             style={{ background: surface, borderColor: border }}
           >
-            <h3 className="text-lg" style={headingStyle}>
+            <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full" style={{ background: cream, color: accent }}>
+              ?
+            </div>
+            <h3 className="text-[1.1rem]" style={headingStyle}>
               {labels.faq}
             </h3>
-            <p className="mt-2 text-sm" style={{ color: muted }}>
+            <p className="mt-2 text-[13px]" style={{ color: muted }}>
               {locale === "en"
                 ? "Answers to common questions about the day"
                 : "Ответы на частые вопросы о свадьбе"}
             </p>
-            <a href="#faq" className="mt-3 inline-block text-xs font-medium" style={{ color: primary }}>
+            <a href="#faq" className="mt-3 inline-block text-[12px] font-medium" style={{ color: primary }}>
               {locale === "en" ? "Go to FAQ →" : "Перейти к FAQ →"}
             </a>
           </div>
@@ -536,16 +571,16 @@ export function InviteView({
 
         {gifts && (
           <div
-            className="rounded-[1.25rem] border p-5 shadow-sm"
+            className="rounded-[1.15rem] border p-5 shadow-[0_4px_20px_-10px_rgba(40,30,20,0.08)]"
             style={{ background: surface, borderColor: border }}
           >
             <div className="mb-2 flex items-center gap-2">
-              <Gift size={18} strokeWidth={1.5} style={{ color: accent }} />
-              <h3 className="text-lg" style={headingStyle}>
+              <Gift size={17} strokeWidth={1.4} style={{ color: accent }} />
+              <h3 className="text-[1.1rem]" style={headingStyle}>
                 {String(gifts.data.title || labels.gifts)}
               </h3>
             </div>
-            <p className="text-sm leading-relaxed" style={{ color: muted }}>
+            <p className="text-[13px] leading-relaxed" style={{ color: muted }}>
               {String(gifts.data.text || "")}
             </p>
           </div>
@@ -553,17 +588,17 @@ export function InviteView({
 
         {payment && (
           <div
-            className="rounded-[1.25rem] border p-5 shadow-sm"
+            className="rounded-[1.15rem] border p-5 shadow-[0_4px_20px_-10px_rgba(40,30,20,0.08)]"
             style={{ background: surface, borderColor: border }}
           >
-            <h3 className="text-lg" style={headingStyle}>
-              {String(payment.data.title || "Оплата")}
+            <h3 className="text-[1.1rem]" style={headingStyle}>
+              {String(payment.data.title || "Для гостей")}
             </h3>
-            <p className="mt-2 text-sm leading-relaxed" style={{ color: muted }}>
+            <p className="mt-2 text-[13px] leading-relaxed" style={{ color: muted }}>
               {String(payment.data.text || "")}
             </p>
             {Boolean(payment.data.recipient) && (
-              <p className="mt-2 text-sm font-medium" style={{ color: accent }}>
+              <p className="mt-2 text-[13px] font-medium" style={{ color: accent }}>
                 {String(payment.data.recipient)}
               </p>
             )}
@@ -572,7 +607,7 @@ export function InviteView({
       </section>
 
       {rsvp && (
-        <section id="rsvp" className="mx-auto max-w-lg px-4 py-12">
+        <section id="rsvp" className="relative z-10 mx-auto max-w-lg px-4 py-12">
           <RsvpForm
             deadline={
               rsvp.data.deadline ? String(rsvp.data.deadline) : undefined
@@ -591,8 +626,8 @@ export function InviteView({
       />
 
       {faq && (
-        <section id="faq" className="mx-auto max-w-2xl px-4 py-10">
-          <h2 className="mb-6 text-center text-2xl" style={headingStyle}>
+        <section id="faq" className="relative z-10 mx-auto max-w-2xl px-4 py-10">
+          <h2 className="mb-6 text-center text-[1.65rem]" style={headingStyle}>
             {labels.faq}
           </h2>
           <div className="space-y-2">
@@ -606,7 +641,7 @@ export function InviteView({
               >
                 <button
                   type="button"
-                  className="flex w-full items-center justify-between px-5 py-4 text-left text-sm font-medium"
+                  className="flex w-full items-center justify-between px-5 py-4 text-left text-[13.5px] font-medium"
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 >
                   {item.question}
@@ -620,7 +655,7 @@ export function InviteView({
                 </button>
                 {openFaq === i && (
                   <div
-                    className="border-t px-5 py-3 text-sm"
+                    className="border-t px-5 py-3 text-[13px]"
                     style={{ borderColor: border, color: muted }}
                   >
                     {item.answer}
@@ -633,11 +668,11 @@ export function InviteView({
       )}
 
       {wishesBlock && (
-        <section id="wishes" className="mx-auto max-w-2xl px-4 py-10">
-          <h2 className="mb-2 text-center text-2xl" style={headingStyle}>
+        <section id="wishes" className="relative z-10 mx-auto max-w-2xl px-4 py-10">
+          <h2 className="mb-2 text-center text-[1.65rem]" style={headingStyle}>
             {String(wishesBlock.data.title || labels.wishes)}
           </h2>
-          <p className="mb-6 text-center text-sm" style={{ color: muted }}>
+          <p className="mb-6 text-center text-[13px]" style={{ color: muted }}>
             {String(wishesBlock.data.text || "")}
           </p>
           <div className="mb-6 space-y-3">
@@ -647,7 +682,9 @@ export function InviteView({
                 className="rounded-2xl border p-4"
                 style={{ background: surface, borderColor: border }}
               >
-                <p className="text-sm leading-relaxed opacity-80">«{w.text}»</p>
+                <p className="text-[13.5px] leading-relaxed opacity-85">
+                  «{w.text}»
+                </p>
                 <p className="mt-2 text-xs font-medium" style={{ color: accent }}>
                   — {w.authorName}
                 </p>
@@ -655,7 +692,7 @@ export function InviteView({
             ))}
           </div>
           <div
-            className="space-y-3 rounded-[1.25rem] border p-5"
+            className="space-y-3 rounded-[1.15rem] border p-5"
             style={{ background: surface, borderColor: border }}
           >
             <input
@@ -665,7 +702,7 @@ export function InviteView({
               className="h-11 w-full rounded-full border px-4 text-sm outline-none focus:ring-2"
               style={{
                 borderColor: border,
-                background: isLuxury ? bg : "#FAF7F2",
+                background: cream,
                 color: text,
               }}
             />
@@ -677,7 +714,7 @@ export function InviteView({
               className="w-full rounded-2xl border px-4 py-3 text-sm outline-none focus:ring-2"
               style={{
                 borderColor: border,
-                background: isLuxury ? bg : "#FAF7F2",
+                background: cream,
                 color: text,
               }}
             />
@@ -698,7 +735,7 @@ export function InviteView({
       )}
 
       <footer
-        className="border-t py-10 text-center text-xs"
+        className="relative z-10 border-t py-10 text-center text-xs"
         style={{ borderColor: border, color: muted }}
       >
         <Logo href={`/${locale}`} dark={isLuxury} size="sm" />
@@ -730,7 +767,7 @@ export function InviteView({
           borderColor: border,
           background: isLuxury
             ? "rgba(17,17,17,0.96)"
-            : "rgba(253,252,250,0.96)",
+            : "rgba(251,248,243,0.96)",
           backdropFilter: "blur(12px)",
         }}
       >
@@ -759,7 +796,7 @@ export function InviteView({
               className="flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[10px]"
               style={{ color: muted }}
             >
-              <Icon size={18} strokeWidth={1.5} style={{ color: accent }} />
+              <Icon size={18} strokeWidth={1.4} style={{ color: accent }} />
               {item.label}
             </a>
           );
