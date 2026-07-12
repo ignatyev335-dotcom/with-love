@@ -1,396 +1,578 @@
 "use client";
 
-import { Countdown } from "@/components/invitation/Countdown";
+import { LiveCanvas } from "@/components/editor/LiveCanvas";
+import { SettingsPanel } from "@/components/editor/SettingsPanel";
+import { BlockIcon } from "@/components/editor/blockIcons";
+import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/Button";
+import { BLOCK_LABELS } from "@/lib/editor-meta";
 import { useAppStore } from "@/lib/store";
-import type { BlockType } from "@/types";
+import { cn } from "@/lib/utils";
 import {
-  BookOpen,
-  Car,
-  Clock,
-  CreditCard,
+  Check,
+  Copy,
   Eye,
-  Gift,
-  Heart,
-  HelpCircle,
-  ImageIcon,
-  MapPin,
-  Music,
-  Palette,
-  Settings2,
-  Shirt,
-  Users,
-  Wand2,
+  LayoutTemplate,
+  Monitor,
+  Share2,
+  Smartphone,
+  Tablet,
+  Undo2,
 } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
-import Image from "next/image";
+import { useLocale } from "next-intl";
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-const BLOCK_META: Record<
-  BlockType,
-  { label: string; icon: React.ReactNode }
-> = {
-  hero: { label: "Обложка", icon: <ImageIcon size={18} /> },
-  countdown: { label: "Таймер", icon: <Clock size={18} /> },
-  story: { label: "О нас", icon: <BookOpen size={18} /> },
-  rsvp: { label: "RSVP форма", icon: <Heart size={18} /> },
-  schedule: { label: "Программа", icon: <Clock size={18} /> },
-  transfer: { label: "Трансфер", icon: <Car size={18} /> },
-  location: { label: "Карта", icon: <MapPin size={18} /> },
-  wishes: { label: "Пожелания", icon: <Gift size={18} /> },
-  dresscode: { label: "Дресс-код", icon: <Shirt size={18} /> },
-  faq: { label: "FAQ", icon: <HelpCircle size={18} /> },
-  gifts: { label: "Подарки", icon: <Gift size={18} /> },
-  music: { label: "Музыка", icon: <Music size={18} /> },
-  afterparty: { label: "После свадьбы", icon: <Wand2 size={18} /> },
-  seating: { label: "Рассадка", icon: <Users size={18} /> },
-  payment: { label: "Оплата", icon: <CreditCard size={18} /> },
-};
-
-const PALETTE = ["#F76E62", "#C98B88", "#D4A537", "#A7B8A1", "#282B2B", "#FAF7F2"];
+type Device = "desktop" | "tablet" | "mobile";
+type RightTab = "block" | "style" | "settings";
 
 export default function EditorPage() {
-  const t = useTranslations("editor");
-  const tc = useTranslations("common");
   const locale = useLocale();
   const invitation = useAppStore((s) => s.invitation);
   const toggleBlock = useAppStore((s) => s.toggleBlock);
-  const publishInvitation = useAppStore((s) => s.publishInvitation);
   const updateConfig = useAppStore((s) => s.updateConfig);
-  const [tab, setTab] = useState<"settings" | "style">("settings");
-  const [saved, setSaved] = useState(false);
-  const [published, setPublished] = useState(false);
+  const updateBlockData = useAppStore((s) => s.updateBlockData);
+  const moveBlock = useAppStore((s) => s.moveBlock);
+  const publishInvitation = useAppStore((s) => s.publishInvitation);
 
-  if (!invitation) return null;
+  const [selectedId, setSelectedId] = useState<string | null>("b-hero");
+  const [device, setDevice] = useState<Device>("desktop");
+  const [rightTab, setRightTab] = useState<RightTab>("block");
+  const [leftOpen, setLeftOpen] = useState(true);
+  const [rightOpen, setRightOpen] = useState(true);
+  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("saved");
+  const [lastSaved, setLastSaved] = useState(() => new Date());
+  const [publishedFlash, setPublishedFlash] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [mobilePanel, setMobilePanel] = useState<"blocks" | "canvas" | "settings">(
+    "canvas"
+  );
+
+  // Autosave feedback when invitation changes
+  useEffect(() => {
+    if (!invitation) return;
+    setSaveState("saving");
+    const t = setTimeout(() => {
+      setSaveState("saved");
+      setLastSaved(new Date());
+    }, 600);
+    return () => clearTimeout(t);
+  }, [invitation]);
+
+  // Ensure new blocks exist for users with old persisted store
+  useEffect(() => {
+    if (!invitation) return;
+    const types = new Set(invitation.config.blocks.map((b) => b.type));
+    const missing: Array<{
+      id: string;
+      type: (typeof invitation.config.blocks)[0]["type"];
+      enabled: boolean;
+      order: number;
+      data: Record<string, unknown>;
+    }> = [];
+    if (!types.has("music")) {
+      missing.push({
+        id: "b-music",
+        type: "music",
+        enabled: true,
+        order: 11,
+        data: {
+          title: "Музыка",
+          text: "Поделитесь треками для нашего плейлиста",
+          trackName: invitation.config.music?.trackName || "Фоновая музыка",
+        },
+      });
+    }
+    if (!types.has("afterparty")) {
+      missing.push({
+        id: "b-afterparty",
+        type: "afterparty",
+        enabled: false,
+        order: 12,
+        data: {
+          title: "После свадьбы",
+          text: "After party / brunch на следующий день",
+        },
+      });
+    }
+    if (!types.has("seating")) {
+      missing.push({
+        id: "b-seating",
+        type: "seating",
+        enabled: false,
+        order: 13,
+        data: {
+          title: "Рассадка",
+          text: "Схема рассадки появится ближе к дате",
+        },
+      });
+    }
+    if (!types.has("payment")) {
+      missing.push({
+        id: "b-payment",
+        type: "payment",
+        enabled: false,
+        order: 14,
+        data: {
+          title: "Оплата",
+          text: "Поддержите наш праздник",
+          recipient: "",
+        },
+      });
+    }
+    if (missing.length) {
+      updateConfig({
+        ...invitation.config,
+        blocks: [...invitation.config.blocks, ...missing],
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const selectedBlock = useMemo(() => {
+    if (!invitation || !selectedId) return null;
+    return invitation.config.blocks.find((b) => b.id === selectedId) ?? null;
+  }, [invitation, selectedId]);
+
+  const selectBlock = useCallback((id: string) => {
+    setSelectedId(id);
+    setRightTab("block");
+    setRightOpen(true);
+    setMobilePanel("settings");
+  }, []);
+
+  const handleSave = () => {
+    setSaveState("saving");
+    setTimeout(() => {
+      setSaveState("saved");
+      setLastSaved(new Date());
+    }, 400);
+  };
+
+  const handlePublish = () => {
+    publishInvitation();
+    setPublishedFlash(true);
+    setTimeout(() => setPublishedFlash(false), 2500);
+  };
+
+  const inviteUrl =
+    typeof window !== "undefined" && invitation
+      ? `${window.location.origin}/${locale}/invite/${invitation.slug}`
+      : invitation
+        ? `/${locale}/invite/${invitation.slug}`
+        : "";
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(inviteUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* ignore */
+    }
+  };
+
+  if (!invitation) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-ivory text-muted">
+        Загрузка конструктора…
+      </div>
+    );
+  }
 
   const { config } = invitation;
-  const hero = config.blocks.find((b) => b.type === "hero");
-  const heroData = (hero?.data ?? {}) as {
-    partner1?: string;
-    partner2?: string;
-    date?: string;
-    tagline?: string;
-    image?: string;
-  };
-  const countdown = config.blocks.find((b) => b.type === "countdown");
-  const location = config.blocks.find((b) => b.type === "location");
-  const transfer = config.blocks.find((b) => b.type === "transfer");
-  const rsvp = config.blocks.find((b) => b.type === "rsvp");
-
-  const save = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  };
-
-  const publish = () => {
-    publishInvitation();
-    setPublished(true);
-    setTimeout(() => setPublished(false), 3000);
-  };
+  const sortedBlocks = [...config.blocks].sort((a, b) => a.order - b.order);
+  const savedLabel =
+    saveState === "saving"
+      ? "Сохранение…"
+      : saveState === "saved"
+        ? `Сохранено ${formatRelative(lastSaved)}`
+        : "Не сохранено";
 
   return (
-    <div className="-m-4 flex h-[calc(100vh-4rem)] flex-col lg:-m-8 lg:h-[calc(100vh-4rem)]">
-      {/* top bar */}
-      <div className="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border/60 bg-white px-3 lg:px-4">
-        <div className="flex items-center gap-2 text-xs text-muted">
-          <span className="hidden sm:inline">{t("autosave")}:</span>
-          <span className="text-sage">{saved ? t("saved") : "2 мин. назад"}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Link href={`/${locale}/invite/${invitation.slug}`} target="_blank">
-            <Button variant="ghost" size="sm">
-              <Eye size={14} />
-              <span className="hidden sm:inline">{tc("preview")}</span>
-            </Button>
+    <div className="flex h-screen flex-col overflow-hidden bg-[#f5f0e8]">
+      {/* TOP BAR */}
+      <header className="z-30 flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border/70 bg-white px-2 sm:px-4">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+          <Link
+            href={`/${locale}/dashboard`}
+            className="flex items-center gap-1.5 rounded-xl px-2 py-1.5 text-muted hover:bg-warm-beige hover:text-charcoal"
+            title="В кабинет"
+          >
+            <Undo2 size={16} />
+            <span className="hidden text-xs sm:inline">Кабинет</span>
           </Link>
-          <Button variant="secondary" size="sm" onClick={save}>
-            {tc("save")}
-          </Button>
-          <Button size="sm" onClick={publish}>
-            {published ? t("publishSuccess") : tc("publish")}
-          </Button>
+          <div className="hidden h-5 w-px bg-border sm:block" />
+          <Logo href={`/${locale}`} size="sm" className="hidden sm:inline-flex" />
+          <Link
+            href={`/${locale}/templates`}
+            className="hidden items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs text-muted hover:bg-warm-beige md:flex"
+          >
+            <LayoutTemplate size={14} />
+            Шаблоны
+          </Link>
         </div>
-      </div>
 
-      <div className="flex min-h-0 flex-1">
-        {/* left: blocks palette */}
-        <aside className="hidden w-52 shrink-0 overflow-y-auto border-r border-border/60 bg-white p-3 lg:block">
-          <h3 className="mb-3 px-1 text-xs font-semibold uppercase tracking-wider text-muted">
-            {t("blocks")}
-          </h3>
-          <p className="mb-3 px-1 text-[11px] text-muted">{t("addBlock")}</p>
-          <div className="grid grid-cols-2 gap-2">
-            {config.blocks.map((block) => {
-              const meta = BLOCK_META[block.type];
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="hidden items-center gap-1.5 text-[11px] text-muted lg:flex">
+            <span
+              className={cn(
+                "h-1.5 w-1.5 rounded-full",
+                saveState === "saving" ? "animate-pulse bg-gold" : "bg-sage"
+              )}
+            />
+            {savedLabel}
+          </div>
+
+          <div className="flex rounded-xl border border-border bg-warm-beige/50 p-0.5">
+            {(
+              [
+                { id: "desktop" as const, icon: Monitor },
+                { id: "tablet" as const, icon: Tablet },
+                { id: "mobile" as const, icon: Smartphone },
+              ] as const
+            ).map((d) => {
+              const Icon = d.icon;
               return (
                 <button
-                  key={block.id}
-                  onClick={() => toggleBlock(block.id)}
-                  className={`flex flex-col items-center gap-1.5 rounded-2xl border p-3 text-center transition-all ${
-                    block.enabled
-                      ? "border-blush/30 bg-soft-pink/50 text-blush"
-                      : "border-border bg-ivory text-muted opacity-60 hover:opacity-100"
-                  }`}
+                  key={d.id}
+                  type="button"
+                  onClick={() => setDevice(d.id)}
+                  className={cn(
+                    "flex h-8 w-8 items-center justify-center rounded-lg transition-colors",
+                    device === d.id
+                      ? "bg-white text-charcoal shadow-soft"
+                      : "text-muted hover:text-charcoal"
+                  )}
+                  title={d.id}
                 >
-                  <span className="text-gold">{meta.icon}</span>
-                  <span className="text-[10px] font-medium leading-tight">
-                    {meta.label}
-                  </span>
+                  <Icon size={15} />
                 </button>
               );
             })}
           </div>
-        </aside>
 
-        {/* center: preview */}
-        <div className="flex-1 overflow-y-auto bg-warm-beige/40 p-3 lg:p-6">
-          <div className="mx-auto max-w-3xl overflow-hidden rounded-3xl border border-border/80 bg-ivory shadow-soft-lg">
-            {/* hero preview */}
-            <div className="grid gap-0 md:grid-cols-2">
-              <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[280px]">
-                {heroData.image && (
-                  <Image
-                    src={heroData.image}
-                    alt="Cover"
-                    fill
-                    className="object-cover"
-                    sizes="400px"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col justify-center p-6 text-center md:p-8">
-                <h2 className="font-heading text-2xl text-charcoal sm:text-3xl">
-                  {heroData.partner1}
-                  <br />
-                  <span className="text-blush">&</span> {heroData.partner2}
-                </h2>
-                <p className="mt-2 text-sm text-muted">
-                  {heroData.date
-                    ? new Date(heroData.date).toLocaleDateString("ru-RU", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      })
-                    : ""}
+          <Link
+            href={`/${locale}/invite/${invitation.slug}`}
+            target="_blank"
+            className="hidden sm:block"
+          >
+            <Button variant="ghost" size="sm">
+              <Eye size={14} />
+              <span className="hidden md:inline">Предпросмотр</span>
+            </Button>
+          </Link>
+          <Button variant="secondary" size="sm" onClick={handleSave}>
+            {saveState === "saving" ? "…" : "Сохранить"}
+          </Button>
+          <Button size="sm" onClick={handlePublish}>
+            {publishedFlash ? (
+              <>
+                <Check size={14} /> Опубликовано
+              </>
+            ) : (
+              "Опубликовать"
+            )}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="hidden sm:inline-flex"
+            onClick={() => setShareOpen(true)}
+          >
+            <Share2 size={14} />
+            <span className="hidden lg:inline">Поделиться</span>
+          </Button>
+        </div>
+      </header>
+
+      {/* BODY */}
+      <div className="flex min-h-0 flex-1">
+        {/* LEFT: block palette — desktop */}
+        <aside
+          className={cn(
+            "hidden shrink-0 flex-col border-r border-border/70 bg-white transition-all lg:flex",
+            leftOpen ? "w-[220px]" : "w-12"
+          )}
+        >
+          <div className="flex items-center justify-between border-b border-border/60 px-3 py-3">
+            {leftOpen && (
+              <div>
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted">
+                  Блоки
+                </h3>
+                <p className="mt-0.5 text-[10px] text-muted/80">
+                  Включите и выберите блок
                 </p>
-                <p className="mt-1 font-heading italic text-gold">
-                  {heroData.tagline}
-                </p>
-                <Button size="sm" className="mx-auto mt-4">
-                  Подтвердить участие
-                </Button>
-              </div>
-            </div>
-
-            {/* info cards */}
-            <div className="grid gap-3 border-t border-border/50 p-4 sm:grid-cols-3">
-              {countdown?.enabled && (
-                <div className="rounded-2xl border border-border/60 bg-white p-4 text-center">
-                  <p className="mb-2 text-xs font-medium text-muted">
-                    Таймер до свадьбы
-                  </p>
-                  <Countdown
-                    targetDate={
-                      (countdown.data.targetDate as string) ||
-                      "2025-06-20T15:00:00"
-                    }
-                    compact
-                  />
-                </div>
-              )}
-              {location?.enabled && (
-                <div className="rounded-2xl border border-border/60 bg-white p-4">
-                  <p className="mb-1 flex items-center gap-1 text-xs font-medium text-muted">
-                    <MapPin size={12} className="text-gold" /> Адрес торжества
-                  </p>
-                  <p className="text-sm font-medium text-charcoal">
-                    {String(location.data.name ?? "")}
-                  </p>
-                  <p className="mt-1 text-xs text-muted">
-                    {String(location.data.address ?? "")}
-                  </p>
-                </div>
-              )}
-              {transfer?.enabled && (
-                <div className="rounded-2xl border border-border/60 bg-white p-4">
-                  <p className="mb-1 flex items-center gap-1 text-xs font-medium text-muted">
-                    <Car size={12} className="text-gold" /> Трансфер
-                  </p>
-                  <p className="text-xs leading-relaxed text-muted">
-                    {String(transfer.data.text ?? "")}
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {rsvp?.enabled && (
-              <div className="border-t border-border/50 p-4">
-                <div className="rounded-2xl border border-dashed border-blush/30 bg-soft-pink/30 p-5 text-center">
-                  <p className="text-sm font-medium text-charcoal">
-                    {String(rsvp.data.title ?? "Подтвердите присутствие")}
-                  </p>
-                  <Button size="sm" className="mt-3">
-                    Подтвердить участие
-                  </Button>
-                </div>
               </div>
             )}
-
-            <div className="grid gap-3 border-t border-border/50 p-4 sm:grid-cols-3">
-              {config.blocks
-                .filter(
-                  (b) =>
-                    b.enabled &&
-                    !["hero", "countdown", "location", "transfer", "rsvp"].includes(
-                      b.type
-                    )
-                )
-                .slice(0, 6)
-                .map((b) => (
-                  <div
-                    key={b.id}
-                    className="rounded-2xl border border-border/60 bg-white p-4"
-                  >
-                    <div className="mb-2 text-gold">
-                      {BLOCK_META[b.type]?.icon}
-                    </div>
-                    <p className="text-sm font-medium text-charcoal">
-                      {BLOCK_META[b.type]?.label}
-                    </p>
-                    <p className="mt-1 text-xs text-muted">Блок активен</p>
-                  </div>
-                ))}
+            <button
+              type="button"
+              onClick={() => setLeftOpen((v) => !v)}
+              className="rounded-lg p-1.5 text-muted hover:bg-warm-beige"
+            >
+              {leftOpen ? "«" : "»"}
+            </button>
+          </div>
+          {leftOpen && (
+            <div className="flex-1 overflow-y-auto p-3">
+              <div className="grid grid-cols-2 gap-2">
+                {sortedBlocks.map((block) => {
+                  const meta = BLOCK_LABELS[block.type];
+                  const active = selectedId === block.id;
+                  return (
+                    <button
+                      key={block.id}
+                      type="button"
+                      onClick={() => {
+                        if (!block.enabled) toggleBlock(block.id);
+                        selectBlock(block.id);
+                      }}
+                      onDoubleClick={() => toggleBlock(block.id)}
+                      className={cn(
+                        "group relative flex flex-col items-center gap-1.5 rounded-2xl border p-3 text-center transition-all",
+                        active
+                          ? "border-blush bg-soft-pink shadow-soft"
+                          : block.enabled
+                            ? "border-border/80 bg-ivory hover:border-blush/40 hover:shadow-soft"
+                            : "border-dashed border-border bg-white opacity-55 hover:opacity-90"
+                      )}
+                      title="Клик — выбрать, двойной клик — вкл/выкл"
+                    >
+                      <span
+                        className={cn(
+                          "transition-colors",
+                          active || block.enabled ? "text-gold" : "text-muted"
+                        )}
+                      >
+                        <BlockIcon type={block.type} size={20} />
+                      </span>
+                      <span
+                        className={cn(
+                          "text-[11px] font-medium leading-tight",
+                          active ? "text-blush" : "text-charcoal"
+                        )}
+                      >
+                        {meta.label}
+                      </span>
+                      <span
+                        className={cn(
+                          "absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full",
+                          block.enabled ? "bg-sage" : "bg-border"
+                        )}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="mt-4 text-center text-[10px] leading-relaxed text-muted">
+                Нужен уникальный блок?
+                <br />
+                <span className="text-blush">Скоро · запросите</span>
+              </p>
             </div>
+          )}
+        </aside>
+
+        {/* CENTER: canvas */}
+        <div
+          className={cn(
+            "min-w-0 flex-1 overflow-y-auto",
+            mobilePanel !== "canvas" && "hidden lg:block"
+          )}
+          onClick={() => {
+            /* click empty to deselect optional */
+          }}
+        >
+          <div className="min-h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-soft-pink/30 via-[#f5f0e8] to-light-sage/20 px-3 py-6 sm:px-6 lg:py-8">
+            <div className="mb-4 flex items-center justify-center gap-2 text-center">
+              <span className="rounded-full bg-white/80 px-3 py-1 text-[11px] text-muted shadow-soft backdrop-blur">
+                Клик по блоку → редактирование справа
+              </span>
+            </div>
+            <LiveCanvas
+              config={config}
+              selectedId={selectedId}
+              onSelect={selectBlock}
+              device={device}
+            />
+            <p className="mt-6 text-center text-[11px] text-muted/70">
+              Изменения сохраняются автоматически ·{" "}
+              {invitation.published ? (
+                <span className="text-sage">Опубликовано</span>
+              ) : (
+                <span className="text-gold">Черновик</span>
+              )}
+            </p>
           </div>
         </div>
 
-        {/* right: settings */}
-        <aside className="hidden w-64 shrink-0 overflow-y-auto border-l border-border/60 bg-white p-4 xl:block">
-          <div className="mb-4 flex gap-1 rounded-xl bg-warm-beige p-1">
-            <button
-              onClick={() => setTab("settings")}
-              className={`flex flex-1 items-center justify-center gap-1 rounded-lg py-1.5 text-xs font-medium ${
-                tab === "settings" ? "bg-white text-charcoal shadow-soft" : "text-muted"
-              }`}
-            >
-              <Settings2 size={12} /> {t("settings")}
-            </button>
-            <button
-              onClick={() => setTab("style")}
-              className={`flex flex-1 items-center justify-center gap-1 rounded-lg py-1.5 text-xs font-medium ${
-                tab === "style" ? "bg-white text-charcoal shadow-soft" : "text-muted"
-              }`}
-            >
-              <Palette size={12} /> {t("style")}
-            </button>
-          </div>
-
-          {tab === "settings" && (
-            <div className="space-y-5">
-              <div>
-                <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">
-                  {t("general")}
-                </h4>
-                <div className="space-y-2 text-sm">
-                  <div className="rounded-xl bg-warm-beige/50 px-3 py-2">
-                    <span className="text-xs text-muted">Шрифт заголовков</span>
-                    <p className="font-medium">{config.fonts.heading}</p>
-                  </div>
-                  <div className="rounded-xl bg-warm-beige/50 px-3 py-2">
-                    <span className="text-xs text-muted">Шрифт текста</span>
-                    <p className="font-medium">{config.fonts.body}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">
-                  {t("visibility")}
-                </h4>
-                <div className="space-y-1.5">
-                  {config.blocks.map((b) => (
-                    <label
-                      key={b.id}
-                      className="flex cursor-pointer items-center justify-between rounded-xl px-2 py-1.5 hover:bg-warm-beige/50"
-                    >
-                      <span className="text-xs text-charcoal">
-                        {BLOCK_META[b.type]?.label}
-                      </span>
-                      <input
-                        type="checkbox"
-                        checked={b.enabled}
-                        onChange={() => toggleBlock(b.id)}
-                        className="accent-blush"
-                      />
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">
-                  {t("music")}
-                </h4>
-                <div className="rounded-xl bg-warm-beige/50 px-3 py-2 text-xs">
-                  <p className="font-medium text-charcoal">
-                    {config.music?.trackName || "Трек не выбран"}
-                  </p>
-                  <label className="mt-2 flex items-center justify-between">
-                    <span className="text-muted">Автовоспроизведение</span>
-                    <input
-                      type="checkbox"
-                      checked={config.music?.autoplay ?? false}
-                      onChange={(e) =>
-                        updateConfig({
-                          ...config,
-                          music: {
-                            enabled: true,
-                            trackName: config.music?.trackName,
-                            trackUrl: config.music?.trackUrl,
-                            autoplay: e.target.checked,
-                          },
-                        })
-                      }
-                      className="accent-blush"
-                    />
-                  </label>
-                </div>
-              </div>
-            </div>
+        {/* RIGHT: settings — desktop */}
+        <aside
+          className={cn(
+            "hidden shrink-0 border-l border-border/70 bg-white transition-all xl:flex xl:flex-col",
+            rightOpen ? "w-[300px]" : "w-12"
           )}
-
-          {tab === "style" && (
-            <div className="space-y-4">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted">
-                {t("colors")}
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {PALETTE.map((c) => (
-                  <button
-                    key={c}
-                    onClick={() =>
-                      updateConfig({
-                        ...config,
-                        colors: { ...config.colors, primary: c },
-                      })
-                    }
-                    className={`h-8 w-8 rounded-full border-2 transition-transform hover:scale-110 ${
-                      config.colors.primary === c
-                        ? "border-charcoal scale-110"
-                        : "border-transparent"
-                    }`}
-                    style={{ background: c }}
-                  />
-                ))}
-              </div>
-              <div className="rounded-xl bg-warm-beige/50 p-3 text-xs text-muted">
-                Тема: <span className="font-medium text-charcoal">{config.theme}</span>
-              </div>
-            </div>
+        >
+          {rightOpen ? (
+            <SettingsPanel
+              tab={rightTab}
+              setTab={setRightTab}
+              config={config}
+              selectedBlock={selectedBlock}
+              onUpdateConfig={updateConfig}
+              onUpdateBlock={updateBlockData}
+              onToggle={toggleBlock}
+              onMove={moveBlock}
+              onSelectBlock={selectBlock}
+            />
+          ) : (
+            <button
+              type="button"
+              onClick={() => setRightOpen(true)}
+              className="p-3 text-muted hover:text-charcoal"
+            >
+              «
+            </button>
           )}
         </aside>
+
+        {/* Mobile panels */}
+        <div
+          className={cn(
+            "flex min-w-0 flex-1 flex-col overflow-hidden lg:hidden",
+            mobilePanel === "canvas" && "hidden"
+          )}
+        >
+          {mobilePanel === "blocks" && (
+            <div className="flex-1 overflow-y-auto bg-white p-4">
+              <h3 className="mb-3 text-sm font-semibold text-charcoal">Блоки</h3>
+              <div className="grid grid-cols-3 gap-2">
+                {sortedBlocks.map((block) => (
+                  <button
+                    key={block.id}
+                    type="button"
+                    onClick={() => {
+                      if (!block.enabled) toggleBlock(block.id);
+                      selectBlock(block.id);
+                    }}
+                    className={cn(
+                      "flex flex-col items-center gap-1 rounded-2xl border p-3",
+                      selectedId === block.id
+                        ? "border-blush bg-soft-pink"
+                        : "border-border bg-ivory"
+                    )}
+                  >
+                    <BlockIcon type={block.type} size={18} className="text-gold" />
+                    <span className="text-[10px] font-medium">
+                      {BLOCK_LABELS[block.type].label}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          {mobilePanel === "settings" && (
+            <div className="flex-1 overflow-hidden bg-white">
+              <SettingsPanel
+                tab={rightTab}
+                setTab={setRightTab}
+                config={config}
+                selectedBlock={selectedBlock}
+                onUpdateConfig={updateConfig}
+                onUpdateBlock={updateBlockData}
+                onToggle={toggleBlock}
+                onMove={moveBlock}
+                onSelectBlock={selectBlock}
+              />
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Mobile bottom nav */}
+      <nav className="flex shrink-0 border-t border-border/70 bg-white lg:hidden">
+        {(
+          [
+            { id: "blocks" as const, label: "Блоки" },
+            { id: "canvas" as const, label: "Превью" },
+            { id: "settings" as const, label: "Правка" },
+          ] as const
+        ).map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            onClick={() => setMobilePanel(tab.id)}
+            className={cn(
+              "flex-1 py-3 text-xs font-medium",
+              mobilePanel === tab.id ? "text-blush" : "text-muted"
+            )}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </nav>
+
+      {/* Share modal */}
+      {shareOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-charcoal/40 p-4 backdrop-blur-sm"
+          onClick={() => setShareOpen(false)}
+        >
+          <div
+            className="w-full max-w-md rounded-3xl border border-border bg-white p-6 shadow-soft-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="font-heading text-xl text-charcoal">
+              Поделиться приглашением
+            </h3>
+            <p className="mt-1 text-sm text-muted">
+              Отправьте ссылку гостям — ответы появятся в кабинете.
+            </p>
+            <div className="mt-4 break-all rounded-2xl bg-warm-beige/60 px-3 py-2.5 font-mono text-xs text-charcoal">
+              {inviteUrl}
+            </div>
+            <div className="mt-4 flex gap-2">
+              <Button className="flex-1" onClick={copyLink}>
+                {copied ? (
+                  <>
+                    <Check size={14} /> Скопировано
+                  </>
+                ) : (
+                  <>
+                    <Copy size={14} /> Копировать
+                  </>
+                )}
+              </Button>
+              <Link href={`/${locale}/invite/${invitation.slug}`} target="_blank">
+                <Button variant="secondary">
+                  <Eye size={14} /> Открыть
+                </Button>
+              </Link>
+            </div>
+            <button
+              type="button"
+              className="mt-4 w-full text-center text-sm text-muted hover:text-charcoal"
+              onClick={() => setShareOpen(false)}
+            >
+              Закрыть
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
+}
+
+function formatRelative(date: Date) {
+  const sec = Math.round((Date.now() - date.getTime()) / 1000);
+  if (sec < 5) return "только что";
+  if (sec < 60) return `${sec} сек. назад`;
+  const min = Math.floor(sec / 60);
+  if (min < 60) return `${min} мин. назад`;
+  return date.toLocaleTimeString("ru-RU", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }

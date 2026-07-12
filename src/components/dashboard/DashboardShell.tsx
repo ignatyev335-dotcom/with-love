@@ -57,6 +57,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     );
   }
 
+  // Full-screen constructor — no dashboard chrome
+  const isEditor = pathname.includes("/dashboard/editor");
+  if (isEditor) {
+    return <div className="min-h-screen bg-ivory">{children}</div>;
+  }
+
   return (
     <div className="flex min-h-screen bg-ivory">
       <aside className="hidden w-60 shrink-0 flex-col border-r border-border/60 bg-white lg:flex">

@@ -209,7 +209,50 @@ export const DEMO_INVITATION: Invitation = {
         enabled: true,
         order: 10,
         data: {
+          title: "Подарки",
           text: "Если вы хотите сделать нам подарок, будем благодарны за вклад в наше путешествие.",
+        },
+      },
+      {
+        id: "b-music",
+        type: "music",
+        enabled: true,
+        order: 11,
+        data: {
+          title: "Музыка",
+          text: "Поделитесь треками, которые хотите услышать на нашем празднике",
+          trackName: "All of Me — John Legend",
+        },
+      },
+      {
+        id: "b-afterparty",
+        type: "afterparty",
+        enabled: false,
+        order: 12,
+        data: {
+          title: "После свадьбы",
+          text: "Приглашаем на after party на следующий день — brunch у бассейна с 12:00.",
+        },
+      },
+      {
+        id: "b-seating",
+        type: "seating",
+        enabled: false,
+        order: 13,
+        data: {
+          title: "Рассадка гостей",
+          text: "Найдите своё место за праздничным столом — схема появится ближе к дате.",
+        },
+      },
+      {
+        id: "b-payment",
+        type: "payment",
+        enabled: false,
+        order: 14,
+        data: {
+          title: "Оплата",
+          text: "Поддержите наш праздник удобным способом",
+          recipient: "Александр И.",
         },
       },
     ],

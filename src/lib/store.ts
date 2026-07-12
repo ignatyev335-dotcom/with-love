@@ -24,6 +24,10 @@ interface AppState {
   updateInvitation: (partial: Partial<Invitation>) => void;
   updateConfig: (config: Invitation["config"]) => void;
   toggleBlock: (blockId: string) => void;
+  updateBlockData: (blockId: string, data: Record<string, unknown>) => void;
+  setBlockEnabled: (blockId: string, enabled: boolean) => void;
+  moveBlock: (blockId: string, direction: "up" | "down") => void;
+  updateWedding: (partial: Partial<Wedding>) => void;
   publishInvitation: () => void;
   addGuest: (guest: Omit<Guest, "id">) => void;
   updateGuest: (id: string, partial: Partial<Guest>) => void;
@@ -111,6 +115,106 @@ export const useAppStore = create<AppState>()(
             },
           },
         });
+      },
+
+      updateBlockData: (blockId, data) => {
+        const inv = get().invitation;
+        if (!inv) return;
+        const blocks = inv.config.blocks.map((b) =>
+          b.id === blockId ? { ...b, data: { ...b.data, ...data } } : b
+        );
+        const hero = blocks.find((b) => b.type === "hero");
+        const isHero = hero?.id === blockId;
+        let wedding = get().wedding;
+        let title = inv.title;
+
+        if (isHero && hero && wedding) {
+          const p1 = String(
+            data.partner1 ?? hero.data.partner1 ?? wedding.partner1
+          );
+          const p2 = String(
+            data.partner2 ?? hero.data.partner2 ?? wedding.partner2
+          );
+          const date = String(data.date ?? hero.data.date ?? wedding.date);
+          wedding = {
+            ...wedding,
+            partner1: p1,
+            partner2: p2,
+            coupleNames: `${p1} и ${p2}`,
+            date: date.includes("T") ? date : `${date}T15:00:00`,
+          };
+          title = `${p1} & ${p2}`;
+        }
+
+        // Sync countdown when hero date changes
+        let nextBlocks = blocks;
+        if (isHero && data.date) {
+          const d = String(data.date);
+          const target = d.includes("T") ? d : `${d}T15:00:00`;
+          nextBlocks = blocks.map((b) =>
+            b.type === "countdown"
+              ? { ...b, data: { ...b.data, targetDate: target } }
+              : b
+          );
+        }
+
+        set({
+          wedding,
+          invitation: {
+            ...inv,
+            title,
+            config: { ...inv.config, blocks: nextBlocks },
+          },
+        });
+      },
+
+      setBlockEnabled: (blockId, enabled) => {
+        const inv = get().invitation;
+        if (!inv) return;
+        set({
+          invitation: {
+            ...inv,
+            config: {
+              ...inv.config,
+              blocks: inv.config.blocks.map((b) =>
+                b.id === blockId ? { ...b, enabled } : b
+              ),
+            },
+          },
+        });
+      },
+
+      moveBlock: (blockId, direction) => {
+        const inv = get().invitation;
+        if (!inv) return;
+        const sorted = [...inv.config.blocks].sort((a, b) => a.order - b.order);
+        const idx = sorted.findIndex((b) => b.id === blockId);
+        if (idx < 0) return;
+        const swapWith = direction === "up" ? idx - 1 : idx + 1;
+        if (swapWith < 0 || swapWith >= sorted.length) return;
+        const a = sorted[idx];
+        const b = sorted[swapWith];
+        const orderA = a.order;
+        sorted[idx] = { ...a, order: b.order };
+        sorted[swapWith] = { ...b, order: orderA };
+        set({
+          invitation: {
+            ...inv,
+            config: {
+              ...inv.config,
+              blocks: inv.config.blocks.map((block) => {
+                const updated = sorted.find((s) => s.id === block.id);
+                return updated ?? block;
+              }),
+            },
+          },
+        });
+      },
+
+      updateWedding: (partial) => {
+        const wedding = get().wedding;
+        if (!wedding) return;
+        set({ wedding: { ...wedding, ...partial } });
       },
 
       publishInvitation: () => {
