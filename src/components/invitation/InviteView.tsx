@@ -13,7 +13,9 @@ import {
   Clock,
   Gift,
   Heart,
+  Home,
   MapPin,
+  Menu,
   Music,
   Shirt,
 } from "lucide-react";
@@ -639,6 +641,56 @@ export function InviteView({
           labels={{ play: labels.playMusic, pause: labels.pauseMusic }}
         />
       )}
+
+      {/* Mobile bottom nav — ref 03 */}
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-30 flex border-t pb-safe md:hidden"
+        style={{
+          borderColor: border,
+          background: isLuxury ? "rgba(17,17,17,0.96)" : "rgba(250,247,242,0.96)",
+          backdropFilter: "blur(12px)",
+        }}
+      >
+        {(
+          [
+            { href: "#", icon: Home, label: locale === "en" ? "Home" : "Главная" },
+            {
+              href: "#schedule",
+              icon: Clock,
+              label: locale === "en" ? "Plan" : "План",
+            },
+            {
+              href: "#details",
+              icon: MapPin,
+              label: locale === "en" ? "Place" : "Место",
+            },
+            {
+              href: "#rsvp",
+              icon: Heart,
+              label: "RSVP",
+            },
+            {
+              href: "#faq",
+              icon: Menu,
+              label: "Menu",
+            },
+          ] as const
+        ).map((item) => {
+          const Icon = item.icon;
+          return (
+            <a
+              key={item.href + item.label}
+              href={item.href}
+              className="flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[10px] opacity-70"
+              style={{ color: text }}
+            >
+              <Icon size={18} style={{ color: accent }} />
+              {item.label}
+            </a>
+          );
+        })}
+      </nav>
+      <div className="h-16 md:hidden" />
     </div>
   );
 }

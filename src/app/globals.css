@@ -87,6 +87,22 @@ body {
   animation: fade-in-up 0.45s ease-out both;
 }
 
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media print {
+  header,
+  footer,
+  .fixed,
+  nav {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+  }
+}
+
 h1,
 h2,
 h3,
