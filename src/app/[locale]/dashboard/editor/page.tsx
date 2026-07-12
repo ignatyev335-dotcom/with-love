@@ -457,7 +457,7 @@ export default function EditorPage() {
                     className={cn(
                       "flex flex-col items-center gap-1 rounded-2xl border p-3",
                       selectedId === block.id
-                        ? "border-blush bg-soft-pink"
+                        ? "border-[#E8A09A] bg-[#F8E8E8]"
                         : "border-[#EDE7DD] bg-[#FAF7F2]"
                     )}
                   >

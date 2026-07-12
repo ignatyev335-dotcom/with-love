@@ -27,12 +27,12 @@ export default function InvitePage({
 
   if (!isDemo || !invitation) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-ivory px-4 text-center">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#FDFCFA] px-4 text-center">
         <Logo href={`/${locale}`} />
         <h1 className="mt-6 font-heading text-2xl text-charcoal">
           {locale === "en" ? "Invitation not found" : "Приглашение не найдено"}
         </h1>
-        <p className="mt-2 text-muted">
+        <p className="mt-2 text-[#8a8580]">
           {locale === "en"
             ? "Check the link or create your own"
             : "Проверьте ссылку или создайте своё"}
