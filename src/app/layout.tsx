@@ -15,7 +15,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://with-love.vercel.app"),
+  metadataBase: new URL("https://with-love-teal.vercel.app"),
   title: {
     default: "With Love — RSVP-приглашения на свадьбу",
     template: "%s · With Love",

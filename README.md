@@ -4,6 +4,16 @@
 
 SaaS-платформа: красивые шаблоны → конструктор → публикация → управление гостями.
 
+## Live
+
+| | |
+|--|--|
+| **Production** | https://with-love-teal.vercel.app |
+| **GitHub** | https://github.com/ignatyev335-dotcom/with-love |
+| **Demo invite** | https://with-love-teal.vercel.app/ru/invite/aleksandr-ekaterina |
+
+Автодеплой: push в `main` → Vercel production.
+
 ## Быстрый старт
 
 ```bash

@@ -1,3 +1,4 @@
+import { BenefitsGrid } from "@/components/landing/BenefitsGrid";
 import { CTABanner } from "@/components/landing/CTABanner";
 import { FAQ } from "@/components/landing/FAQ";
 import { Features } from "@/components/landing/Features";
@@ -25,6 +26,7 @@ export default async function HomePage({
         <Hero locale={locale} />
         <Features locale={locale} />
         <HowItWorks locale={locale} />
+        <BenefitsGrid locale={locale} />
         <StylesGallery locale={locale} />
         <Reviews locale={locale} />
         <Pricing locale={locale} />

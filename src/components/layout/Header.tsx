@@ -20,6 +20,7 @@ export function Header() {
 
   const nav = [
     { href: `/${locale}#features`, label: t("nav.features") },
+    { href: `/${locale}#how`, label: locale === "en" ? "How it works" : "Как это работает" },
     { href: `/${locale}/templates`, label: t("nav.templates") },
     { href: `/${locale}/pricing`, label: t("nav.pricing") },
     { href: `/${locale}#faq`, label: t("nav.faq") },
