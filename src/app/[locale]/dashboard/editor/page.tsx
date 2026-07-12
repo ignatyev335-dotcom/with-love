@@ -490,7 +490,7 @@ export default function EditorPage() {
       </div>
 
       {/* Mobile bottom nav */}
-      <nav className="flex shrink-0 border-t border-border/70 bg-white lg:hidden">
+      <nav className="flex shrink-0 border-t border-[#EDE7DD] bg-white lg:hidden">
         {(
           [
             { id: "blocks" as const, label: "Блоки" },
@@ -504,7 +504,7 @@ export default function EditorPage() {
             onClick={() => setMobilePanel(tab.id)}
             className={cn(
               "flex-1 py-3 text-xs font-medium",
-              mobilePanel === tab.id ? "text-blush" : "text-muted"
+              mobilePanel === tab.id ? "text-[#E8A09A]" : "text-[#8a8580]"
             )}
           >
             {tab.label}

@@ -37,15 +37,12 @@ export default function AnalyticsPage() {
       views: invitation?.views ?? 0,
       wishes: wishes.length,
       dietary,
-      rsvpRate: guests.length
-        ? Math.round((confirmed / guests.length) * 100)
-        : 0,
     };
   }, [guests, invitation, wishes]);
 
   const cards = [
     {
-      label: isEn ? "Invitation views" : "Просмотры приглашения",
+      label: isEn ? "Invitation views" : "Просмотры",
       value: data.views,
     },
     {
@@ -57,7 +54,7 @@ export default function AnalyticsPage() {
       value: data.confirmed,
     },
     {
-      label: isEn ? "Attending (with +1)" : "Всего гостей (с +1)",
+      label: isEn ? "Attending (+1)" : "Гостей (с +1)",
       value: data.totalAttending,
     },
     {
@@ -69,33 +66,33 @@ export default function AnalyticsPage() {
       value: data.pending,
     },
     {
-      label: isEn ? "Wishes left" : "Пожеланий",
+      label: isEn ? "Wishes" : "Пожеланий",
       value: data.wishes,
     },
     {
-      label: isEn ? "Dietary notes" : "Диетические пометки",
+      label: isEn ? "Dietary notes" : "Диета",
       value: data.dietary,
     },
   ];
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-5 animate-fade-in">
       <div>
-        <h1 className="font-heading text-2xl text-charcoal sm:text-3xl">
+        <h1 className="font-heading text-2xl font-medium text-charcoal sm:text-[1.75rem]">
           {isEn ? "Analytics" : "Аналитика"}
         </h1>
-        <p className="mt-1 text-sm text-muted">
+        <p className="mt-1 text-sm text-[#8a8580]">
           {isEn
             ? "RSVP performance for your wedding invitation"
             : "Эффективность RSVP по вашему приглашению"}
         </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((c) => (
           <Card key={c.label}>
-            <CardContent className="pt-5">
-              <p className="text-sm text-muted">{c.label}</p>
+            <CardContent className="pt-4 pb-4">
+              <p className="text-[11px] text-[#8a8580]">{c.label}</p>
               <p className="mt-1 font-heading text-3xl text-charcoal">
                 {c.value}
               </p>
@@ -104,7 +101,7 @@ export default function AnalyticsPage() {
         ))}
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <h2 className="font-heading text-lg">
@@ -112,19 +109,18 @@ export default function AnalyticsPage() {
             </h2>
           </CardHeader>
           <CardContent>
-            <div className="flex h-8 overflow-hidden rounded-full">
+            <div className="flex h-3 overflow-hidden rounded-full bg-[#FAF7F2]">
               {data.confirmed > 0 && (
                 <div
-                  className="bg-sage transition-all"
+                  className="bg-[#A7B8A1] transition-all"
                   style={{
                     width: `${(data.confirmed / Math.max(guests.length, 1)) * 100}%`,
                   }}
-                  title={isEn ? "Confirmed" : "Подтвердили"}
                 />
               )}
               {data.declined > 0 && (
                 <div
-                  className="bg-dusty-rose transition-all"
+                  className="bg-[#C98B88] transition-all"
                   style={{
                     width: `${(data.declined / Math.max(guests.length, 1)) * 100}%`,
                   }}
@@ -132,24 +128,24 @@ export default function AnalyticsPage() {
               )}
               {data.pending > 0 && (
                 <div
-                  className="bg-gold/60 transition-all"
+                  className="bg-[#D4A537]/70 transition-all"
                   style={{
                     width: `${(data.pending / Math.max(guests.length, 1)) * 100}%`,
                   }}
                 />
               )}
             </div>
-            <div className="mt-4 flex flex-wrap gap-4 text-sm text-muted">
+            <div className="mt-4 flex flex-wrap gap-4 text-sm text-[#8a8580]">
               <span className="flex items-center gap-2">
-                <span className="h-3 w-3 rounded-full bg-sage" />{" "}
+                <span className="h-2.5 w-2.5 rounded-full bg-[#A7B8A1]" />{" "}
                 {isEn ? "Confirmed" : "Подтвердили"} ({data.confirmed})
               </span>
               <span className="flex items-center gap-2">
-                <span className="h-3 w-3 rounded-full bg-dusty-rose" />{" "}
+                <span className="h-2.5 w-2.5 rounded-full bg-[#C98B88]" />{" "}
                 {isEn ? "Declined" : "Отказались"} ({data.declined})
               </span>
               <span className="flex items-center gap-2">
-                <span className="h-3 w-3 rounded-full bg-gold/60" />{" "}
+                <span className="h-2.5 w-2.5 rounded-full bg-[#D4A537]/70" />{" "}
                 {isEn ? "Pending" : "Без ответа"} ({data.pending})
               </span>
             </div>
@@ -170,7 +166,7 @@ export default function AnalyticsPage() {
                 max: Math.max(data.views, 1),
               },
               {
-                label: isEn ? "In guest list" : "В списке гостей",
+                label: isEn ? "In guest list" : "В списке",
                 value: guests.length,
                 max: Math.max(data.views, guests.length, 1),
               },
@@ -187,12 +183,12 @@ export default function AnalyticsPage() {
             ].map((row) => (
               <div key={row.label}>
                 <div className="mb-1 flex justify-between text-sm">
-                  <span className="text-muted">{row.label}</span>
+                  <span className="text-[#8a8580]">{row.label}</span>
                   <span className="font-medium">{row.value}</span>
                 </div>
-                <div className="h-2 rounded-full bg-warm-beige">
+                <div className="h-2 rounded-full bg-[#FAF7F2]">
                   <div
-                    className="h-full rounded-full bg-blush/80"
+                    className="h-full rounded-full bg-[#E8A09A]/85"
                     style={{
                       width: `${Math.min(100, (row.value / row.max) * 100)}%`,
                     }}
