@@ -34,7 +34,7 @@ export function LiveCanvas({
     .sort((a, b) => a.order - b.order);
 
   const isLuxury = config.theme === "luxury";
-  const primary = config.colors.primary;
+  const primary = config.colors.primary === "#F76E62" ? "#E8A09A" : config.colors.primary;
   const accent = config.colors.accent;
   const bg = config.colors.background;
   const text = config.colors.text;
