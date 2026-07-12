@@ -395,19 +395,32 @@ export const useAppStore = create<AppState>()(
       }),
       onRehydrateStorage: () => (state) => {
         if (!state?.invitation) return;
-        // Migrate old harsh blush to soft reference palette
-        if (state.invitation.config.colors.primary === "#F76E62") {
+        // Migrate old harsh blush to soft dusty-rose from references
+        const old = ["#F76E62", "#E8A09A"];
+        if (old.includes(state.invitation.config.colors.primary)) {
           state.invitation = {
             ...state.invitation,
             config: {
               ...state.invitation.config,
               colors: {
                 ...state.invitation.config.colors,
-                primary: "#E8A09A",
+                primary: "#D4A39C",
               },
             },
           };
         }
+        // Enable key content blocks from ref 13 if present but disabled
+        state.invitation = {
+          ...state.invitation,
+          config: {
+            ...state.invitation.config,
+            blocks: state.invitation.config.blocks.map((b) =>
+              b.type === "afterparty" || b.type === "seating"
+                ? { ...b, enabled: true }
+                : b
+            ),
+          },
+        };
       },
     }
   )

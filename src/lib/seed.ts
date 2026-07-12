@@ -227,21 +227,21 @@ export const DEMO_INVITATION: Invitation = {
       {
         id: "b-afterparty",
         type: "afterparty",
-        enabled: false,
+        enabled: true,
         order: 12,
         data: {
           title: "После свадьбы",
-          text: "Приглашаем на after party на следующий день — brunch у бассейна с 12:00.",
+          text: "Приглашаем остаться с нами на следующий день — brunch 22 июня 11:00–14:00.",
         },
       },
       {
         id: "b-seating",
         type: "seating",
-        enabled: false,
+        enabled: true,
         order: 13,
         data: {
-          title: "Рассадка гостей",
-          text: "Найдите своё место за праздничным столом — схема появится ближе к дате.",
+          title: "План рассадки",
+          text: "Найдите своё место за праздничным столом",
         },
       },
       {
