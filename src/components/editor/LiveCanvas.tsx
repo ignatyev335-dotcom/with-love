@@ -34,10 +34,15 @@ export function LiveCanvas({
     .sort((a, b) => a.order - b.order);
 
   const isLuxury = config.theme === "luxury";
-  const primary = config.colors.primary === "#F76E62" ? "#E8A09A" : config.colors.primary;
-  const accent = config.colors.accent;
-  const bg = config.colors.background;
-  const text = config.colors.text;
+  const primary = ["#F76E62", "#E8A09A"].includes(config.colors.primary)
+    ? "#D4A39C"
+    : config.colors.primary || "#D4A39C";
+  const accent = config.colors.accent || "#C4A35A";
+  const bg = isLuxury ? "#111111" : "#F7F1EA";
+  const text = isLuxury ? "#FAF7F2" : "#2C2926";
+  const surface = isLuxury ? "#1A1A1A" : "#FFFCFA";
+  const borderCol = isLuxury ? "rgba(255,255,255,0.1)" : "#EFE9E0";
+  const wide = device === "desktop";
 
   const widthClass =
     device === "mobile"
@@ -59,13 +64,11 @@ export function LiveCanvas({
   return (
     <div
       className={cn(
-        "mx-auto w-full overflow-hidden rounded-[1.75rem] border shadow-soft-lg transition-all duration-300",
-        widthClass,
-        isLuxury ? "border-white/10" : "border-[#EDE7DD]"
+        "mx-auto w-full overflow-hidden rounded-[1.35rem] border shadow-[0_24px_60px_-20px_rgba(50,40,30,0.18)] transition-all duration-300",
+        widthClass
       )}
-      style={{ background: bg, color: text }}
+      style={{ background: bg, color: text, borderColor: borderCol }}
     >
-      {/* HERO */}
       {hero && (
         <Selectable
           block={hero}
@@ -75,36 +78,45 @@ export function LiveCanvas({
           <div
             className={cn(
               "grid gap-0",
-              device === "mobile" ? "grid-cols-1" : "md:grid-cols-2"
+              device === "mobile"
+                ? "grid-cols-1"
+                : wide
+                  ? "grid-cols-12"
+                  : "grid-cols-2"
             )}
           >
-            <div className="relative min-h-[220px] aspect-[4/3] md:aspect-auto md:min-h-[300px]">
-              {String(hero.data.image || "") && (
+            <div
+              className={cn(
+                "relative min-h-[200px] aspect-[4/3]",
+                wide && "col-span-5 aspect-auto min-h-[280px]"
+              )}
+            >
+              {Boolean(hero.data.image) && (
                 <Image
                   src={String(hero.data.image)}
                   alt="Cover"
                   fill
-                  className="object-cover object-[center_15%]"
+                  className="object-cover object-[center_12%]"
                   sizes="500px"
                 />
               )}
               {!isLuxury && (
-                <FloralBouquet className="pointer-events-none absolute -bottom-6 -left-8 h-36 w-40 drop-shadow" />
+                <FloralBouquet className="pointer-events-none absolute -bottom-8 -left-10 h-40 w-48 drop-shadow" />
               )}
               <div className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-medium text-charcoal shadow-sm">
                 Изменить обложку
               </div>
             </div>
+
             <div
-              className="flex flex-col justify-center px-6 py-8 text-center"
-              style={{
-                background: isLuxury
-                  ? "#1A1A1A"
-                  : "color-mix(in srgb, white 70%, transparent)",
-              }}
+              className={cn(
+                "flex flex-col justify-center px-5 py-7 text-center",
+                wide && "col-span-4"
+              )}
+              style={{ background: surface }}
             >
               <h2
-                className="font-heading text-3xl leading-tight sm:text-4xl"
+                className="font-heading text-2xl leading-tight sm:text-3xl"
                 style={{ fontFamily: `"${config.fonts.heading}", serif` }}
               >
                 {String(hero.data.partner1 || "Имя")}
@@ -112,62 +124,119 @@ export function LiveCanvas({
                 <span style={{ color: primary }}>&</span>{" "}
                 {String(hero.data.partner2 || "Имя")}
               </h2>
-              <p className="mt-3 text-sm opacity-60">
+              <p className="mt-2.5 text-[13px] opacity-55">
                 {hero.data.date
                   ? new Date(String(hero.data.date)).toLocaleDateString(
                       "ru-RU",
-                      {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      }
+                      { day: "numeric", month: "long", year: "numeric" }
                     )
                   : "Дата"}
               </p>
               <p
-                className="mt-2 font-heading text-lg italic"
+                className="mt-1.5 font-heading text-base italic"
                 style={{ color: accent }}
               >
                 {String(hero.data.tagline || "Мы женимся!")} ♥
               </p>
               <button
                 type="button"
-                className="mx-auto mt-5 rounded-2xl px-5 py-2.5 text-sm font-medium text-white shadow-soft"
+                className="mx-auto mt-4 rounded-full px-5 py-2 text-[13px] font-medium text-white"
                 style={{ background: primary }}
               >
                 {String(hero.data.cta || "Подтвердить участие")}
               </button>
             </div>
+
+            {wide && (countdown || location || transfer) && (
+              <div
+                className="col-span-3 space-y-2 border-l p-3"
+                style={{ borderColor: borderCol, background: bg }}
+              >
+                {countdown && (
+                  <Selectable
+                    block={countdown}
+                    selected={selectedId === countdown.id}
+                    onSelect={onSelect}
+                  >
+                    <div
+                      className="rounded-xl border p-3 text-center"
+                      style={{ background: surface, borderColor: borderCol }}
+                    >
+                      <p className="mb-1.5 text-[10px] opacity-50">
+                        До нашей свадьбы
+                      </p>
+                      <Countdown
+                        targetDate={String(
+                          countdown.data.targetDate || "2025-06-20T15:00:00"
+                        )}
+                        compact
+                      />
+                    </div>
+                  </Selectable>
+                )}
+                {location && (
+                  <Selectable
+                    block={location}
+                    selected={selectedId === location.id}
+                    onSelect={onSelect}
+                  >
+                    <div
+                      className="rounded-xl border p-3"
+                      style={{ background: surface, borderColor: borderCol }}
+                    >
+                      <p className="mb-1 flex items-center gap-1 text-[10px] opacity-50">
+                        <MapPin size={11} style={{ color: accent }} /> Локация
+                      </p>
+                      <p className="text-xs font-medium">
+                        {String(location.data.name || "")}
+                      </p>
+                    </div>
+                  </Selectable>
+                )}
+                {transfer && (
+                  <Selectable
+                    block={transfer}
+                    selected={selectedId === transfer.id}
+                    onSelect={onSelect}
+                  >
+                    <div
+                      className="rounded-xl border p-3"
+                      style={{ background: surface, borderColor: borderCol }}
+                    >
+                      <p className="mb-1 flex items-center gap-1 text-[10px] opacity-50">
+                        <Car size={11} style={{ color: accent }} /> Трансфер
+                      </p>
+                      <p className="line-clamp-3 text-[10px] leading-relaxed opacity-65">
+                        {String(transfer.data.text || "")}
+                      </p>
+                    </div>
+                  </Selectable>
+                )}
+              </div>
+            )}
           </div>
         </Selectable>
       )}
 
-      {/* INFO ROW */}
-      {(countdown || location || transfer) && (
+      {!wide && (countdown || location || transfer) && (
         <div
           className={cn(
-            "grid gap-3 border-t p-4",
-            device === "mobile" ? "grid-cols-1" : "sm:grid-cols-3",
-            isLuxury ? "border-white/10" : "border-black/5"
+            "grid gap-2.5 border-t p-3",
+            device === "mobile" ? "grid-cols-1" : "grid-cols-3"
           )}
+          style={{ borderColor: borderCol }}
         >
           {countdown && (
             <Selectable
               block={countdown}
               selected={selectedId === countdown.id}
               onSelect={onSelect}
-              className="rounded-2xl"
             >
               <div
-                className="rounded-2xl p-4 text-center"
-                style={{
-                  background: isLuxury ? "#1A1A1A" : "rgba(255,255,255,0.7)",
-                  border: `1px solid ${isLuxury ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)"}`,
-                }}
+                className="rounded-xl border p-3 text-center"
+                style={{ background: surface, borderColor: borderCol }}
               >
-                <p className="mb-2 text-[11px] font-medium uppercase tracking-wide opacity-50">
-                  Таймер до свадьбы
-                </p>
+                <p className="mb-1.5 text-[10px] opacity-50">Таймер</p>
                 <Countdown
                   targetDate={String(
                     countdown.data.targetDate || "2025-06-20T15:00:00"
@@ -184,21 +253,14 @@ export function LiveCanvas({
               onSelect={onSelect}
             >
               <div
-                className="h-full rounded-2xl p-4"
-                style={{
-                  background: isLuxury ? "#1A1A1A" : "rgba(255,255,255,0.7)",
-                  border: `1px solid ${isLuxury ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)"}`,
-                }}
+                className="h-full rounded-xl border p-3"
+                style={{ background: surface, borderColor: borderCol }}
               >
-                <p className="mb-1 flex items-center gap-1 text-[11px] font-medium opacity-50">
-                  <MapPin size={12} style={{ color: accent }} /> Адрес
-                  торжества
+                <p className="mb-1 flex items-center gap-1 text-[10px] opacity-50">
+                  <MapPin size={11} style={{ color: accent }} /> Адрес
                 </p>
-                <p className="text-sm font-medium">
+                <p className="text-xs font-medium">
                   {String(location.data.name || "")}
-                </p>
-                <p className="mt-1 text-xs opacity-60 leading-relaxed">
-                  {String(location.data.address || "")}
                 </p>
               </div>
             </Selectable>
@@ -210,16 +272,13 @@ export function LiveCanvas({
               onSelect={onSelect}
             >
               <div
-                className="h-full rounded-2xl p-4"
-                style={{
-                  background: isLuxury ? "#1A1A1A" : "rgba(255,255,255,0.7)",
-                  border: `1px solid ${isLuxury ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)"}`,
-                }}
+                className="h-full rounded-xl border p-3"
+                style={{ background: surface, borderColor: borderCol }}
               >
-                <p className="mb-1 flex items-center gap-1 text-[11px] font-medium opacity-50">
-                  <Car size={12} style={{ color: accent }} /> Трансфер
+                <p className="mb-1 flex items-center gap-1 text-[10px] opacity-50">
+                  <Car size={11} style={{ color: accent }} /> Трансфер
                 </p>
-                <p className="text-xs leading-relaxed opacity-70">
+                <p className="line-clamp-3 text-[10px] leading-relaxed opacity-65">
                   {String(transfer.data.text || "")}
                 </p>
               </div>
@@ -228,24 +287,18 @@ export function LiveCanvas({
         </div>
       )}
 
-      {/* RSVP */}
       {rsvp && (
         <Selectable
           block={rsvp}
           selected={selectedId === rsvp.id}
           onSelect={onSelect}
         >
-          <div
-            className={cn(
-              "border-t p-4",
-              isLuxury ? "border-white/10" : "border-black/5"
-            )}
-          >
+          <div className="border-t p-4" style={{ borderColor: borderCol }}>
             <div
-              className="rounded-2xl border border-dashed p-6 text-center"
+              className="rounded-2xl border border-dashed p-5 text-center"
               style={{
                 borderColor: `${primary}55`,
-                background: `${primary}12`,
+                background: `${primary}14`,
               }}
             >
               <p className="text-sm font-medium">
@@ -265,7 +318,7 @@ export function LiveCanvas({
               )}
               <button
                 type="button"
-                className="mt-4 rounded-2xl px-5 py-2 text-sm font-medium text-white"
+                className="mt-3 rounded-full px-5 py-2 text-sm font-medium text-white"
                 style={{ background: primary }}
               >
                 Подтвердить участие
@@ -275,7 +328,6 @@ export function LiveCanvas({
         </Selectable>
       )}
 
-      {/* SCHEDULE full width */}
       {rest
         .filter((b) => b.type === "schedule")
         .map((block) => (
@@ -285,34 +337,35 @@ export function LiveCanvas({
             selected={selectedId === block.id}
             onSelect={onSelect}
           >
-            <div
-              className={cn(
-                "border-t px-4 py-8",
-                isLuxury ? "border-white/10" : "border-black/5"
-              )}
-            >
+            <div className="border-t px-4 py-7" style={{ borderColor: borderCol }}>
               <h3
-                className="mb-6 text-center font-heading text-xl"
+                className="mb-5 text-center font-heading text-lg"
                 style={{ fontFamily: `"${config.fonts.heading}", serif` }}
               >
                 Программа дня
               </h3>
-              <div className="flex flex-wrap items-start justify-center gap-4">
+              <div className="flex flex-wrap items-start justify-center gap-3">
                 {((block.data.items as ScheduleItem[]) || []).map((item, i) => (
-                  <div key={i} className="flex w-[88px] flex-col items-center text-center">
+                  <div
+                    key={i}
+                    className="flex w-[84px] flex-col items-center text-center"
+                  >
                     <div
-                      className="mb-2 flex h-11 w-11 items-center justify-center rounded-2xl"
+                      className="mb-2 flex h-10 w-10 items-center justify-center rounded-2xl"
                       style={{
-                        background: isLuxury ? "#1A1A1A" : `${accent}22`,
+                        background: isLuxury ? "#1A1A1A" : "#F7F1EA",
                         color: accent,
+                        boxShadow: isLuxury
+                          ? "none"
+                          : "inset 0 0 0 1px #EFE9E0",
                       }}
                     >
-                      <Heart size={16} />
+                      <Heart size={15} strokeWidth={1.4} />
                     </div>
-                    <p className="font-heading text-base font-semibold">
+                    <p className="font-heading text-sm font-semibold">
                       {item.time}
                     </p>
-                    <p className="mt-0.5 text-[11px] leading-snug opacity-60">
+                    <p className="mt-0.5 text-[10px] leading-snug opacity-60">
                       {item.title}
                     </p>
                   </div>
@@ -322,13 +375,12 @@ export function LiveCanvas({
           </Selectable>
         ))}
 
-      {/* GRID of content blocks */}
       <div
         className={cn(
-          "grid gap-3 border-t p-4",
-          device === "mobile" ? "grid-cols-1" : "sm:grid-cols-2 lg:grid-cols-3",
-          isLuxury ? "border-white/10" : "border-black/5"
+          "grid gap-2.5 border-t p-3.5",
+          device === "mobile" ? "grid-cols-1" : "sm:grid-cols-2 lg:grid-cols-3"
         )}
+        style={{ borderColor: borderCol }}
       >
         {rest
           .filter((b) => b.type !== "schedule")
@@ -344,16 +396,16 @@ export function LiveCanvas({
                 isLuxury={isLuxury}
                 accent={accent}
                 headingFont={config.fonts.heading}
+                surface={surface}
+                borderCol={borderCol}
               />
             </Selectable>
           ))}
       </div>
 
       <div
-        className={cn(
-          "border-t px-4 py-6 text-center text-xs opacity-40",
-          isLuxury ? "border-white/10" : "border-black/5"
-        )}
+        className="border-t px-4 py-5 text-center text-xs opacity-40"
+        style={{ borderColor: borderCol }}
       >
         С любовью · With Love
       </div>
@@ -390,12 +442,13 @@ function Selectable({
       }}
       className={cn(
         "relative cursor-pointer outline-none transition-all",
-        selected && "z-10 ring-2 ring-[#E8A09A] ring-offset-2 ring-offset-[#F3EEE6]",
+        selected &&
+          "z-10 ring-2 ring-[#D4A39C] ring-offset-2 ring-offset-[#F3EEE6]",
         className
       )}
     >
       {selected && (
-        <div className="absolute -top-2.5 left-3 z-20 flex items-center gap-1 rounded-full bg-[#E8A09A] px-2 py-0.5 text-[10px] font-medium text-white shadow-sm">
+        <div className="absolute -top-2.5 left-3 z-20 flex items-center gap-1 rounded-full bg-[#D4A39C] px-2 py-0.5 text-[10px] font-medium text-white shadow-sm">
           <BlockIcon type={block.type} size={10} />
           {BLOCK_LABELS[block.type].label}
         </div>
@@ -410,23 +463,27 @@ function ContentCard({
   isLuxury,
   accent,
   headingFont,
+  surface,
+  borderCol,
 }: {
   block: InvitationBlock;
   isLuxury: boolean;
   accent: string;
   headingFont: string;
+  surface: string;
+  borderCol: string;
 }) {
   const label = BLOCK_LABELS[block.type].label;
   const cardStyle = {
-    background: isLuxury ? "#1A1A1A" : "rgba(255,255,255,0.75)",
-    border: `1px solid ${isLuxury ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)"}`,
+    background: surface,
+    border: `1px solid ${borderCol}`,
   };
 
   if (block.type === "story") {
     return (
       <div className="h-full rounded-2xl p-4" style={cardStyle}>
         <div className="mb-2 flex items-center gap-2" style={{ color: accent }}>
-          <BlockIcon type="story" size={16} />
+          <BlockIcon type="story" size={15} />
           <span
             className="font-heading text-sm"
             style={{ fontFamily: `"${headingFont}", serif` }}
@@ -456,7 +513,7 @@ function ContentCard({
     return (
       <div className="h-full rounded-2xl p-4" style={cardStyle}>
         <div className="mb-2 flex items-center gap-2" style={{ color: accent }}>
-          <Shirt size={16} />
+          <Shirt size={15} strokeWidth={1.4} />
           <span className="font-heading text-sm">{label}</span>
         </div>
         <p className="line-clamp-3 text-xs leading-relaxed opacity-70">
@@ -480,7 +537,7 @@ function ContentCard({
     return (
       <div className="h-full rounded-2xl p-4" style={cardStyle}>
         <div className="mb-2 flex items-center gap-2" style={{ color: accent }}>
-          <BlockIcon type="faq" size={16} />
+          <BlockIcon type="faq" size={15} />
           <span className="font-heading text-sm">{label}</span>
         </div>
         <div className="space-y-1.5">
@@ -488,7 +545,11 @@ function ContentCard({
             <div
               key={i}
               className="flex items-center justify-between rounded-lg px-2 py-1.5 text-xs opacity-70"
-              style={{ background: isLuxury ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)" }}
+              style={{
+                background: isLuxury
+                  ? "rgba(255,255,255,0.04)"
+                  : "rgba(0,0,0,0.03)",
+              }}
             >
               <span className="truncate">{item.question}</span>
               <ChevronDown size={12} />
@@ -503,7 +564,7 @@ function ContentCard({
     return (
       <div className="h-full rounded-2xl p-4" style={cardStyle}>
         <div className="mb-2 flex items-center gap-2" style={{ color: accent }}>
-          <Music size={16} />
+          <Music size={15} strokeWidth={1.4} />
           <span className="font-heading text-sm">{label}</span>
         </div>
         <p className="text-xs opacity-70">
@@ -513,10 +574,37 @@ function ContentCard({
     );
   }
 
+  if (block.type === "seating") {
+    return (
+      <div className="h-full rounded-2xl p-4" style={cardStyle}>
+        <span
+          className="font-heading text-sm"
+          style={{ fontFamily: `"${headingFont}", serif` }}
+        >
+          {String(block.data.title || label)}
+        </span>
+        <p className="mt-1 line-clamp-2 text-xs opacity-70">
+          {String(block.data.text || "")}
+        </p>
+        <div className="mt-3 flex flex-wrap justify-center gap-1.5 opacity-60">
+          {[1, 2, 3, 4].map((n) => (
+            <span
+              key={n}
+              className="flex h-8 w-8 items-center justify-center rounded-full border text-[10px]"
+              style={{ borderColor: `${accent}66`, color: accent }}
+            >
+              {n}
+            </span>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full rounded-2xl p-4" style={cardStyle}>
       <div className="mb-2 flex items-center gap-2" style={{ color: accent }}>
-        <BlockIcon type={block.type} size={16} />
+        <BlockIcon type={block.type} size={15} />
         <span className="font-heading text-sm">
           {String(block.data.title || label)}
         </span>
