@@ -1,5 +1,6 @@
 "use client";
 
+import { ConfirmedGuests } from "@/components/invitation/ConfirmedGuests";
 import { Countdown } from "@/components/invitation/Countdown";
 import { MusicPlayer } from "@/components/invitation/MusicPlayer";
 import { RsvpForm } from "@/components/invitation/RsvpForm";
@@ -36,6 +37,7 @@ export function InviteView({
 }) {
   const addWish = useAppStore((s) => s.addWish);
   const updateInvitation = useAppStore((s) => s.updateInvitation);
+  const guests = useAppStore((s) => s.guests);
   const [wishName, setWishName] = useState("");
   const [wishText, setWishText] = useState("");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -546,6 +548,15 @@ export function InviteView({
           </div>
         </section>
       )}
+
+      <ConfirmedGuests
+        guests={guests}
+        title={locale === "en" ? "Who is coming" : "Кто уже с нами"}
+        surface={surface}
+        border={border}
+        accent={accent}
+        headingFont={config.fonts.heading}
+      />
 
       {wishesBlock && (
         <section id="wishes" className="mx-auto max-w-2xl px-4 py-10">
