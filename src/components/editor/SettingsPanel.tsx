@@ -208,8 +208,8 @@ export function SettingsPanel({
                     }
                     className={`w-full rounded-xl border px-3 py-2 text-left text-xs transition-colors ${
                       config.music?.trackUrl === track.url
-                        ? "border-blush/40 bg-[#F8E8E8]/50 text-charcoal"
-                        : "border-[#EDE7DD] bg-white text-[#8a8580] hover:border-blush/20"
+                        ? "border-[#E8A09A]/40 bg-[#F8E8E8]/50 text-charcoal"
+                        : "border-[#EDE7DD] bg-white text-[#8a8580] hover:border-[#E8A09A]/20"
                     }`}
                   >
                     {track.name}
@@ -345,7 +345,7 @@ function BlockTab({
                   onClick={() => set({ image: c.url })}
                   className={`relative aspect-[4/3] overflow-hidden rounded-xl border-2 transition-all ${
                     block.data.image === c.url
-                      ? "border-blush ring-2 ring-blush/30"
+                      ? "border-[#E8A09A] ring-2 ring-[#E8A09A]/30"
                       : "border-transparent hover:border-[#EDE7DD]"
                   }`}
                 >
@@ -428,7 +428,7 @@ function BlockTab({
                   onClick={() => set({ image: c.url })}
                   className={`relative aspect-square overflow-hidden rounded-xl border-2 ${
                     block.data.image === c.url
-                      ? "border-blush"
+                      ? "border-[#E8A09A]"
                       : "border-transparent"
                   }`}
                 >
@@ -701,8 +701,8 @@ function StyleTab({
               }
               className={`rounded-2xl border p-3 text-left transition-all ${
                 config.theme === theme.id
-                  ? "border-blush bg-[#F8E8E8]/40 ring-1 ring-blush/30"
-                  : "border-[#EDE7DD] bg-white hover:border-blush/30"
+                  ? "border-[#E8A09A] bg-[#F8E8E8]/40 ring-1 ring-[#E8A09A]/30"
+                  : "border-[#EDE7DD] bg-white hover:border-[#E8A09A]/30"
               }`}
             >
               <div className="mb-2 flex gap-1">
@@ -823,7 +823,7 @@ function StyleTab({
             <button
               key={s.id}
               type="button"
-              className="flex-1 rounded-xl border border-[#EDE7DD] bg-white py-2 text-[11px] font-medium text-charcoal hover:border-blush/40"
+              className="flex-1 rounded-xl border border-[#EDE7DD] bg-white py-2 text-[11px] font-medium text-charcoal hover:border-[#E8A09A]/40"
             >
               {s.label}
             </button>
