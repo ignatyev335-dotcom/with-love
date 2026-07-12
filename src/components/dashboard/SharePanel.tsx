@@ -26,7 +26,7 @@ export function SharePanel({
         typeof window !== "undefined"
           ? `${window.location.origin}${path}`
           : path
-      )}&bgcolor=FAF7F2&color=282B2B&margin=8`,
+      )}&bgcolor=FDFCFA&color=282B2B&margin=8`,
     [path]
   );
 
@@ -55,16 +55,16 @@ export function SharePanel({
           <img
             src={qrSrc}
             alt="QR code"
-            width={120}
-            height={120}
-            className="rounded-2xl border border-border bg-white p-2 shadow-soft"
+            width={112}
+            height={112}
+            className="rounded-2xl border border-[#EDE7DD] bg-white p-2 shadow-sm"
           />
           <div className="flex-1 space-y-3 text-center sm:text-left">
-            <p className="text-sm text-muted">
+            <p className="text-sm text-[#8a8580]">
               Отправьте гостям ссылку или QR-код. Ответы появятся в кабинете
               автоматически.
             </p>
-            <div className="rounded-2xl border border-border bg-warm-beige/40 px-3 py-2 font-mono text-xs text-charcoal break-all">
+            <div className="rounded-2xl border border-[#EDE7DD] bg-[#FAF7F2] px-3 py-2.5 font-mono text-xs text-charcoal break-all">
               {url}
             </div>
             <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
@@ -78,12 +78,7 @@ export function SharePanel({
                   Открыть
                 </Button>
               </Link>
-              <a
-                href={qrSrc}
-                download={`withlove-${slug}-qr.png`}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a href={qrSrc} download={`withlove-${slug}-qr.png`} target="_blank" rel="noreferrer">
                 <Button size="sm" variant="ghost">
                   <QrCode size={14} />
                   QR
