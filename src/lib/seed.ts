@@ -63,7 +63,7 @@ export const DEMO_INVITATION: Invitation = {
   config: {
     theme: "classic",
     colors: {
-      primary: "#F76E62",
+      primary: "#E8A09A",
       accent: "#D4A537",
       background: "#FAF7F2",
       text: "#282B2B",

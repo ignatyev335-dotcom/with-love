@@ -95,7 +95,7 @@ export const THEME_PRESETS: {
     id: "classic",
     name: "Классика",
     colors: {
-      primary: "#F76E62",
+      primary: "#E8A09A",
       accent: "#D4A537",
       background: "#FAF7F2",
       text: "#282B2B",
@@ -219,7 +219,7 @@ export const HEADING_FONTS = [
 export const BODY_FONTS = ["Inter", "Lato", "Montserrat", "Source Sans 3"];
 
 export const COLOR_SWATCHES = [
-  "#F76E62",
+  "#E8A09A",
   "#C98B88",
   "#D4A537",
   "#A7B8A1",

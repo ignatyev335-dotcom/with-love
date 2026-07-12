@@ -109,24 +109,24 @@ export default function GuestsPage() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-5 animate-fade-in">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="font-heading text-2xl text-charcoal sm:text-3xl">
+          <h1 className="font-heading text-2xl font-medium text-charcoal sm:text-[1.75rem]">
             {t("title")}
           </h1>
-          <p className="mt-1 text-sm text-muted">
+          <p className="mt-1 text-sm text-[#8a8580]">
             {counts.all} · ✓ {counts.confirmed} · ✕ {counts.declined} · ?{" "}
             {counts.pending}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button size="sm" variant="secondary" onClick={exportCsv}>
-            <Download size={16} />
+            <Download size={15} strokeWidth={1.5} />
             {t("export")}
           </Button>
           <Button size="sm" onClick={() => setShowAdd(true)}>
-            <Plus size={16} />
+            <Plus size={15} strokeWidth={1.5} />
             {t("add")}
           </Button>
         </div>
@@ -155,12 +155,12 @@ export default function GuestsPage() {
             onClick={() =>
               setFilter(chip.id === "pending" ? "pending" : chip.id)
             }
-            className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+            className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
               filter === chip.id ||
               (chip.id === "pending" &&
                 (filter === "pending" || filter === "maybe"))
-                ? "bg-blush text-white"
-                : "border border-border bg-white text-muted hover:border-blush/30"
+                ? "bg-[#E8A09A] text-white"
+                : "border border-[#EDE7DD] bg-white text-[#8a8580] hover:border-[#E8A09A]/40"
             }`}
           >
             {chip.label} ({chip.n})
@@ -227,11 +227,11 @@ export default function GuestsPage() {
         </div>
       )}
 
-      <div className="overflow-hidden rounded-3xl border border-border/80 bg-white shadow-card">
+      <div className="overflow-hidden rounded-[1.25rem] border border-[#EDE7DD] bg-white shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead>
-              <tr className="border-b border-border/60 bg-warm-beige/40 text-xs uppercase tracking-wider text-muted">
+              <tr className="border-b border-[#EDE7DD] bg-[#FAF7F2] text-[11px] uppercase tracking-wider text-[#8a8580]">
                 <th className="px-4 py-3 font-medium">{t("name")}</th>
                 <th className="px-4 py-3 font-medium">{t("status")}</th>
                 <th className="px-4 py-3 font-medium">{t("plusOnes")}</th>
