@@ -36,6 +36,8 @@
 
 ## Этап 6. Монетизация
 - [x] Freemium + demo checkout
+- [x] Register/login with plan + next redirects
+- [x] Premium template notice
 - [ ] Реальный Stripe Checkout + webhooks
 
 ## Этап 7. Полировка
