@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# With Love ❤️
 
-## Getting Started
+**RSVP-приглашения на свадьбу нового поколения**
 
-First, run the development server:
+SaaS-платформа: красивые шаблоны → конструктор → публикация → управление гостями.
+
+## Быстрый старт
 
 ```bash
+cd with-love
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Откройте [http://localhost:3000](http://localhost:3000) — редирект на `/ru`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Демо-аккаунты
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Роль | Email | Пароль |
+|------|-------|--------|
+| Организатор | `anna@example.com` | любой |
+| Админ | `admin@withlove.app` | любой |
 
-## Learn More
+## Что реализовано
 
-To learn more about Next.js, take a look at the following resources:
+### Маркетинг
+- Главная (лендинг по референсу 01): hero, фичи, стили, отзывы, тарифы, FAQ
+- Галерея шаблонов (12+ дизайнов)
+- Страница тарифов
+- i18n: русский + English (`next-intl`)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Организатор
+- Регистрация / вход (локальный store)
+- Дашборд: RSVP-статистика, последние ответы, ссылка на приглашение
+- Гости: фильтры, статусы, добавление/удаление
+- Аналитика RSVP
+- **Конструктор**: вкл/выкл блоков, цвета, музыка, предпросмотр, публикация
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Публичное приглашение
+- `/ru/invite/aleksandr-ekaterina` — live-сайт для гостей
+- Таймер, программа, локация, трансфер, дресс-код
+- RSVP-форма, пожелания, FAQ
+- Фоновая музыка (play/pause + soft autoplay)
 
-## Deploy on Vercel
+### Админка
+- Дашборд метрик, пользователи, платежи, шаблоны, поддержка, аналитика
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Стек
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Next.js 16** (App Router) + TypeScript
+- **Tailwind CSS 4**
+- **next-intl** (ru/en)
+- **Zustand** (persist) — mock backend для MVP
+- **Framer Motion**, Lucide icons
+- Playfair Display + Inter
+
+## Дизайн-система
+
+| Токен | HEX |
+|-------|-----|
+| Ivory | `#FAF7F2` |
+| Blush | `#F76E62` |
+| Gold | `#D4A537` |
+| Sage | `#A7B8A1` |
+| Charcoal | `#282B2B` |
+
+Референсы: `../WED/` (14 скриншотов).
+
+## Структура
+
+```
+src/
+  app/[locale]/          # marketing, auth, dashboard, admin, invite
+  components/            # UI, landing, invitation, dashboard, admin
+  lib/                   # store, seed, utils
+  messages/              # ru.json, en.json
+  types/
+```
+
+## Следующие шаги (production)
+
+1. Supabase (Auth + DB + Realtime + Storage)
+2. Drizzle ORM + миграции
+3. Stripe Checkout (разовые платежи)
+4. Resend (email)
+5. Деплой на Vercel
+
+Полное ТЗ — в папке `WED/README (1).md`.
+
+---
+
+*Сделано с любовью к красивым свадьбам.*

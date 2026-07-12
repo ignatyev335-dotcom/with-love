@@ -1,26 +1,143 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ivory: #faf7f2;
+  --warm-beige: #f2ede6;
+  --blush: #f76e62;
+  --dusty-rose: #c98b88;
+  --sage: #a7b8a1;
+  --gold: #d4a537;
+  --charcoal: #282b2b;
+  --soft-pink: #f8e8e8;
+  --cream: #fdf9f3;
+  --light-sage: #e8ede5;
+  --deep-rose: #b76e6e;
+  --dark-bg: #111111;
+  --dark-surface: #1a1a1a;
+  --gold-text: #d4a537;
+
+  --background: var(--ivory);
+  --foreground: var(--charcoal);
+  --muted: #8a8580;
+  --border: #e8e2d9;
+  --card: #ffffff;
+  --ring: var(--blush);
 }
 
 @theme inline {
+  --color-ivory: var(--ivory);
+  --color-warm-beige: var(--warm-beige);
+  --color-blush: var(--blush);
+  --color-dusty-rose: var(--dusty-rose);
+  --color-sage: var(--sage);
+  --color-gold: var(--gold);
+  --color-charcoal: var(--charcoal);
+  --color-soft-pink: var(--soft-pink);
+  --color-cream: var(--cream);
+  --color-light-sage: var(--light-sage);
+  --color-deep-rose: var(--deep-rose);
+  --color-dark-bg: var(--dark-bg);
+  --color-dark-surface: var(--dark-surface);
+  --color-gold-text: var(--gold-text);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-ring: var(--ring);
+  --font-heading: var(--font-playfair);
+  --font-sans: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth focus for accessibility */
+:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--blush) 50%, transparent);
+  outline-offset: 2px;
+}
+
+/* Subtle page enter */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in-up 0.45s ease-out both;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-heading {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--blush) 25%, transparent);
+  color: var(--charcoal);
+}
+
+/* Soft shadow utilities */
+.shadow-soft {
+  box-shadow: 0 4px 24px rgba(40, 43, 43, 0.06);
+}
+
+.shadow-soft-lg {
+  box-shadow: 0 12px 40px rgba(40, 43, 43, 0.08);
+}
+
+.shadow-card {
+  box-shadow: 0 2px 16px rgba(40, 43, 43, 0.05);
+}
+
+/* Decorative gold line */
+.gold-line {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gold) 20%,
+    var(--gold) 80%,
+    transparent
+  );
+  opacity: 0.5;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--warm-beige);
+}
+::-webkit-scrollbar-thumb {
+  background: #d4cdc2;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dusty-rose);
 }
