@@ -53,7 +53,7 @@ export function SettingsPanel({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex gap-1 border-b border-border/60 p-2">
+      <div className="flex gap-1 border-b border-[#EDE7DD] p-2">
         {(
           [
             { id: "block" as const, label: "Блок" },
@@ -65,10 +65,10 @@ export function SettingsPanel({
             key={t.id}
             type="button"
             onClick={() => setTab(t.id)}
-            className={`flex-1 rounded-xl py-2 text-xs font-medium transition-colors ${
+            className={`flex-1 rounded-full py-2 text-[11px] font-medium transition-colors ${
               tab === t.id
-                ? "bg-soft-pink text-blush"
-                : "text-muted hover:bg-warm-beige"
+                ? "bg-[#F8E8E8] text-[#E8A09A]"
+                : "text-[#8a8580] hover:bg-[#FAF7F2]"
             }`}
           >
             {t.label}

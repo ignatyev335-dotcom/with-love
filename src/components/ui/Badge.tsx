@@ -1,13 +1,13 @@
 import { cn } from "@/lib/utils";
 
 const styles = {
-  default: "bg-warm-beige text-charcoal",
-  success: "bg-light-sage text-[#4a6344]",
+  default: "bg-[#FAF7F2] text-charcoal",
+  success: "bg-[#E8EDE5] text-[#4a6344]",
   warning: "bg-amber-50 text-amber-700",
-  danger: "bg-red-50 text-red-600",
-  blush: "bg-soft-pink text-deep-rose",
-  gold: "bg-[#f8f0dc] text-gold",
-  muted: "bg-gray-100 text-muted",
+  danger: "bg-[#F8E8E8] text-[#B76E6E]",
+  blush: "bg-[#F8E8E8] text-[#E8A09A]",
+  gold: "bg-[#F8F0DC] text-[#D4A537]",
+  muted: "bg-[#F0EBE3] text-[#8a8580]",
 };
 
 export function Badge({

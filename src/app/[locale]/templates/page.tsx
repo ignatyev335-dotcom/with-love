@@ -1,5 +1,6 @@
 "use client";
 
+import { FloralCorner, GoldLine } from "@/components/decor/Floral";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { Badge } from "@/components/ui/Badge";
@@ -26,14 +27,13 @@ export default function TemplatesPage() {
       router.push(`/${locale}/register`);
       return;
     }
-    const tpl = TEMPLATES.find((t) => t.id === id);
+    const tpl = TEMPLATES.find((x) => x.id === id);
     if (tpl?.premium && (user.plan === "free" || user.plan === "basic")) {
       const ok = window.confirm(
         isEn
-          ? `«${tpl.nameEn}» is a premium template (${formatPrice(tpl.price, "en-US")}). Continue to checkout demo, or apply style for free in demo mode?`
-          : `«${tpl.name}» — премиум-шаблон (${formatPrice(tpl.price)}). Перейти к оплате (демо) или применить стиль бесплатно в демо-режиме?`
+          ? `«${tpl.nameEn}» is premium. Apply style in demo mode?`
+          : `«${tpl.name}» — премиум. Применить стиль в демо?`
       );
-      // Demo: always apply; real Stripe would gate here
       if (!ok) {
         router.push(`/${locale}/checkout?plan=premium`);
         return;
@@ -52,15 +52,17 @@ export default function TemplatesPage() {
     filter === "all" ? TEMPLATES : TEMPLATES.filter((x) => x.category === filter);
 
   return (
-    <div className="flex min-h-screen flex-col bg-ivory">
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-[#FDFCFA]">
+      <FloralCorner className="pointer-events-none absolute -left-8 top-40 h-48 w-48 opacity-30" />
       <Header />
-      <main className="flex-1 py-12 lg:py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-10 text-center">
-            <h1 className="font-heading text-3xl text-charcoal sm:text-4xl">
+      <main className="relative flex-1 py-12 lg:py-16">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 flex flex-col items-center text-center">
+            <h1 className="font-heading text-3xl font-medium text-charcoal sm:text-4xl">
               {t("title")}
             </h1>
-            <p className="mt-3 text-muted">{t("subtitle")}</p>
+            <GoldLine className="mt-4" />
+            <p className="mt-3 text-[#8a8580]">{t("subtitle")}</p>
           </div>
 
           <div className="mb-8 flex flex-wrap justify-center gap-2">
@@ -68,10 +70,10 @@ export default function TemplatesPage() {
               <button
                 key={c}
                 onClick={() => setFilter(c)}
-                className={`rounded-full px-4 py-1.5 text-sm transition-colors ${
+                className={`rounded-full px-4 py-1.5 text-[13px] transition-colors ${
                   filter === c
-                    ? "bg-blush text-white"
-                    : "bg-white text-muted border border-border hover:border-blush/30"
+                    ? "bg-[#E8A09A] text-white"
+                    : "border border-[#EDE7DD] bg-white text-[#8a8580] hover:border-[#E8A09A]/40"
                 }`}
               >
                 {c === "all" ? t("allStyles") : c}
@@ -83,14 +85,14 @@ export default function TemplatesPage() {
             {list.map((tpl) => (
               <div
                 key={tpl.id}
-                className="group overflow-hidden rounded-3xl border border-border/80 bg-white shadow-card transition-all hover:-translate-y-1 hover:shadow-soft-lg"
+                className="group overflow-hidden rounded-[1.25rem] border border-[#EDE7DD] bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-[0_16px_40px_-16px_rgba(40,43,43,0.14)]"
               >
-                <div className="relative aspect-[3/4] overflow-hidden">
+                <div className="relative aspect-[3/4] overflow-hidden bg-[#FAF7F2]">
                   <Image
                     src={tpl.preview}
                     alt={tpl.name}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, 25vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal/50 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
@@ -105,9 +107,7 @@ export default function TemplatesPage() {
                   </div>
                   <div className="absolute right-3 top-3">
                     {tpl.premium ? (
-                      <Badge variant="gold">
-                        {formatPrice(tpl.price)}
-                      </Badge>
+                      <Badge variant="gold">{formatPrice(tpl.price)}</Badge>
                     ) : (
                       <Badge variant="success">{t("free")}</Badge>
                     )}
@@ -117,14 +117,14 @@ export default function TemplatesPage() {
                   <h3 className="font-heading text-lg text-charcoal">
                     {isEn ? tpl.nameEn : tpl.name}
                   </h3>
-                  <p className="mt-1 text-xs text-muted line-clamp-2">
+                  <p className="mt-1 line-clamp-2 text-xs text-[#8a8580]">
                     {isEn ? tpl.descriptionEn : tpl.description}
                   </p>
                   <div className="mt-3 flex gap-1.5">
                     {tpl.colors.map((c) => (
                       <span
                         key={c}
-                        className="h-4 w-4 rounded-full border border-border"
+                        className="h-3.5 w-3.5 rounded-full ring-1 ring-black/5"
                         style={{ background: c }}
                       />
                     ))}

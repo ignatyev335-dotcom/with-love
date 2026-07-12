@@ -1,5 +1,6 @@
 "use client";
 
+import { FloralCorner } from "@/components/decor/Floral";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -42,24 +43,34 @@ function RegisterForm() {
   };
 
   return (
-    <div className="w-full max-w-md rounded-3xl border border-border/80 bg-white p-8 shadow-soft-lg">
-      <h1 className="text-center font-heading text-2xl text-charcoal">
+    <div className="relative w-full max-w-md overflow-hidden rounded-[1.5rem] border border-[#EDE7DD] bg-white p-8 shadow-[0_20px_50px_-20px_rgba(40,43,43,0.15)]">
+      <FloralCorner
+        flip
+        className="pointer-events-none absolute -left-8 -bottom-6 h-32 w-32 opacity-40"
+      />
+      <h1 className="relative text-center font-heading text-2xl font-medium text-charcoal">
         {t("registerTitle")}
       </h1>
-      <p className="mt-2 text-center text-sm text-muted">{t("registerSubtitle")}</p>
+      <p className="relative mt-2 text-center text-sm text-[#8a8580]">
+        {t("registerSubtitle")}
+      </p>
       {plan !== "free" && (
-        <p className="mt-3 text-center text-xs text-gold">
+        <p className="relative mt-3 text-center text-xs text-[#D4A537]">
           {locale === "en" ? "Selected plan:" : "Выбран тариф:"} {plan}
         </p>
       )}
 
-      <form onSubmit={onSubmit} className="mt-8 space-y-4">
+      <form onSubmit={onSubmit} className="relative mt-8 space-y-4">
         <div>
-          <label className="mb-1.5 block text-sm text-muted">{t("name")}</label>
+          <label className="mb-1.5 block text-xs font-medium text-[#8a8580]">
+            {t("name")}
+          </label>
           <Input value={name} onChange={(e) => setName(e.target.value)} required />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm text-muted">{t("email")}</label>
+          <label className="mb-1.5 block text-xs font-medium text-[#8a8580]">
+            {t("email")}
+          </label>
           <Input
             type="email"
             value={email}
@@ -68,7 +79,9 @@ function RegisterForm() {
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm text-muted">{t("password")}</label>
+          <label className="mb-1.5 block text-xs font-medium text-[#8a8580]">
+            {t("password")}
+          </label>
           <Input
             type="password"
             value={password}
@@ -82,11 +95,11 @@ function RegisterForm() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-muted">
+      <p className="mt-6 text-center text-sm text-[#8a8580]">
         {t("hasAccount")}{" "}
         <Link
           href={`/${locale}/login`}
-          className="font-medium text-blush hover:underline"
+          className="font-medium text-[#E8A09A] hover:underline"
         >
           {tc("login")}
         </Link>
@@ -99,11 +112,12 @@ export default function RegisterPage() {
   const locale = useLocale();
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-soft-pink/40 via-ivory to-light-sage/30 px-4">
-      <div className="mb-8">
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-[#F8E8E8]/60 via-[#FDFCFA] to-[#E8EDE5]/50 px-4">
+      <FloralCorner className="pointer-events-none absolute -left-10 top-16 h-52 w-52 opacity-45" />
+      <div className="relative mb-8">
         <Logo href={`/${locale}`} size="lg" />
       </div>
-      <Suspense fallback={<div className="text-sm text-muted">…</div>}>
+      <Suspense fallback={<div className="text-sm text-[#8a8580]">…</div>}>
         <RegisterForm />
       </Suspense>
     </div>

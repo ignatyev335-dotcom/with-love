@@ -24,6 +24,7 @@ import { useMemo } from "react";
 export default function DashboardPage() {
   const t = useTranslations("dashboard");
   const locale = useLocale();
+  const isEn = locale === "en";
   const user = useAppStore((s) => s.user);
   const wedding = useAppStore((s) => s.wedding);
   const invitation = useAppStore((s) => s.invitation);
@@ -44,7 +45,13 @@ export default function DashboardPage() {
         ? Math.round((confirmed.length / guests.length) * 100)
         : 0,
       declined: declined.length,
+      declinedPct: guests.length
+        ? Math.round((declined.length / guests.length) * 100)
+        : 0,
       pending: pending.length,
+      pendingPct: guests.length
+        ? Math.round((pending.length / guests.length) * 100)
+        : 0,
       children,
       totalPeople,
       listSize: guests.length,
@@ -57,7 +64,7 @@ export default function DashboardPage() {
       (a, b) =>
         new Date(b.respondedAt!).getTime() - new Date(a.respondedAt!).getTime()
     )
-    .slice(0, 6);
+    .slice(0, 5);
 
   const scheduleItems =
     (invitation?.config.blocks.find((b) => b.type === "schedule")?.data
@@ -74,100 +81,98 @@ export default function DashboardPage() {
     );
   }
 
-  const statCards = [
-    {
-      label: t("guestsInvited"),
-      value: stats.invited,
-      icon: Users,
-      color: "text-charcoal",
-      bg: "bg-warm-beige",
-    },
-    {
-      label: t("confirmed"),
-      value: `${stats.confirmed}`,
-      sub: `${stats.confirmedPct}%`,
-      icon: CheckCircle2,
-      color: "text-[#4a6344]",
-      bg: "bg-light-sage",
-    },
-    {
-      label: t("declined"),
-      value: stats.declined,
-      icon: XCircle,
-      color: "text-deep-rose",
-      bg: "bg-soft-pink",
-    },
-    {
-      label: t("pending"),
-      value: stats.pending,
-      icon: HelpCircle,
-      color: "text-amber-700",
-      bg: "bg-amber-50",
-    },
-    {
-      label: t("children"),
-      value: stats.children,
-      icon: Baby,
-      color: "text-gold",
-      bg: "bg-[#f8f0dc]",
-    },
-  ];
-
   const checklist = [
     {
       done: invitation.published,
-      label: locale === "en" ? "Publish invitation" : "Опубликовать приглашение",
+      label: isEn ? "Publish invitation" : "Опубликовать приглашение",
       href: `/${locale}/dashboard/editor`,
     },
     {
       done: stats.listSize >= 5,
-      label: locale === "en" ? "Add guest list" : "Добавить список гостей",
+      label: isEn ? "Add guest list" : "Добавить список гостей",
       href: `/${locale}/dashboard/guests`,
     },
     {
       done: Boolean(
         invitation.config.blocks.find((b) => b.type === "location")?.enabled
       ),
-      label: locale === "en" ? "Set venue & address" : "Указать локацию",
+      label: isEn ? "Set venue & address" : "Указать локацию",
       href: `/${locale}/dashboard/editor`,
     },
     {
       done: Boolean(invitation.config.music?.enabled),
-      label: locale === "en" ? "Choose background music" : "Выбрать музыку",
+      label: isEn ? "Choose background music" : "Выбрать музыку",
       href: `/${locale}/dashboard/editor`,
     },
     {
       done: stats.confirmed > 0,
-      label: locale === "en" ? "Collect first RSVPs" : "Получить первые RSVP",
+      label: isEn ? "Collect first RSVPs" : "Получить первые RSVP",
       href: `/${locale}/invite/${invitation.slug}`,
     },
   ];
 
+  const kpi = [
+    {
+      label: t("guestsInvited"),
+      value: stats.invited,
+      icon: Users,
+      tone: "bg-[#FAF7F2] text-charcoal",
+    },
+    {
+      label: t("confirmed"),
+      value: stats.confirmed,
+      sub: `${stats.confirmedPct}%`,
+      icon: CheckCircle2,
+      tone: "bg-[#E8EDE5] text-[#4a6344]",
+    },
+    {
+      label: t("declined"),
+      value: stats.declined,
+      sub: `${stats.declinedPct}%`,
+      icon: XCircle,
+      tone: "bg-[#F8E8E8] text-[#B76E6E]",
+    },
+    {
+      label: t("pending"),
+      value: stats.pending,
+      sub: `${stats.pendingPct}%`,
+      icon: HelpCircle,
+      tone: "bg-[#FDF6E3] text-[#8B7355]",
+    },
+    {
+      label: t("children"),
+      value: stats.children,
+      icon: Baby,
+      tone: "bg-[#F8F0DC] text-[#D4A537]",
+    },
+  ];
+
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-5 animate-fade-in">
+      {/* Title row */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-sm text-muted">
+          <p className="text-sm text-[#8a8580]">
             {t("greeting")}, {user?.name}
           </p>
-          <h1 className="mt-1 font-heading text-2xl text-charcoal sm:text-3xl">
-            {t("weddingOf")} {wedding.coupleNames}
+          <h1 className="mt-0.5 font-heading text-2xl font-medium text-charcoal sm:text-[1.75rem]">
+            {isEn ? "Wedding of" : "Свадьба"} {wedding.coupleNames}
           </h1>
-          <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
+          <p className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#8a8580]">
             <span className="inline-flex items-center gap-1">
-              <Clock size={14} className="text-gold" />
-              {formatDate(wedding.date, locale === "en" ? "en-US" : "ru-RU")}
+              <Clock size={13} className="text-[#D4A537]" strokeWidth={1.5} />
+              {formatDate(wedding.date, isEn ? "en-US" : "ru-RU")}
             </span>
             <span className="inline-flex items-center gap-1">
-              <MapPin size={14} className="text-gold" />
+              <MapPin size={13} className="text-[#D4A537]" strokeWidth={1.5} />
               {wedding.venue}
             </span>
             <Badge variant={invitation.published ? "success" : "warning"}>
               {invitation.published
-                ? locale === "en"
+                ? isEn
                   ? "Published"
                   : "Опубликовано"
-                : locale === "en"
+                : isEn
                   ? "Draft"
                   : "Черновик"}
             </Badge>
@@ -176,36 +181,37 @@ export default function DashboardPage() {
         <div className="flex flex-wrap gap-2">
           <Link href={`/${locale}/invite/${invitation.slug}`} target="_blank">
             <Button variant="outline" size="sm">
-              <ExternalLink size={14} />
+              <ExternalLink size={14} strokeWidth={1.5} />
               {t("viewInvitation")}
             </Button>
           </Link>
           <Link href={`/${locale}/dashboard/editor`}>
             <Button size="sm">
-              <Wand2 size={14} />
+              <Wand2 size={14} strokeWidth={1.5} />
               {t("openEditor")}
             </Button>
           </Link>
         </div>
       </div>
 
+      {/* KPI row — ref 04 */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-        {statCards.map((s) => {
+        {kpi.map((s) => {
           const Icon = s.icon;
           return (
             <Card key={s.label}>
-              <CardContent className="flex items-center gap-3 pt-5">
+              <CardContent className="flex items-center gap-3 pt-4 pb-4">
                 <div
-                  className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${s.bg} ${s.color}`}
+                  className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${s.tone}`}
                 >
-                  <Icon size={20} />
+                  <Icon size={18} strokeWidth={1.5} />
                 </div>
                 <div>
-                  <p className="text-xs text-muted">{s.label}</p>
-                  <p className="font-heading text-2xl text-charcoal">
+                  <p className="text-[11px] text-[#8a8580]">{s.label}</p>
+                  <p className="font-heading text-2xl leading-none text-charcoal">
                     {s.value}
                     {s.sub && (
-                      <span className="ml-1 text-sm text-muted">{s.sub}</span>
+                      <span className="ml-1 text-sm text-[#a39e97]">{s.sub}</span>
                     )}
                   </p>
                 </div>
@@ -217,94 +223,106 @@ export default function DashboardPage() {
 
       <SharePanel locale={locale} slug={invitation.slug} />
 
-      <div className="grid gap-5 lg:grid-cols-3">
-        <Card className="lg:col-span-1">
+      <div className="grid gap-4 lg:grid-cols-3">
+        {/* Status donut-ish */}
+        <Card>
           <CardHeader>
             <h2 className="font-heading text-lg text-charcoal">
-              {t("quickStats")}
+              {isEn ? "Guests by status" : "Гости по статусу"}
             </h2>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
+            <div className="mb-4 flex items-center justify-center">
+              <div
+                className="relative flex h-28 w-28 items-center justify-center rounded-full"
+                style={{
+                  background: `conic-gradient(#A7B8A1 0 ${stats.confirmedPct}%, #C98B88 ${stats.confirmedPct}% ${stats.confirmedPct + stats.declinedPct}%, #D4A537 ${stats.confirmedPct + stats.declinedPct}% 100%)`,
+                }}
+              >
+                <div className="flex h-20 w-20 flex-col items-center justify-center rounded-full bg-white text-center shadow-inner">
+                  <span className="font-heading text-xl text-charcoal">
+                    {stats.confirmedPct}%
+                  </span>
+                  <span className="text-[10px] text-[#a39e97]">
+                    {isEn ? "yes" : "да"}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-2 text-sm">
               {[
                 {
                   label: t("confirmed"),
+                  n: stats.confirmed,
                   pct: stats.confirmedPct,
-                  color: "bg-sage",
+                  c: "bg-[#A7B8A1]",
                 },
                 {
                   label: t("declined"),
-                  pct: guests.length
-                    ? Math.round((stats.declined / guests.length) * 100)
-                    : 0,
-                  color: "bg-dusty-rose",
+                  n: stats.declined,
+                  pct: stats.declinedPct,
+                  c: "bg-[#C98B88]",
                 },
                 {
                   label: t("pending"),
-                  pct: guests.length
-                    ? Math.round((stats.pending / guests.length) * 100)
-                    : 0,
-                  color: "bg-gold",
+                  n: stats.pending,
+                  pct: stats.pendingPct,
+                  c: "bg-[#D4A537]",
                 },
               ].map((row) => (
-                <div key={row.label}>
-                  <div className="mb-1 flex justify-between text-sm">
-                    <span className="text-muted">{row.label}</span>
-                    <span className="font-medium text-charcoal">{row.pct}%</span>
-                  </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-warm-beige">
-                    <div
-                      className={`h-full rounded-full ${row.color} transition-all`}
-                      style={{ width: `${row.pct}%` }}
-                    />
-                  </div>
+                <div key={row.label} className="flex items-center gap-2">
+                  <span className={`h-2 w-2 rounded-full ${row.c}`} />
+                  <span className="flex-1 text-[#8a8580]">{row.label}</span>
+                  <span className="font-medium text-charcoal">
+                    {row.n} ({row.pct}%)
+                  </span>
                 </div>
               ))}
             </div>
-            <p className="mt-4 text-xs text-muted">
-              {locale === "en" ? "Attending (with +1)" : "Придут (с +1)"}:{" "}
-              <strong className="text-charcoal">{stats.totalPeople}</strong>
-              {" · "}
-              {locale === "en" ? "Views" : "Просмотры"}:{" "}
-              <strong className="text-charcoal">{invitation.views}</strong>
-            </p>
+            <Link
+              href={`/${locale}/dashboard/guests`}
+              className="mt-4 inline-block text-xs font-medium text-[#E8A09A] hover:underline"
+            >
+              {isEn ? "Open guest list →" : "Перейти к списку гостей →"}
+            </Link>
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-1">
+        {/* Recent RSVP */}
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <h2 className="font-heading text-lg text-charcoal">
               {t("recentRsvp")}
             </h2>
             <Link
               href={`/${locale}/dashboard/guests`}
-              className="text-xs text-blush hover:underline"
+              className="text-xs text-[#E8A09A] hover:underline"
             >
-              {locale === "en" ? "All guests →" : "Все гости →"}
+              {isEn ? "All →" : "Все →"}
             </Link>
           </CardHeader>
-          <CardContent className="space-y-2.5">
+          <CardContent className="space-y-2">
             {recent.length === 0 && (
-              <p className="text-sm text-muted">
-                {locale === "en" ? "No responses yet" : "Пока нет ответов"}
+              <p className="text-sm text-[#8a8580]">
+                {isEn ? "No responses yet" : "Пока нет ответов"}
               </p>
             )}
             {recent.map((g) => (
               <div
                 key={g.id}
-                className="flex items-center justify-between rounded-2xl bg-warm-beige/50 px-3 py-2.5"
+                className="flex items-center justify-between rounded-2xl bg-[#FAF7F2] px-3 py-2.5"
               >
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-charcoal">
                     {g.name}
                     {g.plusOnes > 0 && (
-                      <span className="ml-1 text-xs text-muted">
+                      <span className="ml-1 text-xs text-[#a39e97]">
                         +{g.plusOnes}
                       </span>
                     )}
                   </p>
                   {g.message && (
-                    <p className="truncate text-xs text-muted">{g.message}</p>
+                    <p className="truncate text-xs text-[#8a8580]">{g.message}</p>
                   )}
                 </div>
                 <Badge
@@ -323,31 +341,32 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-1">
+        {/* Checklist / Today */}
+        <Card>
           <CardHeader>
             <h2 className="font-heading text-lg text-charcoal">
-              {locale === "en" ? "Checklist" : "Чек-лист"}
+              {isEn ? "Checklist" : "Чек-лист"}
             </h2>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-1.5">
             {checklist.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className="flex items-center gap-3 rounded-xl px-2 py-2 transition-colors hover:bg-warm-beige/50"
+                className="flex items-center gap-3 rounded-xl px-2 py-2 transition-colors hover:bg-[#FAF7F2]"
               >
                 <span
                   className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] ${
                     item.done
-                      ? "bg-sage text-white"
-                      : "border border-border bg-white text-muted"
+                      ? "bg-[#A7B8A1] text-white"
+                      : "border border-[#EDE7DD] bg-white text-[#a39e97]"
                   }`}
                 >
                   {item.done ? "✓" : ""}
                 </span>
                 <span
                   className={`text-sm ${
-                    item.done ? "text-muted line-through" : "text-charcoal"
+                    item.done ? "text-[#a39e97] line-through" : "text-charcoal"
                   }`}
                 >
                   {item.label}
@@ -358,71 +377,77 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      {scheduleItems.length > 0 && (
+      {/* Timeline + reminders */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        {scheduleItems.length > 0 && (
+          <Card>
+            <CardHeader>
+              <h2 className="font-heading text-lg text-charcoal">
+                {isEn ? "Day timeline" : "Тайминг дня"}
+              </h2>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-0">
+                {scheduleItems.map((item, i) => (
+                  <div key={i} className="flex gap-3">
+                    <div className="flex flex-col items-center">
+                      <span className="font-heading text-sm font-semibold text-charcoal">
+                        {item.time}
+                      </span>
+                      {i < scheduleItems.length - 1 && (
+                        <span className="my-1 w-px flex-1 bg-[#EDE7DD]" />
+                      )}
+                    </div>
+                    <p className="pb-4 text-sm text-[#8a8580]">{item.title}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between">
             <h2 className="font-heading text-lg text-charcoal">
-              {locale === "en" ? "Day timeline" : "Тайминг дня"}
+              {isEn ? "Reminders" : "Напоминания"}
             </h2>
+            <Badge variant="blush">
+              {stats.pending} {isEn ? "pending" : "без ответа"}
+            </Badge>
           </CardHeader>
-          <CardContent>
-            <div className="flex gap-4 overflow-x-auto pb-2">
-              {scheduleItems.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex min-w-[100px] flex-col items-center rounded-2xl bg-warm-beige/40 px-3 py-3 text-center"
-                >
-                  <p className="font-heading text-base font-semibold text-charcoal">
-                    {item.time}
-                  </p>
-                  <p className="mt-1 text-xs text-muted">{item.title}</p>
-                </div>
-              ))}
-            </div>
+          <CardContent className="space-y-3">
+            <p className="text-sm text-[#8a8580]">
+              {isEn
+                ? "Send a gentle reminder to guests who have not responded yet."
+                : "Отправьте мягкое напоминание гостям без ответа."}
+            </p>
+            <p className="text-xs text-[#a39e97]">
+              {isEn ? "Attending (with +1):" : "Придут (с +1):"}{" "}
+              <strong className="text-charcoal">{stats.totalPeople}</strong>
+              {" · "}
+              {isEn ? "Views:" : "Просмотры:"}{" "}
+              <strong className="text-charcoal">{invitation.views}</strong>
+            </p>
+            <Button
+              size="sm"
+              variant="secondary"
+              disabled={stats.pending === 0}
+              onClick={() => {
+                const pending = guests.filter(
+                  (g) => g.status === "pending" || g.status === "maybe"
+                );
+                alert(
+                  isEn
+                    ? `Demo: reminder queued for ${pending.length} guests`
+                    : `Демо: напоминание для ${pending.length} гостей`
+                );
+              }}
+            >
+              {isEn ? "Send reminders" : "Отправить напоминания"}
+            </Button>
           </CardContent>
         </Card>
-      )}
-
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <h2 className="font-heading text-lg text-charcoal">
-            {locale === "en" ? "Reminders" : "Напоминания"}
-          </h2>
-          <Badge variant="blush">
-            {stats.pending} {locale === "en" ? "pending" : "без ответа"}
-          </Badge>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <p className="text-sm text-muted">
-            {locale === "en"
-              ? "Send a gentle reminder to guests who have not responded yet. Email delivery hooks into Resend when configured."
-              : "Отправьте мягкое напоминание гостям без ответа. Рассылка подключится через Resend, когда будет ключ."}
-          </p>
-          <Button
-            size="sm"
-            variant="secondary"
-            disabled={stats.pending === 0}
-            onClick={() => {
-              const pending = guests.filter(
-                (g) => g.status === "pending" || g.status === "maybe"
-              );
-              console.info(
-                "[reminders:demo]",
-                pending.map((g) => g.name)
-              );
-              alert(
-                locale === "en"
-                  ? `Demo: reminder queued for ${pending.length} guests`
-                  : `Демо: напоминание поставлено в очередь для ${pending.length} гостей`
-              );
-            }}
-          >
-            {locale === "en"
-              ? "Send reminders"
-              : "Отправить напоминания"}
-          </Button>
-        </CardContent>
-      </Card>
+      </div>
     </div>
   );
 }

@@ -51,18 +51,18 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
   if (!user || user.role !== "admin") {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-ivory text-muted">
+      <div className="flex min-h-screen items-center justify-center bg-[#FDFCFA] text-[#8a8580]">
         {tc("loading")}
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-ivory">
-      <aside className="hidden w-56 shrink-0 flex-col border-r border-border/60 bg-white lg:flex">
-        <div className="flex h-16 items-center gap-2 px-4">
+    <div className="flex min-h-screen bg-[#FDFCFA]">
+      <aside className="hidden w-56 shrink-0 flex-col border-r border-[#EDE7DD] bg-white lg:flex">
+        <div className="flex h-[4.25rem] items-center gap-2 px-4">
           <Logo href={`/${locale}/admin`} size="sm" />
-          <span className="rounded-md bg-soft-pink px-1.5 py-0.5 text-[10px] font-semibold uppercase text-blush">
+          <span className="rounded-full bg-[#F8E8E8] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#E8A09A]">
             Admin
           </span>
         </div>
@@ -79,35 +79,35 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                 key={l.href}
                 href={href}
                 className={cn(
-                  "flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm transition-colors",
+                  "flex items-center gap-2.5 rounded-2xl px-3 py-2 text-[13px] transition-colors",
                   active
-                    ? "bg-soft-pink font-medium text-blush"
-                    : "text-muted hover:bg-warm-beige hover:text-charcoal"
+                    ? "bg-[#F8E8E8] font-medium text-[#E8A09A]"
+                    : "text-[#8a8580] hover:bg-[#FAF7F2] hover:text-charcoal"
                 )}
               >
-                <Icon size={16} />
+                <Icon size={16} strokeWidth={1.5} />
                 {l.label}
               </Link>
             );
           })}
         </nav>
-        <div className="border-t border-border/60 p-3">
+        <div className="border-t border-[#EDE7DD] p-3">
           <div className="mb-2 flex items-center gap-2 px-1">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={user.avatar}
               alt={user.name}
-              className="h-8 w-8 rounded-full"
+              className="h-8 w-8 rounded-full ring-2 ring-[#F8E8E8]"
             />
             <div className="min-w-0">
               <p className="truncate text-sm font-medium">{user.name}</p>
-              <p className="text-[10px] text-muted">Администратор</p>
+              <p className="text-[10px] text-[#a39e97]">Администратор</p>
             </div>
           </div>
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start"
+            className="w-full justify-start text-[#8a8580]"
             onClick={() => {
               logout();
               router.push(`/${locale}`);
@@ -120,11 +120,11 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-14 items-center justify-between border-b border-border/60 bg-white px-4 lg:px-6">
+        <header className="flex h-14 items-center justify-between border-b border-[#EDE7DD] bg-white px-4 lg:px-6">
           <div className="lg:hidden">
             <Logo href={`/${locale}/admin`} size="sm" />
           </div>
-          <p className="hidden text-sm text-muted lg:block">
+          <p className="hidden text-sm text-[#8a8580] lg:block">
             Панель управления платформой
           </p>
           <Link href={`/${locale}`}>
@@ -133,7 +133,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             </Button>
           </Link>
         </header>
-        <div className="flex gap-1 overflow-x-auto border-b border-border/60 bg-white px-2 py-2 lg:hidden">
+        <div className="flex gap-1 overflow-x-auto border-b border-[#EDE7DD] bg-white px-2 py-2 lg:hidden">
           {links.slice(0, 5).map((l) => {
             const href = `/${locale}${l.href}`;
             const Icon = l.icon;
@@ -141,7 +141,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               <Link
                 key={l.href}
                 href={href}
-                className="flex shrink-0 items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs text-muted hover:bg-warm-beige"
+                className="flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1.5 text-xs text-[#8a8580] hover:bg-[#FAF7F2]"
               >
                 <Icon size={12} />
                 {l.label}

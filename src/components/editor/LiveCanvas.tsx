@@ -386,12 +386,12 @@ function Selectable({
       }}
       className={cn(
         "relative cursor-pointer outline-none transition-all",
-        selected && "z-10 ring-2 ring-blush ring-offset-2",
+        selected && "z-10 ring-2 ring-[#E8A09A] ring-offset-2 ring-offset-[#F3EEE6]",
         className
       )}
     >
       {selected && (
-        <div className="absolute -top-2.5 left-3 z-20 flex items-center gap-1 rounded-full bg-blush px-2 py-0.5 text-[10px] font-medium text-white shadow-soft">
+        <div className="absolute -top-2.5 left-3 z-20 flex items-center gap-1 rounded-full bg-[#E8A09A] px-2 py-0.5 text-[10px] font-medium text-white shadow-sm">
           <BlockIcon type={block.type} size={10} />
           {BLOCK_LABELS[block.type].label}
         </div>

@@ -17,42 +17,36 @@ const KPIS = [
     value: "12 458",
     change: "+8,2%",
     icon: Users,
-    up: true,
   },
   {
     label: "Активных сайтов",
     value: "3 247",
     change: "+6,1%",
     icon: Heart,
-    up: true,
   },
   {
     label: "Опубликованные",
     value: "8 936",
     change: "+7,4%",
     icon: Eye,
-    up: true,
   },
   {
     label: "Конверсия RSVP",
     value: "68,4%",
     change: "+4,3 п.п.",
     icon: TrendingUp,
-    up: true,
   },
   {
     label: "Выручка",
     value: "5 682 400 ₽",
     change: "+12,9%",
     icon: Wallet,
-    up: true,
   },
   {
     label: "Здоровье системы",
     value: "99,9%",
     change: "Без сбоев",
     icon: Activity,
-    up: true,
   },
 ];
 
@@ -73,10 +67,12 @@ const RECENT = [
 
 export default function AdminDashboardPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="font-heading text-2xl text-charcoal">Дашборд</h1>
-        <p className="mt-1 text-sm text-muted">
+        <h1 className="font-heading text-2xl font-medium text-charcoal">
+          Дашборд
+        </h1>
+        <p className="mt-1 text-sm text-[#8a8580]">
           Обзор ключевых показателей платформы
         </p>
       </div>
@@ -86,16 +82,16 @@ export default function AdminDashboardPage() {
           const Icon = k.icon;
           return (
             <Card key={k.label}>
-              <CardContent className="pt-4">
+              <CardContent className="pt-4 pb-4">
                 <div className="mb-2 flex items-center justify-between">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-warm-beige text-gold">
-                    <Icon size={16} />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#FAF7F2] text-[#D4A537] ring-1 ring-[#EDE7DD]">
+                    <Icon size={16} strokeWidth={1.5} />
                   </div>
-                  <span className="text-[11px] font-medium text-sage">
+                  <span className="text-[11px] font-medium text-[#A7B8A1]">
                     {k.change}
                   </span>
                 </div>
-                <p className="text-xs text-muted">{k.label}</p>
+                <p className="text-[11px] text-[#8a8580]">{k.label}</p>
                 <p className="mt-0.5 font-heading text-xl text-charcoal">
                   {k.value}
                 </p>
@@ -105,24 +101,24 @@ export default function AdminDashboardPage() {
         })}
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-3">
-        <Card className="lg:col-span-1">
+      <div className="grid gap-4 lg:grid-cols-3">
+        <Card>
           <CardHeader>
             <h2 className="font-heading text-lg">Подписки и тарифы</h2>
           </CardHeader>
           <CardContent className="space-y-3">
             {[
-              { name: "Premium", pct: 56.7, color: "bg-blush" },
-              { name: "Pro", pct: 30.4, color: "bg-gold" },
-              { name: "Базовый", pct: 10.9, color: "bg-sage" },
-              { name: "Тестовый", pct: 1.9, color: "bg-border" },
+              { name: "Premium", pct: 56.7, color: "bg-[#E8A09A]" },
+              { name: "Pro", pct: 30.4, color: "bg-[#D4A537]" },
+              { name: "Базовый", pct: 10.9, color: "bg-[#A7B8A1]" },
+              { name: "Тестовый", pct: 1.9, color: "bg-[#EDE7DD]" },
             ].map((p) => (
               <div key={p.name}>
                 <div className="mb-1 flex justify-between text-sm">
                   <span>{p.name}</span>
-                  <span className="text-muted">{p.pct}%</span>
+                  <span className="text-[#8a8580]">{p.pct}%</span>
                 </div>
-                <div className="h-2 rounded-full bg-warm-beige">
+                <div className="h-2 rounded-full bg-[#FAF7F2]">
                   <div
                     className={`h-full rounded-full ${p.color}`}
                     style={{ width: `${p.pct}%` }}
@@ -133,19 +129,19 @@ export default function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-1">
+        <Card>
           <CardHeader>
             <h2 className="font-heading text-lg">Топ шаблонов</h2>
           </CardHeader>
           <CardContent className="space-y-3">
             {TOP_TEMPLATES.map((t, i) => (
               <div key={t.name} className="flex items-center gap-3">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-warm-beige text-xs font-medium text-muted">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#FAF7F2] text-xs font-medium text-[#8a8580]">
                   {i + 1}
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium">{t.name}</p>
-                  <p className="text-xs text-muted">
+                  <p className="text-xs text-[#8a8580]">
                     {t.count} · {t.pct}%
                   </p>
                 </div>
@@ -154,19 +150,19 @@ export default function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-1">
+        <Card>
           <CardHeader>
             <h2 className="font-heading text-lg">Последние приглашения</h2>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-2.5">
             {RECENT.map((r) => (
               <div
                 key={r.name}
-                className="flex items-center justify-between rounded-xl bg-warm-beige/40 px-3 py-2.5"
+                className="flex items-center justify-between rounded-2xl bg-[#FAF7F2] px-3 py-2.5"
               >
                 <div>
                   <p className="text-sm font-medium">{r.name}</p>
-                  <p className="text-xs text-muted">{r.date}</p>
+                  <p className="text-xs text-[#8a8580]">{r.date}</p>
                 </div>
                 <Badge
                   variant={r.status === "published" ? "success" : "muted"}
@@ -179,7 +175,7 @@ export default function AdminDashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <h2 className="font-heading text-lg">Открытые обращения</h2>
@@ -188,15 +184,15 @@ export default function AdminDashboardPage() {
             <div className="grid grid-cols-3 gap-3 text-center">
               <div className="rounded-2xl bg-amber-50 p-4">
                 <p className="font-heading text-2xl text-amber-700">18</p>
-                <p className="text-xs text-muted">Новые</p>
+                <p className="text-xs text-[#8a8580]">Новые</p>
               </div>
-              <div className="rounded-2xl bg-soft-pink p-4">
-                <p className="font-heading text-2xl text-deep-rose">16</p>
-                <p className="text-xs text-muted">В работе</p>
+              <div className="rounded-2xl bg-[#F8E8E8] p-4">
+                <p className="font-heading text-2xl text-[#B76E6E]">16</p>
+                <p className="text-xs text-[#8a8580]">В работе</p>
               </div>
-              <div className="rounded-2xl bg-light-sage p-4">
+              <div className="rounded-2xl bg-[#E8EDE5] p-4">
                 <p className="font-heading text-2xl text-[#4a6344]">8</p>
-                <p className="text-xs text-muted">Ожидают</p>
+                <p className="text-xs text-[#8a8580]">Ожидают</p>
               </div>
             </div>
           </CardContent>
@@ -206,7 +202,7 @@ export default function AdminDashboardPage() {
           <CardHeader>
             <h2 className="font-heading text-lg">Состояние системы</h2>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-1">
             {[
               "Веб-приложение",
               "База данных",

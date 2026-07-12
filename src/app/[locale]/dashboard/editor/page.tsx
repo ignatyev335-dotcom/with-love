@@ -192,41 +192,43 @@ export default function EditorPage() {
         : "Не сохранено";
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-[#f5f0e8]">
-      {/* TOP BAR */}
-      <header className="z-30 flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border/70 bg-white px-2 sm:px-4">
+    <div className="flex h-screen flex-col overflow-hidden bg-[#F3EEE6]">
+      {/* TOP BAR — ref 02 */}
+      <header className="z-30 flex h-[3.5rem] shrink-0 items-center justify-between gap-2 border-b border-[#EDE7DD] bg-white px-2 sm:px-4">
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           <Link
             href={`/${locale}/dashboard`}
-            className="flex items-center gap-1.5 rounded-xl px-2 py-1.5 text-muted hover:bg-warm-beige hover:text-charcoal"
+            className="flex items-center gap-1.5 rounded-full px-2 py-1.5 text-[#8a8580] hover:bg-[#FAF7F2] hover:text-charcoal"
             title="В кабинет"
           >
-            <Undo2 size={16} />
+            <Undo2 size={15} strokeWidth={1.5} />
             <span className="hidden text-xs sm:inline">Кабинет</span>
           </Link>
-          <div className="hidden h-5 w-px bg-border sm:block" />
+          <div className="hidden h-4 w-px bg-[#EDE7DD] sm:block" />
           <Logo href={`/${locale}`} size="sm" className="hidden sm:inline-flex" />
           <Link
             href={`/${locale}/templates`}
-            className="hidden items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs text-muted hover:bg-warm-beige md:flex"
+            className="hidden items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs text-[#8a8580] hover:bg-[#FAF7F2] md:flex"
           >
-            <LayoutTemplate size={14} />
+            <LayoutTemplate size={13} strokeWidth={1.5} />
             Шаблоны
           </Link>
         </div>
 
         <div className="flex items-center gap-1.5 sm:gap-2">
-          <div className="hidden items-center gap-1.5 text-[11px] text-muted lg:flex">
+          <div className="hidden items-center gap-1.5 text-[11px] text-[#8a8580] lg:flex">
             <span
               className={cn(
                 "h-1.5 w-1.5 rounded-full",
-                saveState === "saving" ? "animate-pulse bg-gold" : "bg-sage"
+                saveState === "saving"
+                  ? "animate-pulse bg-[#D4A537]"
+                  : "bg-[#A7B8A1]"
               )}
             />
-            {savedLabel}
+            Автосохранение: {savedLabel}
           </div>
 
-          <div className="flex rounded-xl border border-border bg-warm-beige/50 p-0.5">
+          <div className="flex rounded-full border border-[#EDE7DD] bg-[#FAF7F2] p-0.5">
             {(
               [
                 { id: "desktop" as const, icon: Monitor },
@@ -241,14 +243,14 @@ export default function EditorPage() {
                   type="button"
                   onClick={() => setDevice(d.id)}
                   className={cn(
-                    "flex h-8 w-8 items-center justify-center rounded-lg transition-colors",
+                    "flex h-8 w-8 items-center justify-center rounded-full transition-colors",
                     device === d.id
-                      ? "bg-white text-charcoal shadow-soft"
-                      : "text-muted hover:text-charcoal"
+                      ? "bg-white text-charcoal shadow-sm"
+                      : "text-[#8a8580] hover:text-charcoal"
                   )}
                   title={d.id}
                 >
-                  <Icon size={15} />
+                  <Icon size={14} strokeWidth={1.5} />
                 </button>
               );
             })}
@@ -260,7 +262,7 @@ export default function EditorPage() {
             className="hidden sm:block"
           >
             <Button variant="ghost" size="sm">
-              <Eye size={14} />
+              <Eye size={14} strokeWidth={1.5} />
               <span className="hidden md:inline">Предпросмотр</span>
             </Button>
           </Link>
@@ -282,7 +284,7 @@ export default function EditorPage() {
             className="hidden sm:inline-flex"
             onClick={() => setShareOpen(true)}
           >
-            <Share2 size={14} />
+            <Share2 size={14} strokeWidth={1.5} />
             <span className="hidden lg:inline">Поделиться</span>
           </Button>
         </div>
@@ -290,35 +292,35 @@ export default function EditorPage() {
 
       {/* BODY */}
       <div className="flex min-h-0 flex-1">
-        {/* LEFT: block palette — desktop */}
+        {/* LEFT: block palette */}
         <aside
           className={cn(
-            "hidden shrink-0 flex-col border-r border-border/70 bg-white transition-all lg:flex",
-            leftOpen ? "w-[220px]" : "w-12"
+            "hidden shrink-0 flex-col border-r border-[#EDE7DD] bg-white transition-all lg:flex",
+            leftOpen ? "w-[13.5rem]" : "w-11"
           )}
         >
-          <div className="flex items-center justify-between border-b border-border/60 px-3 py-3">
+          <div className="flex items-center justify-between border-b border-[#EDE7DD] px-3 py-3">
             {leftOpen && (
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted">
+                <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[#8a8580]">
                   Блоки
                 </h3>
-                <p className="mt-0.5 text-[10px] text-muted/80">
-                  Включите и выберите блок
+                <p className="mt-0.5 text-[10px] text-[#a39e97]">
+                  Перетащите блок на страницу
                 </p>
               </div>
             )}
             <button
               type="button"
               onClick={() => setLeftOpen((v) => !v)}
-              className="rounded-lg p-1.5 text-muted hover:bg-warm-beige"
+              className="rounded-full p-1.5 text-[#8a8580] hover:bg-[#FAF7F2]"
             >
               {leftOpen ? "«" : "»"}
             </button>
           </div>
           {leftOpen && (
-            <div className="flex-1 overflow-y-auto p-3">
-              <div className="grid grid-cols-2 gap-2">
+            <div className="flex-1 overflow-y-auto p-2.5">
+              <div className="grid grid-cols-2 gap-1.5">
                 {sortedBlocks.map((block) => {
                   const meta = BLOCK_LABELS[block.type];
                   const active = selectedId === block.id;
@@ -332,45 +334,41 @@ export default function EditorPage() {
                       }}
                       onDoubleClick={() => toggleBlock(block.id)}
                       className={cn(
-                        "group relative flex flex-col items-center gap-1.5 rounded-2xl border p-3 text-center transition-all",
+                        "group relative flex flex-col items-center gap-1.5 rounded-xl border p-2.5 text-center transition-all",
                         active
-                          ? "border-blush bg-soft-pink shadow-soft"
+                          ? "border-[#E8A09A]/50 bg-[#F8E8E8] shadow-sm"
                           : block.enabled
-                            ? "border-border/80 bg-ivory hover:border-blush/40 hover:shadow-soft"
-                            : "border-dashed border-border bg-white opacity-55 hover:opacity-90"
+                            ? "border-[#EDE7DD] bg-[#FAF7F2] hover:border-[#E8A09A]/40"
+                            : "border-dashed border-[#EDE7DD] bg-white opacity-55 hover:opacity-90"
                       )}
                       title="Клик — выбрать, двойной клик — вкл/выкл"
                     >
                       <span
                         className={cn(
                           "transition-colors",
-                          active || block.enabled ? "text-gold" : "text-muted"
+                          active || block.enabled
+                            ? "text-[#D4A537]"
+                            : "text-[#a39e97]"
                         )}
                       >
-                        <BlockIcon type={block.type} size={20} />
+                        <BlockIcon type={block.type} size={18} />
                       </span>
                       <span
                         className={cn(
-                          "text-[11px] font-medium leading-tight",
-                          active ? "text-blush" : "text-charcoal"
+                          "text-[10px] font-medium leading-tight",
+                          active ? "text-[#E8A09A]" : "text-charcoal"
                         )}
                       >
                         {meta.label}
                       </span>
-                      <span
-                        className={cn(
-                          "absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full",
-                          block.enabled ? "bg-sage" : "bg-border"
-                        )}
-                      />
                     </button>
                   );
                 })}
               </div>
-              <p className="mt-4 text-center text-[10px] leading-relaxed text-muted">
+              <p className="mt-4 text-center text-[10px] leading-relaxed text-[#a39e97]">
                 Нужен уникальный блок?
                 <br />
-                <span className="text-blush">Скоро · запросите</span>
+                <span className="text-[#E8A09A]">Скоро · запросите</span>
               </p>
             </div>
           )}
@@ -382,13 +380,10 @@ export default function EditorPage() {
             "min-w-0 flex-1 overflow-y-auto",
             mobilePanel !== "canvas" && "hidden lg:block"
           )}
-          onClick={() => {
-            /* click empty to deselect optional */
-          }}
         >
-          <div className="min-h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-soft-pink/30 via-[#f5f0e8] to-light-sage/20 px-3 py-6 sm:px-6 lg:py-8">
-            <div className="mb-4 flex items-center justify-center gap-2 text-center">
-              <span className="rounded-full bg-white/80 px-3 py-1 text-[11px] text-muted shadow-soft backdrop-blur">
+          <div className="min-h-full bg-[radial-gradient(ellipse_at_top,#F8E8E8_0%,#F3EEE6_45%,#E8EDE5_100%)] px-3 py-6 sm:px-6 lg:py-8">
+            <div className="mb-4 flex items-center justify-center">
+              <span className="rounded-full border border-white/70 bg-white/85 px-3.5 py-1 text-[11px] text-[#8a8580] shadow-sm backdrop-blur">
                 Клик по блоку → редактирование справа
               </span>
             </div>
@@ -398,22 +393,22 @@ export default function EditorPage() {
               onSelect={selectBlock}
               device={device}
             />
-            <p className="mt-6 text-center text-[11px] text-muted/70">
+            <p className="mt-6 text-center text-[11px] text-[#a39e97]">
               Изменения сохраняются автоматически ·{" "}
               {invitation.published ? (
-                <span className="text-sage">Опубликовано</span>
+                <span className="text-[#A7B8A1]">Опубликовано</span>
               ) : (
-                <span className="text-gold">Черновик</span>
+                <span className="text-[#D4A537]">Черновик</span>
               )}
             </p>
           </div>
         </div>
 
-        {/* RIGHT: settings — desktop */}
+        {/* RIGHT: settings */}
         <aside
           className={cn(
-            "hidden shrink-0 border-l border-border/70 bg-white transition-all xl:flex xl:flex-col",
-            rightOpen ? "w-[300px]" : "w-12"
+            "hidden shrink-0 border-l border-[#EDE7DD] bg-white transition-all xl:flex xl:flex-col",
+            rightOpen ? "w-[18.5rem]" : "w-11"
           )}
         >
           {rightOpen ? (

@@ -1,5 +1,6 @@
 "use client";
 
+import { FloralCorner } from "@/components/decor/Floral";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -38,15 +39,20 @@ function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md rounded-3xl border border-border/80 bg-white p-8 shadow-soft-lg">
-      <h1 className="text-center font-heading text-2xl text-charcoal">
+    <div className="relative w-full max-w-md overflow-hidden rounded-[1.5rem] border border-[#EDE7DD] bg-white p-8 shadow-[0_20px_50px_-20px_rgba(40,43,43,0.15)]">
+      <FloralCorner className="pointer-events-none absolute -right-8 -top-6 h-32 w-32 opacity-40" />
+      <h1 className="relative text-center font-heading text-2xl font-medium text-charcoal">
         {t("loginTitle")}
       </h1>
-      <p className="mt-2 text-center text-sm text-muted">{t("loginSubtitle")}</p>
+      <p className="relative mt-2 text-center text-sm text-[#8a8580]">
+        {t("loginSubtitle")}
+      </p>
 
-      <form onSubmit={onSubmit} className="mt-8 space-y-4">
+      <form onSubmit={onSubmit} className="relative mt-8 space-y-4">
         <div>
-          <label className="mb-1.5 block text-sm text-muted">{t("email")}</label>
+          <label className="mb-1.5 block text-xs font-medium text-[#8a8580]">
+            {t("email")}
+          </label>
           <Input
             type="email"
             value={email}
@@ -56,7 +62,9 @@ function LoginForm() {
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm text-muted">{t("password")}</label>
+          <label className="mb-1.5 block text-xs font-medium text-[#8a8580]">
+            {t("password")}
+          </label>
           <Input
             type="password"
             value={password}
@@ -70,14 +78,14 @@ function LoginForm() {
         </Button>
       </form>
 
-      <p className="mt-4 text-center text-xs text-muted">{t("demoHint")}</p>
-      <p className="mt-1 text-center text-xs text-muted">{t("adminHint")}</p>
+      <p className="mt-4 text-center text-xs text-[#a39e97]">{t("demoHint")}</p>
+      <p className="mt-1 text-center text-xs text-[#a39e97]">{t("adminHint")}</p>
 
-      <p className="mt-6 text-center text-sm text-muted">
+      <p className="mt-6 text-center text-sm text-[#8a8580]">
         {t("noAccount")}{" "}
         <Link
           href={`/${locale}/register`}
-          className="font-medium text-blush hover:underline"
+          className="font-medium text-[#E8A09A] hover:underline"
         >
           {tc("register")}
         </Link>
@@ -90,15 +98,16 @@ export default function LoginPage() {
   const locale = useLocale();
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-soft-pink/40 via-ivory to-light-sage/30 px-4">
-      <div className="mb-8">
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-[#F8E8E8]/60 via-[#FDFCFA] to-[#E8EDE5]/50 px-4">
+      <FloralCorner className="pointer-events-none absolute -left-10 bottom-10 h-56 w-56 opacity-50" />
+      <FloralCorner
+        flip
+        className="pointer-events-none absolute -right-8 top-10 h-48 w-48 opacity-40"
+      />
+      <div className="relative mb-8">
         <Logo href={`/${locale}`} size="lg" />
       </div>
-      <Suspense
-        fallback={
-          <div className="text-sm text-muted">…</div>
-        }
-      >
+      <Suspense fallback={<div className="text-sm text-[#8a8580]">…</div>}>
         <LoginForm />
       </Suspense>
     </div>
