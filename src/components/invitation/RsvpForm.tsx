@@ -52,7 +52,7 @@ export function RsvpForm({ deadline }: { deadline?: string }) {
           ❤️
         </div>
         <p className="font-heading text-xl text-charcoal">{t("success")}</p>
-        <p className="mt-2 text-sm text-muted">
+        <p className="mt-2 text-sm text-[#8a8580]">
           {status === "confirmed"
             ? "До встречи на празднике!"
             : status === "declined"
@@ -72,7 +72,7 @@ export function RsvpForm({ deadline }: { deadline?: string }) {
         {t("rsvpTitle")}
       </h3>
       {deadline && (
-        <p className="mt-2 text-center text-sm text-muted">
+        <p className="mt-2 text-center text-sm text-[#8a8580]">
           Ответьте до{" "}
           {new Date(deadline).toLocaleDateString("ru-RU", {
             day: "numeric",
@@ -136,7 +136,7 @@ export function RsvpForm({ deadline }: { deadline?: string }) {
         )}
 
         <div>
-          <label className="mb-1.5 block text-sm text-muted">{t("yourName")}</label>
+          <label className="mb-1.5 block text-sm text-[#8a8580]">{t("yourName")}</label>
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -146,7 +146,7 @@ export function RsvpForm({ deadline }: { deadline?: string }) {
         </div>
 
         <div>
-          <label className="mb-1.5 block text-sm text-muted">{t("comment")}</label>
+          <label className="mb-1.5 block text-sm text-[#8a8580]">{t("comment")}</label>
           <Textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
@@ -157,7 +157,7 @@ export function RsvpForm({ deadline }: { deadline?: string }) {
 
         {status === "confirmed" && (
           <div>
-            <label className="mb-1.5 block text-sm text-muted">
+            <label className="mb-1.5 block text-sm text-[#8a8580]">
               {t("dietary")}
             </label>
             <Input

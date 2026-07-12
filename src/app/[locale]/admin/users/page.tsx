@@ -69,7 +69,7 @@ export default function AdminUsersPage() {
         <h1 className="font-heading text-2xl text-charcoal">
           Пользователи и подписки
         </h1>
-        <p className="mt-1 text-sm text-muted">
+        <p className="mt-1 text-sm text-[#8a8580]">
           Управление аккаунтами, доступами и монетизацией
         </p>
       </div>
@@ -84,7 +84,7 @@ export default function AdminUsersPage() {
         ].map((k) => (
           <Card key={k.label}>
             <CardContent className="pt-4">
-              <p className="text-xs text-muted">{k.label}</p>
+              <p className="text-xs text-[#8a8580]">{k.label}</p>
               <p className="mt-1 font-heading text-xl">{k.value}</p>
             </CardContent>
           </Card>
@@ -97,7 +97,7 @@ export default function AdminUsersPage() {
           <div className="relative w-full sm:w-64">
             <Search
               size={14}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8a8580]"
             />
             <Input className="h-9 pl-9 text-sm" placeholder="Поиск..." />
           </div>
@@ -105,7 +105,7 @@ export default function AdminUsersPage() {
         <CardContent className="overflow-x-auto p-0">
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead>
-              <tr className="border-y border-border/60 bg-warm-beige/30 text-xs uppercase tracking-wider text-muted">
+              <tr className="border-y border-[#EDE7DD] bg-[#FAF7F2] text-xs uppercase tracking-wider text-[#8a8580]">
                 <th className="px-4 py-3 font-medium">Пользователь</th>
                 <th className="px-4 py-3 font-medium">Роль</th>
                 <th className="px-4 py-3 font-medium">Тариф</th>
@@ -118,13 +118,13 @@ export default function AdminUsersPage() {
               {USERS.map((u) => (
                 <tr
                   key={u.email}
-                  className="border-b border-border/40 last:border-0 hover:bg-warm-beige/20"
+                  className="border-b border-[#EDE7DD] last:border-0 hover:bg-[#FAF7F2]/20"
                 >
                   <td className="px-4 py-3">
                     <p className="font-medium text-charcoal">{u.name}</p>
-                    <p className="text-xs text-muted">{u.email}</p>
+                    <p className="text-xs text-[#8a8580]">{u.email}</p>
                   </td>
-                  <td className="px-4 py-3 text-muted">{u.role}</td>
+                  <td className="px-4 py-3 text-[#8a8580]">{u.role}</td>
                   <td className="px-4 py-3">
                     <Badge variant="gold">{u.plan}</Badge>
                   </td>
@@ -141,8 +141,8 @@ export default function AdminUsersPage() {
                       {u.status}
                     </Badge>
                   </td>
-                  <td className="px-4 py-3 text-muted">{u.projects}</td>
-                  <td className="px-4 py-3 text-muted">{u.date}</td>
+                  <td className="px-4 py-3 text-[#8a8580]">{u.projects}</td>
+                  <td className="px-4 py-3 text-[#8a8580]">{u.date}</td>
                 </tr>
               ))}
             </tbody>

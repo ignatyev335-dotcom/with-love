@@ -93,7 +93,7 @@ export function SettingsPanel({
         {tab === "settings" && (
           <div className="space-y-6">
             <section>
-              <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">
+              <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#8a8580]">
                 Порядок и видимость
               </h4>
               <div className="space-y-1">
@@ -123,8 +123,8 @@ export function SettingsPanel({
                     }}
                     className={`flex cursor-grab items-center gap-1 rounded-xl border px-2 py-1.5 active:cursor-grabbing ${
                       b.enabled
-                        ? "border-border/70 bg-white"
-                        : "border-transparent bg-warm-beige/40 opacity-60"
+                        ? "border-[#EDE7DD]/70 bg-white"
+                        : "border-transparent bg-[#FAF7F2] opacity-60"
                     }`}
                   >
                     <button
@@ -132,7 +132,7 @@ export function SettingsPanel({
                       className="flex min-w-0 flex-1 items-center gap-2 text-left"
                       onClick={() => onSelectBlock(b.id)}
                     >
-                      <span className="text-gold">
+                      <span className="text-[#D4A537]">
                         <BlockIcon type={b.type} size={14} />
                       </span>
                       <span className="truncate text-xs font-medium text-charcoal">
@@ -141,7 +141,7 @@ export function SettingsPanel({
                     </button>
                     <button
                       type="button"
-                      className="rounded-lg p-1 text-muted hover:bg-warm-beige disabled:opacity-30"
+                      className="rounded-lg p-1 text-[#8a8580] hover:bg-[#FAF7F2] disabled:opacity-30"
                       disabled={i === 0}
                       onClick={() => onMove(b.id, "up")}
                     >
@@ -149,7 +149,7 @@ export function SettingsPanel({
                     </button>
                     <button
                       type="button"
-                      className="rounded-lg p-1 text-muted hover:bg-warm-beige disabled:opacity-30"
+                      className="rounded-lg p-1 text-[#8a8580] hover:bg-[#FAF7F2] disabled:opacity-30"
                       disabled={i === sorted.length - 1}
                       onClick={() => onMove(b.id, "down")}
                     >
@@ -157,7 +157,7 @@ export function SettingsPanel({
                     </button>
                     <button
                       type="button"
-                      className="rounded-lg p-1 text-muted hover:bg-warm-beige"
+                      className="rounded-lg p-1 text-[#8a8580] hover:bg-[#FAF7F2]"
                       onClick={() => onToggle(b.id)}
                       title={b.enabled ? "Скрыть" : "Показать"}
                     >
@@ -166,13 +166,13 @@ export function SettingsPanel({
                   </div>
                 ))}
               </div>
-              <p className="mt-2 text-[10px] text-muted">
+              <p className="mt-2 text-[10px] text-[#8a8580]">
                 Перетащите блок, чтобы изменить порядок
               </p>
             </section>
 
             <section>
-              <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">
+              <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#8a8580]">
                 Музыка
               </h4>
               <div className="space-y-2">
@@ -208,14 +208,14 @@ export function SettingsPanel({
                     }
                     className={`w-full rounded-xl border px-3 py-2 text-left text-xs transition-colors ${
                       config.music?.trackUrl === track.url
-                        ? "border-blush/40 bg-soft-pink/50 text-charcoal"
-                        : "border-border bg-white text-muted hover:border-blush/20"
+                        ? "border-blush/40 bg-[#F8E8E8]/50 text-charcoal"
+                        : "border-[#EDE7DD] bg-white text-[#8a8580] hover:border-blush/20"
                     }`}
                   >
                     {track.name}
                   </button>
                 ))}
-                <label className="mt-2 flex items-center justify-between rounded-xl bg-warm-beige/50 px-3 py-2.5 text-xs">
+                <label className="mt-2 flex items-center justify-between rounded-xl bg-[#FAF7F2] px-3 py-2.5 text-xs">
                   <span className="text-charcoal">Автовоспроизведение</span>
                   <input
                     type="checkbox"
@@ -252,7 +252,7 @@ function Field({
 }) {
   return (
     <div className="space-y-1.5">
-      <label className="block text-xs font-medium text-muted">{label}</label>
+      <label className="block text-xs font-medium text-[#8a8580]">{label}</label>
       {children}
     </div>
   );
@@ -271,8 +271,8 @@ function BlockTab({
 }) {
   if (!block) {
     return (
-      <div className="flex h-40 flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-warm-beige/30 px-4 text-center">
-        <p className="text-sm text-muted">{emptyHint}</p>
+      <div className="flex h-40 flex-col items-center justify-center rounded-2xl border border-dashed border-[#EDE7DD] bg-[#FAF7F2]/30 px-4 text-center">
+        <p className="text-sm text-[#8a8580]">{emptyHint}</p>
       </div>
     );
   }
@@ -284,11 +284,11 @@ function BlockTab({
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-2">
         <div>
-          <div className="flex items-center gap-2 text-gold">
+          <div className="flex items-center gap-2 text-[#D4A537]">
             <BlockIcon type={block.type} size={18} />
             <h3 className="font-heading text-lg text-charcoal">{meta.label}</h3>
           </div>
-          <p className="mt-0.5 text-xs text-muted">{meta.hint}</p>
+          <p className="mt-0.5 text-xs text-[#8a8580]">{meta.hint}</p>
         </div>
         <button
           type="button"
@@ -296,7 +296,7 @@ function BlockTab({
           className={`rounded-xl px-2.5 py-1 text-[11px] font-medium ${
             block.enabled
               ? "bg-light-sage text-[#4a6344]"
-              : "bg-warm-beige text-muted"
+              : "bg-[#FAF7F2] text-[#8a8580]"
           }`}
         >
           {block.enabled ? "Включён" : "Выключен"}
@@ -346,7 +346,7 @@ function BlockTab({
                   className={`relative aspect-[4/3] overflow-hidden rounded-xl border-2 transition-all ${
                     block.data.image === c.url
                       ? "border-blush ring-2 ring-blush/30"
-                      : "border-transparent hover:border-border"
+                      : "border-transparent hover:border-[#EDE7DD]"
                   }`}
                 >
                   <Image src={c.url} alt={c.label} fill className="object-cover" sizes="80px" />
@@ -562,7 +562,7 @@ function ScheduleEditor({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <h4 className="text-xs font-semibold uppercase tracking-wider text-muted">
+        <h4 className="text-xs font-semibold uppercase tracking-wider text-[#8a8580]">
           События
         </h4>
         <Button
@@ -579,7 +579,7 @@ function ScheduleEditor({
       {items.map((item, i) => (
         <div
           key={i}
-          className="flex items-start gap-2 rounded-xl border border-border bg-white p-2"
+          className="flex items-start gap-2 rounded-xl border border-[#EDE7DD] bg-white p-2"
         >
           <Input
             className="h-9 w-20 shrink-0 px-2 text-xs"
@@ -601,7 +601,7 @@ function ScheduleEditor({
           />
           <button
             type="button"
-            className="rounded-lg p-2 text-muted hover:bg-red-50 hover:text-red-500"
+            className="rounded-lg p-2 text-[#8a8580] hover:bg-red-50 hover:text-red-500"
             onClick={() => onChange(items.filter((_, j) => j !== i))}
           >
             <Trash2 size={14} />
@@ -622,7 +622,7 @@ function FaqEditor({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <h4 className="text-xs font-semibold uppercase tracking-wider text-muted">
+        <h4 className="text-xs font-semibold uppercase tracking-wider text-[#8a8580]">
           Вопросы
         </h4>
         <Button
@@ -639,7 +639,7 @@ function FaqEditor({
       {items.map((item, i) => (
         <div
           key={i}
-          className="space-y-1.5 rounded-xl border border-border bg-white p-2.5"
+          className="space-y-1.5 rounded-xl border border-[#EDE7DD] bg-white p-2.5"
         >
           <Input
             className="h-9 text-xs"
@@ -684,7 +684,7 @@ function StyleTab({
   return (
     <div className="space-y-6">
       <section>
-        <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">
+        <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#8a8580]">
           Тема
         </h4>
         <div className="grid grid-cols-2 gap-2">
@@ -701,8 +701,8 @@ function StyleTab({
               }
               className={`rounded-2xl border p-3 text-left transition-all ${
                 config.theme === theme.id
-                  ? "border-blush bg-soft-pink/40 ring-1 ring-blush/30"
-                  : "border-border bg-white hover:border-blush/30"
+                  ? "border-blush bg-[#F8E8E8]/40 ring-1 ring-blush/30"
+                  : "border-[#EDE7DD] bg-white hover:border-blush/30"
               }`}
             >
               <div className="mb-2 flex gap-1">
@@ -723,12 +723,12 @@ function StyleTab({
       </section>
 
       <section>
-        <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">
+        <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#8a8580]">
           Шрифты
         </h4>
         <Field label="Заголовки">
           <select
-            className="h-11 w-full rounded-2xl border border-border bg-white px-3 text-sm"
+            className="h-11 w-full rounded-2xl border border-[#EDE7DD] bg-white px-3 text-sm"
             value={config.fonts.heading}
             onChange={(e) =>
               onUpdateConfig({
@@ -747,7 +747,7 @@ function StyleTab({
         <div className="mt-3">
           <Field label="Основной текст">
             <select
-              className="h-11 w-full rounded-2xl border border-border bg-white px-3 text-sm"
+              className="h-11 w-full rounded-2xl border border-[#EDE7DD] bg-white px-3 text-sm"
               value={config.fonts.body}
               onChange={(e) =>
                 onUpdateConfig({
@@ -767,10 +767,10 @@ function StyleTab({
       </section>
 
       <section>
-        <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">
+        <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#8a8580]">
           Цветовая палитра
         </h4>
-        <p className="mb-2 text-[11px] text-muted">Акцентный цвет</p>
+        <p className="mb-2 text-[11px] text-[#8a8580]">Акцентный цвет</p>
         <div className="flex flex-wrap gap-2">
           {COLOR_SWATCHES.map((c) => (
             <button
@@ -791,7 +791,7 @@ function StyleTab({
             />
           ))}
         </div>
-        <p className="mb-2 mt-4 text-[11px] text-muted">Золото / вторичный</p>
+        <p className="mb-2 mt-4 text-[11px] text-[#8a8580]">Золото / вторичный</p>
         <div className="flex flex-wrap gap-2">
           {COLOR_SWATCHES.map((c) => (
             <button
@@ -815,7 +815,7 @@ function StyleTab({
       </section>
 
       <section>
-        <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">
+        <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#8a8580]">
           Отступы
         </h4>
         <div className="flex gap-2">
@@ -823,7 +823,7 @@ function StyleTab({
             <button
               key={s.id}
               type="button"
-              className="flex-1 rounded-xl border border-border bg-white py-2 text-[11px] font-medium text-charcoal hover:border-blush/40"
+              className="flex-1 rounded-xl border border-[#EDE7DD] bg-white py-2 text-[11px] font-medium text-charcoal hover:border-blush/40"
             >
               {s.label}
             </button>

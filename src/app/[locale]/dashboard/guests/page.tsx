@@ -171,7 +171,7 @@ export default function GuestsPage() {
       <div className="relative max-w-md">
         <Search
           size={16}
-          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted"
+          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8a8580]"
         />
         <Input
           className="pl-10"
@@ -184,9 +184,9 @@ export default function GuestsPage() {
       </div>
 
       {showAdd && (
-        <div className="flex flex-col gap-2 rounded-3xl border border-border bg-white p-4 shadow-card sm:flex-row sm:items-end">
+        <div className="flex flex-col gap-2 rounded-3xl border border-[#EDE7DD] bg-white p-4 shadow-card sm:flex-row sm:items-end">
           <div className="flex-1 space-y-1.5">
-            <label className="text-xs text-muted">{t("name")}</label>
+            <label className="text-xs text-[#8a8580]">{t("name")}</label>
             <Input
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
@@ -194,7 +194,7 @@ export default function GuestsPage() {
             />
           </div>
           <div className="flex-1 space-y-1.5">
-            <label className="text-xs text-muted">Email</label>
+            <label className="text-xs text-[#8a8580]">Email</label>
             <Input
               type="email"
               value={newEmail}
@@ -247,12 +247,12 @@ export default function GuestsPage() {
               {filtered.map((g) => (
                 <tr
                   key={g.id}
-                  className="border-b border-border/40 last:border-0 hover:bg-warm-beige/20"
+                  className="border-b border-[#EDE7DD] last:border-0 hover:bg-[#FAF7F2]/20"
                 >
                   <td className="px-4 py-3 font-medium text-charcoal">
                     {g.name}
                     {g.email && (
-                      <span className="mt-0.5 block text-xs font-normal text-muted">
+                      <span className="mt-0.5 block text-xs font-normal text-[#8a8580]">
                         {g.email}
                       </span>
                     )}
@@ -267,7 +267,7 @@ export default function GuestsPage() {
                             respondedAt: new Date().toISOString(),
                           })
                         }
-                        className="rounded-xl border border-border bg-white px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blush/25"
+                        className="rounded-xl border border-[#EDE7DD] bg-white px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blush/25"
                       >
                         <option value="confirmed">{t("confirmed")}</option>
                         <option value="declined">{t("declined")}</option>
@@ -290,7 +290,7 @@ export default function GuestsPage() {
                           plusOnes: Number(e.target.value) || 0,
                         })
                       }
-                      className="w-14 rounded-lg border border-border px-2 py-1 text-sm"
+                      className="w-14 rounded-lg border border-[#EDE7DD] px-2 py-1 text-sm"
                     />
                   </td>
                   <td className="px-4 py-3">
@@ -300,20 +300,20 @@ export default function GuestsPage() {
                         updateGuest(g.id, { table: e.target.value })
                       }
                       placeholder="—"
-                      className="w-24 rounded-lg border border-border px-2 py-1 text-sm"
+                      className="w-24 rounded-lg border border-[#EDE7DD] px-2 py-1 text-sm"
                     />
                   </td>
-                  <td className="max-w-[120px] truncate px-4 py-3 text-muted">
+                  <td className="max-w-[120px] truncate px-4 py-3 text-[#8a8580]">
                     {g.dietary || "—"}
                   </td>
-                  <td className="max-w-[180px] truncate px-4 py-3 text-muted">
+                  <td className="max-w-[180px] truncate px-4 py-3 text-[#8a8580]">
                     {g.message || "—"}
                   </td>
                   <td className="px-4 py-3">
                     <button
                       type="button"
                       onClick={() => removeGuest(g.id)}
-                      className="rounded-lg p-1.5 text-muted hover:bg-red-50 hover:text-red-500"
+                      className="rounded-lg p-1.5 text-[#8a8580] hover:bg-red-50 hover:text-red-500"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -324,7 +324,7 @@ export default function GuestsPage() {
                 <tr>
                   <td
                     colSpan={7}
-                    className="px-4 py-10 text-center text-sm text-muted"
+                    className="px-4 py-10 text-center text-sm text-[#8a8580]"
                   >
                     {locale === "en" ? "No guests found" : "Гости не найдены"}
                   </td>

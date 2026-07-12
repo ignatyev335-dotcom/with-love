@@ -176,7 +176,7 @@ export default function EditorPage() {
 
   if (!invitation) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-ivory text-muted">
+      <div className="flex min-h-screen items-center justify-center bg-[#FAF7F2] text-[#8a8580]">
         Загрузка конструктора…
       </div>
     );
@@ -428,7 +428,7 @@ export default function EditorPage() {
             <button
               type="button"
               onClick={() => setRightOpen(true)}
-              className="p-3 text-muted hover:text-charcoal"
+              className="p-3 text-[#8a8580] hover:text-charcoal"
             >
               «
             </button>
@@ -458,10 +458,10 @@ export default function EditorPage() {
                       "flex flex-col items-center gap-1 rounded-2xl border p-3",
                       selectedId === block.id
                         ? "border-blush bg-soft-pink"
-                        : "border-border bg-ivory"
+                        : "border-[#EDE7DD] bg-[#FAF7F2]"
                     )}
                   >
-                    <BlockIcon type={block.type} size={18} className="text-gold" />
+                    <BlockIcon type={block.type} size={18} className="text-[#D4A537]" />
                     <span className="text-[10px] font-medium">
                       {BLOCK_LABELS[block.type].label}
                     </span>
@@ -519,16 +519,16 @@ export default function EditorPage() {
           onClick={() => setShareOpen(false)}
         >
           <div
-            className="w-full max-w-md rounded-3xl border border-border bg-white p-6 shadow-soft-lg"
+            className="w-full max-w-md rounded-3xl border border-[#EDE7DD] bg-white p-6 shadow-soft-lg"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="font-heading text-xl text-charcoal">
               Поделиться приглашением
             </h3>
-            <p className="mt-1 text-sm text-muted">
+            <p className="mt-1 text-sm text-[#8a8580]">
               Отправьте ссылку гостям — ответы появятся в кабинете.
             </p>
-            <div className="mt-4 break-all rounded-2xl bg-warm-beige/60 px-3 py-2.5 font-mono text-xs text-charcoal">
+            <div className="mt-4 break-all rounded-2xl bg-[#FAF7F2]/60 px-3 py-2.5 font-mono text-xs text-charcoal">
               {inviteUrl}
             </div>
             <div className="mt-4 flex gap-2">
@@ -551,7 +551,7 @@ export default function EditorPage() {
             </div>
             <button
               type="button"
-              className="mt-4 w-full text-center text-sm text-muted hover:text-charcoal"
+              className="mt-4 w-full text-center text-sm text-[#8a8580] hover:text-charcoal"
               onClick={() => setShareOpen(false)}
             >
               Закрыть

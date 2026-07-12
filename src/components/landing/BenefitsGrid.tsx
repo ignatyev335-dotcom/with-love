@@ -59,13 +59,13 @@ export function BenefitsGrid({ locale }: { locale: string }) {
   const isEn = locale === "en";
 
   return (
-    <section className="border-y border-border/40 bg-white/40 py-16">
+    <section className="border-y border-[#EDE7DD]/40 bg-white/40 py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 text-center">
           <h2 className="font-heading text-3xl text-charcoal sm:text-4xl">
             {isEn ? "Everything guests need" : "Всё, что нужно гостям"}
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-muted">
+          <p className="mx-auto mt-3 max-w-xl text-sm text-[#8a8580]">
             {isEn
               ? "One elegant page instead of endless chat threads"
               : "Одна элегантная страница вместо бесконечных переписок"}
@@ -81,15 +81,15 @@ export function BenefitsGrid({ locale }: { locale: string }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.04 }}
-                className="rounded-3xl border border-border/70 bg-ivory/80 p-5 shadow-card transition-shadow hover:shadow-soft"
+                className="rounded-3xl border border-[#EDE7DD]/70 bg-[#FAF7F2]/80 p-5 shadow-card transition-shadow hover:shadow-soft"
               >
-                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-soft-pink text-blush">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-[#F8E8E8] text-[#E8A09A]">
                   <Icon size={18} />
                 </div>
                 <h3 className="font-heading text-lg text-charcoal">
                   {isEn ? item.titleEn : item.title}
                 </h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted">
+                <p className="mt-1.5 text-sm leading-relaxed text-[#8a8580]">
                   {isEn ? item.descEn : item.desc}
                 </p>
               </motion.div>

@@ -7,7 +7,7 @@ export default function AdminAnalyticsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="font-heading text-2xl text-charcoal">Аналитика</h1>
-        <p className="mt-1 text-sm text-muted">
+        <p className="mt-1 text-sm text-[#8a8580]">
           Отчёты, конверсии и источники трафика
         </p>
       </div>
@@ -20,7 +20,7 @@ export default function AdminAnalyticsPage() {
         ].map((k) => (
           <Card key={k.label}>
             <CardContent className="pt-4">
-              <p className="text-xs text-muted">{k.label}</p>
+              <p className="text-xs text-[#8a8580]">{k.label}</p>
               <p className="mt-1 font-heading text-2xl">{k.value}</p>
             </CardContent>
           </Card>
@@ -33,17 +33,17 @@ export default function AdminAnalyticsPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             {[
-              { name: "Ссылка", pct: 45, color: "bg-blush" },
-              { name: "Соц. сети", pct: 30, color: "bg-gold" },
-              { name: "QR-код", pct: 15, color: "bg-sage" },
+              { name: "Ссылка", pct: 45, color: "bg-[#E8A09A]" },
+              { name: "Соц. сети", pct: 30, color: "bg-[#D4A537]" },
+              { name: "QR-код", pct: 15, color: "bg-[#A7B8A1]" },
               { name: "Другое", pct: 10, color: "bg-dusty-rose" },
             ].map((s) => (
               <div key={s.name}>
                 <div className="mb-1 flex justify-between text-sm">
                   <span>{s.name}</span>
-                  <span className="text-muted">{s.pct}%</span>
+                  <span className="text-[#8a8580]">{s.pct}%</span>
                 </div>
-                <div className="h-2 rounded-full bg-warm-beige">
+                <div className="h-2 rounded-full bg-[#FAF7F2]">
                   <div
                     className={`h-full rounded-full ${s.color}`}
                     style={{ width: `${s.pct}%` }}
@@ -65,7 +65,7 @@ export default function AdminAnalyticsPage() {
               { label: "Ожидается", value: "93 600 ₽" },
             ].map((r) => (
               <div key={r.label} className="flex justify-between">
-                <span className="text-muted">{r.label}</span>
+                <span className="text-[#8a8580]">{r.label}</span>
                 <span className="font-medium">{r.value}</span>
               </div>
             ))}

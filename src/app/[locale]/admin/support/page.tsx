@@ -46,7 +46,7 @@ export default function AdminSupportPage() {
     <div className="space-y-6">
       <div>
         <h1 className="font-heading text-2xl text-charcoal">Поддержка</h1>
-        <p className="mt-1 text-sm text-muted">Тикеты и обращения клиентов</p>
+        <p className="mt-1 text-sm text-[#8a8580]">Тикеты и обращения клиентов</p>
       </div>
       <Card>
         <CardHeader>
@@ -56,11 +56,11 @@ export default function AdminSupportPage() {
           {TICKETS.map((t, i) => (
             <div
               key={i}
-              className="flex flex-col gap-2 rounded-2xl border border-border/50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+              className="flex flex-col gap-2 rounded-2xl border border-[#EDE7DD]/50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
             >
               <div>
                 <p className="text-sm font-medium">{t.client}</p>
-                <p className="text-xs text-muted">{t.topic}</p>
+                <p className="text-xs text-[#8a8580]">{t.topic}</p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <Badge
@@ -85,7 +85,7 @@ export default function AdminSupportPage() {
                 >
                   {t.status}
                 </Badge>
-                <span className="text-xs text-muted">{t.date}</span>
+                <span className="text-xs text-[#8a8580]">{t.date}</span>
               </div>
             </div>
           ))}

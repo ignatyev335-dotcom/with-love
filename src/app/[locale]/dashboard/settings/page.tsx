@@ -40,13 +40,13 @@ export default function SettingsPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-sm text-muted">
+            <label className="mb-1.5 block text-sm text-[#8a8580]">
               {isEn ? "Name" : "Имя"}
             </label>
             <Input value={name} onChange={(e) => setName(e.target.value)} />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm text-muted">Email</label>
+            <label className="mb-1.5 block text-sm text-[#8a8580]">Email</label>
             <Input value={user?.email ?? ""} disabled />
           </div>
           <Button
@@ -81,7 +81,7 @@ export default function SettingsPage() {
           </Badge>
         </CardHeader>
         <CardContent className="space-y-3">
-          <p className="text-sm text-muted">
+          <p className="text-sm text-[#8a8580]">
             {plan.price === 0
               ? isEn
                 ? "Free plan with limits"
@@ -111,7 +111,7 @@ export default function SettingsPage() {
             {isEn ? "Wedding" : "Свадьба"}
           </h2>
         </CardHeader>
-        <CardContent className="space-y-3 text-sm text-muted">
+        <CardContent className="space-y-3 text-sm text-[#8a8580]">
           <p>
             <span className="text-charcoal">{isEn ? "Couple:" : "Пара:"}</span>{" "}
             {wedding?.coupleNames}
@@ -129,7 +129,7 @@ export default function SettingsPage() {
             {wedding?.venue}
           </p>
           <div>
-            <label className="mb-1.5 block text-sm text-muted">
+            <label className="mb-1.5 block text-sm text-[#8a8580]">
               {isEn ? "Public link slug" : "Slug публичной ссылки"}
             </label>
             <div className="flex gap-2">
@@ -148,7 +148,7 @@ export default function SettingsPage() {
                 OK
               </Button>
             </div>
-            <p className="mt-1 text-xs text-muted">
+            <p className="mt-1 text-xs text-[#8a8580]">
               /{locale}/invite/{invitation?.slug}
             </p>
           </div>

@@ -12,7 +12,7 @@ export default async function FaqPage({
   setRequestLocale(locale);
 
   return (
-    <div className="flex min-h-screen flex-col bg-ivory">
+    <div className="flex min-h-screen flex-col bg-[#FAF7F2]">
       <Header />
       <main className="flex-1">
         <div className="mx-auto max-w-7xl px-4 pt-12 text-center sm:px-6">

@@ -78,7 +78,7 @@ export function MusicPlayer({
         title={trackName}
       >
         {playing ? <Pause size={16} /> : <Play size={16} />}
-        <Music size={14} className="text-gold" />
+        <Music size={14} className="text-[#D4A537]" />
         <span className="hidden max-w-[140px] truncate sm:inline">
           {playing ? labels.pause : labels.play}
         </span>

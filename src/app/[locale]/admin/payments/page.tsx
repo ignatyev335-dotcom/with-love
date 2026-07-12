@@ -41,7 +41,7 @@ export default function AdminPaymentsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="font-heading text-2xl text-charcoal">Платежи и финансы</h1>
-        <p className="mt-1 text-sm text-muted">
+        <p className="mt-1 text-sm text-[#8a8580]">
           Транзакции, комиссии, возвраты
         </p>
       </div>
@@ -56,7 +56,7 @@ export default function AdminPaymentsPage() {
         ].map((k) => (
           <Card key={k.label}>
             <CardContent className="pt-4">
-              <p className="text-xs text-muted">{k.label}</p>
+              <p className="text-xs text-[#8a8580]">{k.label}</p>
               <p className="mt-1 font-heading text-xl">{k.value}</p>
             </CardContent>
           </Card>
@@ -72,11 +72,11 @@ export default function AdminPaymentsPage() {
             {TX.map((t, i) => (
               <div
                 key={i}
-                className="flex items-center justify-between rounded-xl bg-warm-beige/40 px-4 py-3"
+                className="flex items-center justify-between rounded-xl bg-[#FAF7F2] px-4 py-3"
               >
                 <div>
                   <p className="text-sm font-medium">{t.name}</p>
-                  <p className="text-xs text-muted">{t.date}</p>
+                  <p className="text-xs text-[#8a8580]">{t.date}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-sm font-medium">{t.amount}</span>
@@ -106,7 +106,7 @@ export default function AdminPaymentsPage() {
                 key={r.label}
                 className="flex items-center justify-between text-sm"
               >
-                <span className="text-muted">{r.label}</span>
+                <span className="text-[#8a8580]">{r.label}</span>
                 <span className="font-medium">{r.value}</span>
               </div>
             ))}

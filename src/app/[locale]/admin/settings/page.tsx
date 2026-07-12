@@ -14,19 +14,19 @@ export default function AdminSettingsPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-sm text-muted">
+            <label className="mb-1.5 block text-sm text-[#8a8580]">
               Название сервиса
             </label>
             <Input defaultValue="With Love" />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm text-muted">
+            <label className="mb-1.5 block text-sm text-[#8a8580]">
               Домен по умолчанию
             </label>
             <Input defaultValue="withlove.app" />
           </div>
           <div>
-            <label className="mb-1.5 block text-sm text-muted">
+            <label className="mb-1.5 block text-sm text-[#8a8580]">
               Язык по умолчанию
             </label>
             <Input defaultValue="Русский" />

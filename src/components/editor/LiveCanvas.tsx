@@ -60,7 +60,7 @@ export function LiveCanvas({
       className={cn(
         "mx-auto w-full overflow-hidden rounded-[1.75rem] border shadow-soft-lg transition-all duration-300",
         widthClass,
-        isLuxury ? "border-white/10" : "border-border/80"
+        isLuxury ? "border-white/10" : "border-[#EDE7DD]"
       )}
       style={{ background: bg, color: text }}
     >

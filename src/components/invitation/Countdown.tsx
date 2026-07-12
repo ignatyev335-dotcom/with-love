@@ -50,12 +50,12 @@ export function Countdown({
             >
               {String(c.value).padStart(2, "0")}
             </div>
-            <div className="mt-0.5 text-[10px] uppercase tracking-wider text-muted sm:text-xs">
+            <div className="mt-0.5 text-[10px] uppercase tracking-wider text-[#8a8580] sm:text-xs">
               {c.label}
             </div>
           </div>
           {i < cells.length - 1 && (
-            <span className="font-heading text-xl text-gold/60 sm:text-2xl">:</span>
+            <span className="font-heading text-xl text-[#D4A537]/60 sm:text-2xl">:</span>
           )}
         </div>
       ))}
