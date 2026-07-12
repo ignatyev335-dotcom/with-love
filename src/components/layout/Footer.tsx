@@ -22,7 +22,10 @@ export function Footer({ locale }: { locale: string }) {
       title: t("help"),
       links: [
         { href: `/${locale}/faq`, label: "FAQ" },
-        { href: `/${locale}/login`, label: isEn ? "Support" : "Поддержка" },
+        {
+          href: `/${locale}/invite/aleksandr-ekaterina`,
+          label: isEn ? "Live demo" : "Демо",
+        },
       ],
     },
     {
@@ -35,26 +38,26 @@ export function Footer({ locale }: { locale: string }) {
   ];
 
   return (
-    <footer className="border-t border-[#EDE7DD] bg-[#FDFCFA]">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+    <footer className="border-t border-[#EDE8E1] bg-white">
+      <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="space-y-4">
             <Logo href={`/${locale}`} />
-            <p className="max-w-xs text-sm leading-relaxed text-[#8a8580]">
+            <p className="max-w-xs text-sm leading-relaxed text-[#6B6560]">
               {t("tagline")}
             </p>
           </div>
           {cols.map((col) => (
             <div key={col.title}>
-              <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-charcoal">
+              <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#1C1917]">
                 {col.title}
               </h4>
-              <ul className="space-y-2">
+              <ul className="space-y-2.5">
                 {col.links.map((l) => (
                   <li key={l.href + l.label}>
                     <Link
                       href={l.href}
-                      className="text-sm text-[#8a8580] transition-colors hover:text-[#E8A09A]"
+                      className="text-sm text-[#6B6560] transition hover:text-[#1C1917]"
                     >
                       {l.label}
                     </Link>
@@ -64,15 +67,14 @@ export function Footer({ locale }: { locale: string }) {
             </div>
           ))}
         </div>
-        <div className="my-8 h-px w-full bg-gradient-to-r from-transparent via-[#D4A537]/35 to-transparent" />
-        <div className="flex flex-col items-center justify-between gap-3 text-xs text-[#a39e97] sm:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-[#F0EBE3] pt-8 text-xs text-[#9C948C] sm:flex-row">
           <p>
             © {year} With Love. {t("rights")}
           </p>
-          <p className="flex items-center gap-1">
-            {isEn ? "Made with" : "Сделано с"}{" "}
-            <span className="text-[#E8A09A]">♥</span>{" "}
-            {isEn ? "for beautiful weddings" : "к красивым свадьбам"}
+          <p>
+            {isEn
+              ? "Wedding RSVP sites, done right"
+              : "Свадебные RSVP-сайты без лишнего"}
           </p>
         </div>
       </div>

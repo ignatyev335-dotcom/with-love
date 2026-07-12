@@ -19,32 +19,26 @@ export function Logo({
     lg: "text-2xl gap-2",
   };
   const iconSizes = { sm: 13, md: 15, lg: 18 };
-  const heart = dark ? "text-[#D4A537]" : "text-[#E8A09A]";
+  const heart = dark ? "text-[#B8956C]" : "text-[#B8956C]";
 
   return (
     <Link
       href={href}
       className={cn(
         "inline-flex items-center font-heading font-medium tracking-tight",
-        dark ? "text-white" : "text-charcoal",
+        dark ? "text-white" : "text-[#1C1917]",
         sizes[size],
         className
       )}
     >
       <Heart
         size={iconSizes[size]}
-        className={cn(heart, "fill-current opacity-70")}
+        className={cn(heart, "fill-current opacity-80")}
         strokeWidth={1.5}
       />
       <span>
-        With{" "}
-        <span className={dark ? "text-[#D4A537]" : "text-[#E8A09A]"}>Love</span>
+        With <span className={heart}>Love</span>
       </span>
-      <Heart
-        size={iconSizes[size]}
-        className={cn(heart, "fill-current opacity-70")}
-        strokeWidth={1.5}
-      />
     </Link>
   );
 }

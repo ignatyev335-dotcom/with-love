@@ -1,90 +1,83 @@
 "use client";
 
-import { GoldLine } from "@/components/decor/Floral";
 import { TEMPLATES } from "@/lib/seed";
 import { motion } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 export function StylesGallery({ locale }: { locale: string }) {
-  const t = useTranslations("landing");
   const isEn = locale === "en";
   const styles = TEMPLATES.slice(0, 6);
 
   return (
-    <section className="relative bg-[#FFFCFA] py-14 lg:py-18">
-      <div className="mx-auto max-w-[1120px] px-4 sm:px-6 lg:px-8">
-        <div className="mb-9 flex flex-col items-center text-center">
-          <h2 className="font-heading text-[1.85rem] font-normal text-[#2C2926] sm:text-[2.15rem]">
-            {t("stylesTitle")}
-          </h2>
-          <GoldLine className="mt-3.5" />
+    <section className="bg-white py-20">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#B8956C]">
+              {isEn ? "Templates" : "Шаблоны"}
+            </p>
+            <h2 className="mt-2 font-heading text-3xl text-[#1C1917] sm:text-4xl">
+              {isEn ? "Designs that feel like stationery" : "Дизайны как из типографии"}
+            </h2>
+            <p className="mt-2 max-w-md text-sm text-[#6B6560]">
+              {isEn
+                ? "Start from a polished look. Customize colors, photos and blocks in minutes."
+                : "Начните с готового вайба. Цвета, фото и блоки — за минуты."}
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/templates`}
+            className="group inline-flex items-center gap-1.5 rounded-full border border-[#EDE8E1] bg-[#FAF8F5] px-4 py-2 text-sm font-medium text-[#1C1917] transition hover:border-[#1C1917] hover:bg-[#1C1917] hover:text-white"
+          >
+            {isEn ? "View all templates" : "Все шаблоны"}
+            <ArrowRight
+              size={14}
+              className="transition group-hover:translate-x-0.5"
+            />
+          </Link>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {styles.map((tpl, i) => (
             <motion.div
               key={tpl.id}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
+              transition={{ delay: i * 0.04 }}
             >
               <Link
                 href={`/${locale}/templates`}
-                className="group block overflow-hidden rounded-[1.1rem] bg-white shadow-[0_6px_28px_-12px_rgba(50,40,30,0.14)] ring-1 ring-[#EFE9E0] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_-14px_rgba(50,40,30,0.18)]"
+                className="group block overflow-hidden rounded-[1.5rem] bg-[#FAF8F5] ring-1 ring-[#EDE8E1] transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:ring-[#D4C5A8]/60"
               >
-                {/* invitation-card vertical */}
-                <div className="relative aspect-[5/6] overflow-hidden bg-[#F7F1EA]">
+                <div className="relative aspect-[4/5] overflow-hidden">
                   <Image
                     src={tpl.preview}
-                    alt={tpl.name}
+                    alt={isEn ? tpl.nameEn : tpl.name}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    className="object-cover transition duration-700 group-hover:scale-[1.04]"
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#2C2926]/55 via-[#2C2926]/10 to-transparent" />
-                  {/* faux invitation label overlay */}
-                  <div className="absolute inset-x-0 bottom-0 p-5 text-center">
-                    <p className="font-heading text-[1.35rem] text-white drop-shadow">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <p className="font-heading text-xl text-white">
                       {isEn ? tpl.nameEn : tpl.name}
                     </p>
-                    <p className="mt-1 text-[11px] text-white/75">
+                    <p className="mt-0.5 line-clamp-1 text-xs text-white/70">
                       {isEn ? tpl.descriptionEn : tpl.description}
                     </p>
                   </div>
                   {tpl.premium && (
-                    <span className="absolute right-3 top-3 rounded-full bg-white/92 px-2.5 py-0.5 text-[10px] font-medium tracking-wide text-[#C4A35A] shadow-sm">
+                    <span className="absolute right-3 top-3 rounded-full bg-white/95 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#1C1917] shadow-sm">
                       Premium
                     </span>
                   )}
                 </div>
-                <div className="flex items-center justify-center gap-1.5 border-t border-[#F3EEE6] bg-[#FFFCFA] px-4 py-2.5">
-                  {tpl.colors.map((c) => (
-                    <span
-                      key={c}
-                      className="h-3 w-3 rounded-full ring-1 ring-black/5"
-                      style={{ background: c }}
-                    />
-                  ))}
-                  <span className="ml-2 text-[11px] text-[#A39E96]">
-                    {isEn ? tpl.nameEn : tpl.name}
-                  </span>
-                </div>
               </Link>
             </motion.div>
           ))}
-        </div>
-
-        <div className="mt-9 text-center">
-          <Link
-            href={`/${locale}/templates`}
-            className="inline-flex items-center gap-1 text-[13px] font-medium text-[#D4A39C] transition-colors hover:text-[#c9948d]"
-          >
-            {t("viewTemplates")}
-            <span aria-hidden>→</span>
-          </Link>
         </div>
       </div>
     </section>

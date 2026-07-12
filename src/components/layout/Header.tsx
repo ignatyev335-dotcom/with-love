@@ -20,6 +20,10 @@ export function Header() {
 
   const nav = [
     { href: `/${locale}#features`, label: t("nav.features") },
+    {
+      href: `/${locale}#how`,
+      label: locale === "en" ? "How it works" : "Как это работает",
+    },
     { href: `/${locale}/templates`, label: t("nav.templates") },
     { href: `/${locale}/pricing`, label: t("nav.pricing") },
     { href: `/${locale}/faq`, label: t("nav.faq") },
@@ -32,26 +36,26 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#EDE7DD]/80 bg-[#FDFCFA]/90 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-[#EDE8E1]/70 bg-[#FAF8F5]/85 backdrop-blur-xl">
       <div className="mx-auto flex h-[4.25rem] max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Logo href={`/${locale}`} />
 
-        <nav className="hidden items-center gap-9 md:flex">
+        <nav className="hidden items-center gap-7 md:flex">
           {nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="text-[13px] tracking-wide text-[#8a8580] transition-colors hover:text-charcoal"
+              className="text-[13px] font-medium text-[#6B6560] transition hover:text-[#1C1917]"
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2.5 md:flex">
+        <div className="hidden items-center gap-1.5 md:flex">
           <button
             onClick={switchLocale}
-            className="flex h-9 items-center gap-1.5 rounded-full px-2.5 text-xs text-[#8a8580] hover:bg-[#FAF7F2] hover:text-charcoal"
+            className="flex h-9 items-center gap-1.5 rounded-full px-2.5 text-xs font-medium text-[#6B6560] hover:bg-white"
             aria-label="Switch language"
           >
             <Globe size={14} strokeWidth={1.5} />
@@ -72,7 +76,7 @@ export function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="rounded-full text-[13px] text-[#8a8580]"
+                className="rounded-full text-[13px] text-[#6B6560]"
               >
                 {t("common.login")}
               </Button>
@@ -83,15 +87,15 @@ export function Header() {
           >
             <Button
               size="sm"
-              className="rounded-full bg-[#D4A39C] px-5 text-[13px] shadow-none hover:bg-[#c9948d]"
+              className="rounded-full bg-[#1C1917] px-5 text-[13px] text-white shadow-none hover:bg-[#2d2926]"
             >
-              {t("common.createInvitation")}
+              {locale === "en" ? "Start free" : "Начать"}
             </Button>
           </Link>
         </div>
 
         <button
-          className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-[#FAF7F2] md:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-white md:hidden"
           onClick={() => setOpen(!open)}
           aria-label="Menu"
         >
@@ -101,7 +105,7 @@ export function Header() {
 
       <div
         className={cn(
-          "border-t border-[#EDE7DD] bg-[#FDFCFA] md:hidden",
+          "border-t border-[#EDE8E1] bg-[#FAF8F5] md:hidden",
           open ? "block" : "hidden"
         )}
       >
@@ -111,15 +115,15 @@ export function Header() {
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className="rounded-xl px-3 py-2.5 text-sm text-charcoal hover:bg-[#FAF7F2]"
+              className="rounded-xl px-3 py-2.5 text-sm text-[#1C1917] hover:bg-white"
             >
               {item.label}
             </Link>
           ))}
-          <div className="mt-2 flex flex-col gap-2 border-t border-[#EDE7DD] pt-3">
+          <div className="mt-2 flex flex-col gap-2 border-t border-[#EDE8E1] pt-3">
             <button
               onClick={switchLocale}
-              className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm text-[#8a8580]"
+              className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm text-[#6B6560]"
             >
               <Globe size={15} /> {locale === "ru" ? "English" : "Русский"}
             </button>
@@ -134,8 +138,8 @@ export function Header() {
               href={user ? `/${locale}/dashboard/editor` : `/${locale}/register`}
               onClick={() => setOpen(false)}
             >
-              <Button className="w-full rounded-full bg-[#D4A39C] hover:bg-[#c9948d]">
-                {t("common.createInvitation")}
+              <Button className="w-full rounded-full bg-[#1C1917] text-white hover:bg-[#2d2926]">
+                {locale === "en" ? "Start free" : "Начать бесплатно"}
               </Button>
             </Link>
           </div>
