@@ -33,6 +33,7 @@ export default function EditorPage() {
   const updateConfig = useAppStore((s) => s.updateConfig);
   const updateBlockData = useAppStore((s) => s.updateBlockData);
   const moveBlock = useAppStore((s) => s.moveBlock);
+  const reorderBlocks = useAppStore((s) => s.reorderBlocks);
   const publishInvitation = useAppStore((s) => s.publishInvitation);
 
   const [selectedId, setSelectedId] = useState<string | null>("b-hero");
@@ -425,6 +426,7 @@ export default function EditorPage() {
               onUpdateBlock={updateBlockData}
               onToggle={toggleBlock}
               onMove={moveBlock}
+              onReorder={reorderBlocks}
               onSelectBlock={selectBlock}
             />
           ) : (
@@ -484,6 +486,7 @@ export default function EditorPage() {
                 onUpdateBlock={updateBlockData}
                 onToggle={toggleBlock}
                 onMove={moveBlock}
+                onReorder={reorderBlocks}
                 onSelectBlock={selectBlock}
               />
             </div>

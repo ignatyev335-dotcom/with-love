@@ -35,6 +35,7 @@ export function SettingsPanel({
   onUpdateBlock,
   onToggle,
   onMove,
+  onReorder,
   onSelectBlock,
 }: {
   tab: Tab;
@@ -45,6 +46,7 @@ export function SettingsPanel({
   onUpdateBlock: (id: string, data: Record<string, unknown>) => void;
   onToggle: (id: string) => void;
   onMove: (id: string, dir: "up" | "down") => void;
+  onReorder?: (orderedIds: string[]) => void;
   onSelectBlock: (id: string) => void;
 }) {
   const sorted = [...config.blocks].sort((a, b) => a.order - b.order);
@@ -98,7 +100,28 @@ export function SettingsPanel({
                 {sorted.map((b, i) => (
                   <div
                     key={b.id}
-                    className={`flex items-center gap-1 rounded-xl border px-2 py-1.5 ${
+                    draggable
+                    onDragStart={(e) => {
+                      e.dataTransfer.setData("text/block-id", b.id);
+                      e.dataTransfer.effectAllowed = "move";
+                    }}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      e.dataTransfer.dropEffect = "move";
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      const fromId = e.dataTransfer.getData("text/block-id");
+                      if (!fromId || fromId === b.id || !onReorder) return;
+                      const ids = sorted.map((x) => x.id);
+                      const from = ids.indexOf(fromId);
+                      const to = ids.indexOf(b.id);
+                      if (from < 0 || to < 0) return;
+                      ids.splice(from, 1);
+                      ids.splice(to, 0, fromId);
+                      onReorder(ids);
+                    }}
+                    className={`flex cursor-grab items-center gap-1 rounded-xl border px-2 py-1.5 active:cursor-grabbing ${
                       b.enabled
                         ? "border-border/70 bg-white"
                         : "border-transparent bg-warm-beige/40 opacity-60"
@@ -143,6 +166,9 @@ export function SettingsPanel({
                   </div>
                 ))}
               </div>
+              <p className="mt-2 text-[10px] text-muted">
+                Перетащите блок, чтобы изменить порядок
+              </p>
             </section>
 
             <section>

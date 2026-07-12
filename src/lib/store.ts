@@ -30,6 +30,7 @@ interface AppState {
   updateBlockData: (blockId: string, data: Record<string, unknown>) => void;
   setBlockEnabled: (blockId: string, enabled: boolean) => void;
   moveBlock: (blockId: string, direction: "up" | "down") => void;
+  reorderBlocks: (orderedIds: string[]) => void;
   updateWedding: (partial: Partial<Wedding>) => void;
   applyTemplate: (templateId: string) => boolean;
   publishInvitation: () => void;
@@ -211,6 +212,23 @@ export const useAppStore = create<AppState>()(
               blocks: inv.config.blocks.map((block) => {
                 const updated = sorted.find((s) => s.id === block.id);
                 return updated ?? block;
+              }),
+            },
+          },
+        });
+      },
+
+      reorderBlocks: (orderedIds) => {
+        const inv = get().invitation;
+        if (!inv) return;
+        set({
+          invitation: {
+            ...inv,
+            config: {
+              ...inv.config,
+              blocks: inv.config.blocks.map((b) => {
+                const order = orderedIds.indexOf(b.id);
+                return order >= 0 ? { ...b, order } : b;
               }),
             },
           },
