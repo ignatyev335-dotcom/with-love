@@ -7,12 +7,14 @@
 - [x] Mock auth + persist store (Zustand)
 - [x] Схема данных `src/lib/schema.ts` (Supabase/Drizzle-ready)
 - [x] `.env.example` (Supabase, Stripe, Resend)
+- [x] Stubs: `lib/supabase/client.ts`, `lib/stripe.ts`, `lib/email.ts`
 - [ ] Реальный Supabase Auth + Drizzle миграции
 
 ## Этап 2. Маркетинг
 - [x] Главная (hero, features, how it works, benefits, styles, reviews, pricing, FAQ, CTA)
 - [x] Галерея шаблонов + apply template → editor
 - [x] Страница тарифов (Free / Basic / Premium / Lux)
+- [x] FAQ page `/faq`
 
 ## Этап 3. Конструктор и публикация
 - [x] Fullscreen конструктор (палитра, canvas, настройки, device preview)

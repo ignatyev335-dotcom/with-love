@@ -163,6 +163,21 @@ export function SettingsPanel({
                           trackUrl: track.url,
                           autoplay: config.music?.autoplay ?? true,
                         },
+                        blocks: config.blocks.map((b) =>
+                          b.type === "music"
+                            ? {
+                                ...b,
+                                enabled: true,
+                                data: {
+                                  ...b.data,
+                                  trackName: track.name,
+                                  text:
+                                    b.data.text ||
+                                    "Фоновая музыка на приглашении",
+                                },
+                              }
+                            : b
+                        ),
                       })
                     }
                     className={`w-full rounded-xl border px-3 py-2 text-left text-xs transition-colors ${

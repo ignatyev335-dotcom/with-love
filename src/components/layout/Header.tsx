@@ -23,7 +23,7 @@ export function Header() {
     { href: `/${locale}#how`, label: locale === "en" ? "How it works" : "Как это работает" },
     { href: `/${locale}/templates`, label: t("nav.templates") },
     { href: `/${locale}/pricing`, label: t("nav.pricing") },
-    { href: `/${locale}#faq`, label: t("nav.faq") },
+    { href: `/${locale}/faq`, label: t("nav.faq") },
   ];
 
   const switchLocale = () => {
