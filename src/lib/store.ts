@@ -393,6 +393,22 @@ export const useAppStore = create<AppState>()(
         guests: s.guests,
         wishes: s.wishes,
       }),
+      onRehydrateStorage: () => (state) => {
+        if (!state?.invitation) return;
+        // Migrate old harsh blush to soft reference palette
+        if (state.invitation.config.colors.primary === "#F76E62") {
+          state.invitation = {
+            ...state.invitation,
+            config: {
+              ...state.invitation.config,
+              colors: {
+                ...state.invitation.config.colors,
+                primary: "#E8A09A",
+              },
+            },
+          };
+        }
+      },
     }
   )
 );
