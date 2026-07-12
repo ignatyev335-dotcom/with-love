@@ -33,6 +33,8 @@ interface AppState {
   updateWedding: (partial: Partial<Wedding>) => void;
   applyTemplate: (templateId: string) => boolean;
   publishInvitation: () => void;
+  unpublishInvitation: () => void;
+  setSlug: (slug: string) => boolean;
   addGuest: (guest: Omit<Guest, "id">) => void;
   updateGuest: (id: string, partial: Partial<Guest>) => void;
   removeGuest: (id: string) => void;
@@ -272,6 +274,30 @@ export const useAppStore = create<AppState>()(
             ? { ...get().wedding!, status: "published" }
             : null,
         });
+      },
+
+      unpublishInvitation: () => {
+        const inv = get().invitation;
+        if (!inv) return;
+        set({
+          invitation: { ...inv, published: false },
+          wedding: get().wedding
+            ? { ...get().wedding!, status: "draft" }
+            : null,
+        });
+      },
+
+      setSlug: (slug) => {
+        const inv = get().invitation;
+        if (!inv) return false;
+        const clean = slug
+          .toLowerCase()
+          .replace(/[^a-z0-9-]+/g, "-")
+          .replace(/(^-|-$)/g, "")
+          .slice(0, 64);
+        if (!clean) return false;
+        set({ invitation: { ...inv, slug: clean } });
+        return true;
       },
 
       addGuest: (guest) => {

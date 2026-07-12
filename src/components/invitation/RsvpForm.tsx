@@ -47,11 +47,18 @@ export function RsvpForm({ deadline }: { deadline?: string }) {
 
   if (done) {
     return (
-      <div className="rounded-3xl border border-sage/40 bg-light-sage/40 p-8 text-center">
+      <div className="animate-fade-in rounded-3xl border border-sage/40 bg-light-sage/40 p-8 text-center">
         <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-white text-2xl shadow-soft">
           ❤️
         </div>
         <p className="font-heading text-xl text-charcoal">{t("success")}</p>
+        <p className="mt-2 text-sm text-muted">
+          {status === "confirmed"
+            ? "До встречи на празднике!"
+            : status === "declined"
+              ? "Спасибо, что сообщили — будем скучать."
+              : "Как определитесь — можно ответить снова."}
+        </p>
       </div>
     );
   }
