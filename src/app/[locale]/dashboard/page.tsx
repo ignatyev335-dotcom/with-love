@@ -20,6 +20,7 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useMemo } from "react";
+// Badge already imported
 
 export default function DashboardPage() {
   const t = useTranslations("dashboard");
@@ -382,6 +383,47 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       )}
+
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <h2 className="font-heading text-lg text-charcoal">
+            {locale === "en" ? "Reminders" : "Напоминания"}
+          </h2>
+          <Badge variant="blush">
+            {stats.pending} {locale === "en" ? "pending" : "без ответа"}
+          </Badge>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-sm text-muted">
+            {locale === "en"
+              ? "Send a gentle reminder to guests who have not responded yet. Email delivery hooks into Resend when configured."
+              : "Отправьте мягкое напоминание гостям без ответа. Рассылка подключится через Resend, когда будет ключ."}
+          </p>
+          <Button
+            size="sm"
+            variant="secondary"
+            disabled={stats.pending === 0}
+            onClick={() => {
+              const pending = guests.filter(
+                (g) => g.status === "pending" || g.status === "maybe"
+              );
+              console.info(
+                "[reminders:demo]",
+                pending.map((g) => g.name)
+              );
+              alert(
+                locale === "en"
+                  ? `Demo: reminder queued for ${pending.length} guests`
+                  : `Демо: напоминание поставлено в очередь для ${pending.length} гостей`
+              );
+            }}
+          >
+            {locale === "en"
+              ? "Send reminders"
+              : "Отправить напоминания"}
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }
